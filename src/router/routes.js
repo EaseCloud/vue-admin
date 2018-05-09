@@ -1,10 +1,10 @@
 export default [{
-  path: '/login',
-  name: 'login',
+  path: '/passport/login',
+  name: 'passport_login',
   meta: {
     title: 'Login - 登录'
   },
-  component: () => import('../components/views/Login.vue')
+  component: () => import('../views/passport/Login.vue')
 // }, {
 //   path: '/locking',
 //   name: 'locking',

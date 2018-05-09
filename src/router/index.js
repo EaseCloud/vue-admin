@@ -7,17 +7,22 @@ import config from '../config'
 import utils from '../utils'
 
 import routes from './routes'
-import appRoutes from './app'
-import otherRoutes from './other'
+import mainRoutes from './main'
+
+import MainApp from '../views/main/App.vue'
 
 Vue.use(VueRouter)
 
 const router = new VueRouter({
   ...config.router_options,
   routes: [
+    {
+      path: '',
+      name: 'main',
+      component: MainApp,
+      children: mainRoutes
+    },
     ...routes,
-    ...appRoutes,
-    ...otherRoutes,
     ...config.extra_routes
   ]
 })

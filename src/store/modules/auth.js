@@ -8,7 +8,7 @@ const auth = {
   },
   mutations: {
     setCurrentUser (state, user) {
-      console.log(state, user)
+      // console.log(state, user)
       state.current_user = user
       if (user) {
         localStorage.setItem('current_user', JSON.stringify(user))

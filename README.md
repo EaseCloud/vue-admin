@@ -16,78 +16,34 @@ By @fish-ball &copy;2018
 vue init webpack
 ```
 
-##### 替换 iview-admin 中的 `@` 路径
+##### 初始化项目
 
-由于 iview-admin 项目中的引用 webpack 模块有很多地方使用了 `@` 的绝对路径，\
-在引入 vue-admin 的时候，为了能够完整引用 iview-admin 而不是混入代码，我们\
-必须让出项目中的根目录位置，这样才能实现代码的分层和正交。
+注意，项目自动初始化脚本需要支持 Bash 运行环境，并且需要安装以下软件包：
 
-> 其实个人觉得这是 iview-admin 设计上的欠考虑，但估计是没有考虑到会有这种玩法吧。
-
-因此，**我们在业务代码中禁止使用 @ 作为路径前缀**，此外，需要\
-修改 `webpack.base.conf.js` 文件代码：
-
-```javascript
-module.exports = {
-  // ...
-  resolve: {
-    extensions: ['.js', '.vue', '.json'],
-    alias: {
-      'vue$': 'vue/dist/vue.esm.js',
-      // 修改下面这行
-      '@': resolve('src'),
-    }
-  },
-  // ...
-}
+```
+git
+yarn
 ```
 
-改为：
+确认之后我们只需要在项目文件夹下面执行这一条命令：
 
-```javascript
-module.exports = {
-  // ...
-  resolve: {
-    extensions: ['.js', '.vue', '.json'],
-    alias: {
-      'vue$': 'vue/dist/vue.esm.js',
-      // 改为这一行
-      '@': resolve('src/vue-admin/iview-admin/src'),
-    }
-  },
-  // ...
-}
+TODO: 还没想好
+
+```bash
+curl -s https://raw.githubusercontent.com/EaseCloud/vue-admin/master/src/init.sh | bash -
 ```
 
-##### 初始化
+然后我们在项目文件夹上面调用脚本进行安装，这样会有如下几个效果：
 
-这一步，我们需要将 iview-admin 的依赖库全部展开安装到我们的主项目中，并且\
-执行 iview-admin 的 `npm run init` 初始化脚本。
+1. 用 git 初始化当前项目；
+2. 将 Vue-Admin 作为 Git 子模块添加到 `src` 目录下；
+3. 将 Vue-Admin 样例代码复制到项目中；
 
-> iview-admin 初始化完成之后，iview-admin 文件夹的 build 文件夹中会出现一个 `env.js` 文件。\
-如果提示缺少 env 文件很可能是少了这一步。
-
-这里的操作已经用 bash 脚本写好，只需要执行一次脚本即可：
+完成之后，直接通过 `npm run dev` 或者 `yarn dev` 等方式就可以像正常的 
 
 ```bash
 cd src/vue-admin
 ./init.sh
-```
-
-##### 问题处置：`$export is not a function`
-
-参考：<https://stackoverflow.com/a/36404784/2544762>
-
-打开 `webpack.base.conf.js`，在 `下面加上
-
-```javascript
-{
-  // ...
-  loader: 'babel-loader',
-  // 添加下面这一行
-  exclude: /node_modules/
-  // ...
-}
 ```
 
 ### 配置 Configuration
@@ -122,6 +78,38 @@ cd src/vue-admin
 
 ### 用户登录验证机制
 
+Vue-Admin 提供了一系列的 mixins 方法以完成用户的登录、验证等工作，具体代码定位\
+可以参照 `src/vue-admin/mixins/auth.js`
+
+#### login (username, password)
+
+实现用户登录，登录完成之后调用钩子 `action_after_login`，默认情况下转到首页。
+
+具体登录动作实现可以通过钩子 `action_login` 进行覆盖，如未改写进行调用会报警告提示。
+
+#### authenticate (reload = false)
+
+获取当前已登录的用户信息，如果 `reload` 为 `false`，会直接返回 Vuex 中存储的用户信息，\
+否则调用后台接口查询当前登录的用户对象，并且更新到 Vuex 状态。
+
+如果获取成功，通过 Promise 返回当前用户对象 user。
+
+如果获取失败，则试图通过后台接口获取登录用户，如果依然获取失败，返回 Promise 将被 reject。
+
+具体的后台接口调用登录可以通过钩子 `action_authenticate` 进行覆盖。
+
+#### requireLogin (reload = false, redirectTo)
+
+直接调用 `authenticate(reload)` 获取当前已登录的用户信息，不同的是如果用户没有登录，\
+会调用钩子　`action_goto_login(redirectTo)` 将页面转移到登录页面。
+
+#### logout ()
+
+退出当前的登录，同时退出后台 API 登录以及清空 Vuex 状态。
+
+退出后台登录的操作需要通过 `action_logout` 实现，需要先退出后台登录获得成功 Promise \
+之后才会清空 Vuex 状态。
+
 ### 配置选项
 
 Vue-Admin 框架提供了为数众多的配置选项供用户使用，在 `src/vue-admin/config/default` \
@@ -131,9 +119,9 @@ Vue-Admin 框架提供了为数众多的配置选项供用户使用，在 `src/v
 另外，具体使用时，项目添加了全局 mixin，直接调用任意组件的 `vm.config` 即可获取已经\
 计算完成的配置对象。
 
-另外，在 `src/vue-admin/config/hooks` 模块里面定义了所有行为钩子的处理函数，约定以 \
-`hook_` 作为前缀混入整个 `config` 配置中，用户同样可以在自定义的 `src/config` 模块中覆写\
-任意钩子函数的实现，以实现预期的业务目标。
+另外，在 `src/vue-admin/config/hooks` 模块里面定义了所有行为钩子的处理函数，通过 \
+`config.hooks` 可以获取所有钩子函数的引用，用户同样可以在自定义的 `src/config` \
+模块中覆写任意钩子函数的实现，以实现预期的业务目标。
 
 #### name: 项目名称
 
@@ -180,13 +168,71 @@ router_options: {
 
 #### login_route
 
-**默认值**: `login`
+**默认值**: `{name: 'passport_login'}`
 
-登录页面组件的路由名称。
+登录页面组件的路由。
+
+#### home_route
+
+**默认值**: `{name: 'main_home'}`
+
+登录成功之后跳转到的路由，在 `action_after_login` 调用。
+
+#### menus
+
+**默认值**: `[]`
+
+获取主界面左侧菜单栏的菜单定义，菜单格式如下：
+
+```
+export default [{
+  name: 'main_home',
+  icon: 'key',
+  title: '主界面',
+  children: [
+    name: 'main_home_dashboard',
+    title: '仪表板',
+    route: {name: 'main_home_dashboard'}
+  ]
+}]
+```
+
+如上，菜单分两级目录渲染，每个节点包含 `name`, `title` 和 `route` 属性，\
+其中 `route` 属性指向一个支持被 `vm.$router.push` 操作的已定义路由对象，\
+一级菜单项可以缺省 `route` 属性，这样会忽略点击的跳转。另外一级菜单支持 \
+`icon` 属性指定图标一级通过 `children` 指定其下拉的二级菜单。
+
+\[TODO] 国际化：如果菜单项不指定 `title` 而是指定了 `i18n` 属性，那么对应\
+的标题渲染会依据这个属性计算国际化翻译得到。
 
 ### 钩子机制
 
-#### hook_login (username, password)
+一般我们定义两种钩子，一种是动作钩子，一种是过滤器钩子：
+
+正常情况下的钩子调用，我们会通过 `vm.config.hooks.xxx.apply(vm, [...params])` \
+的方式调用，于是，在钩子处理函数内部调用的 `this` 就可以获取到调起的组件实例，\
+而无需将组件实例手动传入。
+
+* 动作钩子：以 `action_` 为前缀，在指定阶段执行一定的动作，通过 return 参数或者\
+  Promise 返回动作的结果。
+* 过滤器钩子：以 `filter_` 为前缀，在第一个参数传入需要过滤的对象（后续参数可以）\
+  作为附加设置项，然后将对象进行处理之后通过 return 同步返回，处理流程用这个返回\
+  的对象继续原有的处理流程
+  
+#### action_root_mounted ()
+
+根组件挂在之后执行的任务，一般用于执行某些初始化任务。
+
+如果缺省，会将 localStorage 中保存的 `current_user` 用户载入 Vuex 的 state，这样 \
+能够在离线环境下依然能够获取用户的登录状态。
+
+#### action_get_menus ()
+
+通过 Promise 返回展示的主界面侧栏菜单，获取之后替换 `config.menus` 配置，缺省情况下\
+返回 `src/config/menus` 模块的内容，实际使用中，可以根据当前登录用户查询后台获取到\
+实际的菜单格式再返回。
+
+#### action_login (username, password)
 
 实现一个函数，通过 Promise 返回一个 user 对象，表示已登录的用户信息。
 
@@ -196,6 +242,18 @@ Vue-Admin 在获取到用户信息之后，会将用户信息存放在 Vuex 的 
 `$store.user.current_user` 中，并且通过全局 mixin 的 `vm.me` \
 可以获取到。
 
-#### hook_authenticate (reload = True)
+#### action_authenticate ()
 
+调用后台接口查询当前登录的用户对象。
+
+如果获取成功，通过 Promise 返回当前用户对象 user。
+
+如果获取失败，返回的 Promise 将被 reject。
+
+这个接口在 `src/vue-admin/mixins/auth` 模块中被调用，一般来说获取到后台登录用户之后，\
+会自动将用户信息保存进 Vuex 状态。
+
+#### action_logout ()
+
+实现后台退出的动作并返回 Promise。
 

@@ -6,6 +6,8 @@ export default {
   description: 'You can specify your description text here.',
   router_options: {},
   extra_routes: [],
-  login_route: 'login',
-  ...hooks
+  login_route: {name: 'passport_login'},
+  home_route: {name: 'main_home'},
+  menus: [],
+  hooks
 }

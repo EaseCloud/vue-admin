@@ -1,4 +1,4 @@
-import App from './components/App.vue'
+import App from './views/App.vue'
 import iView from 'iview'
 
 import 'iview/dist/styles/iview.css'
@@ -32,7 +32,7 @@ export default {
       // },
       mounted () {
         const vm = this
-        vm.config.hook_root_mounted.apply(vm)
+        vm.config.hooks.action_root_mounted.apply(vm)
       }
       // created () {
       //   let tagsList = []
