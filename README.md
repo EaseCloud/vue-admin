@@ -8,7 +8,7 @@ By @fish-ball &copy;2018
 ### 安装 Installation
 
 \[TODO\]
-##### 创建 vue 基础项目
+#### 创建 vue 基础项目
 
 跟正常的 vue 项目一样
 
@@ -16,7 +16,7 @@ By @fish-ball &copy;2018
 vue init webpack
 ```
 
-##### 初始化项目
+#### 初始化项目
 
 注意，项目自动初始化脚本需要支持 Bash 运行环境，并且需要安装以下软件包：
 
@@ -44,6 +44,22 @@ curl -s https://raw.githubusercontent.com/EaseCloud/vue-admin/master/src/init.sh
 ```bash
 cd src/vue-admin
 ./init.sh
+```
+
+#### 开发环境的域名绑定问题
+
+直接运行项目 `npm run dev` 之后，默认情况下主机名是被绑定在 `localhost` 的，\
+这样的话，如果在开发的时候用其他域名绑定访问会得到 `Invalid Host Header` 提示，\
+如果需要关掉域名检查，可以在主项目的 `/build/webpack.dev.conf.js` 里面找到 \
+`devServer` 块，加入：
+
+```
+devServer: {
+  // ...
+  // 加入下面这项
+  disableHostCheck: true,
+  // ...
+}
 ```
 
 ### 配置 Configuration

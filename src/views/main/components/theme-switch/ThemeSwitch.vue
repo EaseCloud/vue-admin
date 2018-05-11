@@ -22,11 +22,24 @@
 </template>
 
 <script>
+  import _ from 'lodash'
   import Cookies from 'js-cookie'
-  import fs from 'fs'
 
-  const gCss = fs.loadFileSync('./theme/g.css')
-  console.log(gCss)
+  import './theme/r.css'
+  import './theme/g.css'
+  import './theme/y.css'
+  const setThemeCss = mainTheme => {
+    _.each(document.getElementsByClassName('vue-admin-theme'), el => {
+      el.parentElement.removeChild(el)
+    })
+    if (css.hasOwnProperty(mainTheme)) {
+      const el = document.createElement('style')
+      el.setAttribute('class', 'vue-admin-theme')
+      el.textContent = css[mainTheme]
+      document.head.appendChild(el)
+    }
+  }
+  const css = {}
 
   export default {
     name: 'themeSwitch',
@@ -67,7 +80,6 @@
           this.$store.commit('changeMenuTheme', 'light')
           menuTheme = 'light'
         }
-        let path = ''
         let userName = Cookies.get('user')
         if (localStorage.theme) {
           let themeList = JSON.parse(localStorage.theme)
@@ -98,19 +110,17 @@
             menuTheme: menuTheme
           }])
         }
-        let stylePath = process.env.NODE_ENV === 'production'
-          ? 'dist/' : './src/vue-admin/src/views/main/components/theme-switch/theme/'
-        if (mainTheme !== 'b') {
-          path = stylePath + mainTheme + '.css'
-        } else {
-          path = ''
-        }
-        this.getThemeLink().setAttribute('href', path)
+        setThemeCss(mainTheme)
       }
     },
     created () {
-      let path = process.env.NODE_ENV === 'production'
-        ? 'dist/' : './src/vue-admin/src/views/main/components/theme-switch/theme/'
+      document.querySelectorAll('head > style').forEach(el => {
+        if (/^\.vue-admin-theme-/.test(el.textContent)) {
+          const cssName = /^\.vue-admin-theme-([\w\d]+)/.exec(el.textContent)[1]
+          css[cssName] = el.textContent
+          el.parentElement.removeChild(el)
+        }
+      })
       let name = Cookies.get('user')
       if (localStorage.theme) {
         let hasThisUser = JSON.parse(localStorage.theme).some(item => {
@@ -131,10 +141,7 @@
         this.$store.commit('changeMainTheme', 'b')
       }
       // 根据用户设置主题
-      if (this.$store.state.app.themeColor !== 'b') {
-        let stylesheetPath = path + this.$store.state.app.themeColor + '.css'
-        this.getThemeLink().setAttribute('href', stylesheetPath)
-      }
+      setThemeCss(this.$store.state.app.themeColor)
     }
   }
 </script>
