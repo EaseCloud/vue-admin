@@ -20,7 +20,8 @@
     methods: {
       showMessage () {
         const vm = this
-        vm.utils.app.openNewPage(vm, 'message_index')
+        // TODO: 消息中心路由不能写死
+        vm.utils.app.openNewPage('message_index')
         vm.$router.push({
           name: 'message_index'
         })

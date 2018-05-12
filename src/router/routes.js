@@ -6,6 +6,7 @@ export default [{
   },
   component: () => import('../views/passport/Login.vue')
 // }, {
+// TODO: 锁屏功能未实现
 //   path: '/locking',
 //   name: 'locking',
 //   component: () => import('@/views/main-components/lockscreen/components/locking-page.vue')

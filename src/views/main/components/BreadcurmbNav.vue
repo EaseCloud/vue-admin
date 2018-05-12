@@ -4,7 +4,7 @@
       v-for="item in currentPath"
       :href="item.path"
       :key="item.name"
-    >{{utils.app.getMenuTitle(item)}}
+    >{{utils.html.i18nText(item.title)}}
     </breadcrumb-item>
   </breadcrumb>
 </template>

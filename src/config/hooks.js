@@ -1,32 +1,30 @@
 export default {
   /**
    * 根组件挂载之后执行的任务，一般用于执行某些初始化任务
+   * @returns {Promise<void>}
+   * 如果返回 resolve，继续执行正常的启动代码
+   * 如果返回 reject，替换正常的启动代码（不执行系统默认启动代码）
    */
   action_root_mounted () {
-    const vm = this
-    // 从 localStorage 中读取当前登录的用户
-    try {
-      const user = JSON.parse(localStorage.getItem('current_user'))
-      vm.$store.commit('setCurrentUser', user)
-    } catch (e) {
-      vm.$store.commit('setCurrentUser', null)
-    }
-    // 初始化菜单
-    vm.config.hooks.action_get_menus.apply(vm).then(menus => {
-      vm.config.menus = menus
-    })
-    // this.currentPageName = this.$route.name
-    // this.$store.commit('setOpenedList')
-    // this.$store.commit('initCachepage')
-    // this.$store.commit('updateMenulist')
-    // util.checkUpdate(this)
+    return Promise.resolve()
   },
   /**
    * 通过 Promise 返回展示的主界面侧栏菜单
    * @returns {Promise<Array<Object>>}
    */
   action_get_menus () {
-    return Promise.resolve(import('../../../config/menus'))
+    const vm = this
+    return Promise.resolve(vm.config.menus)
+  },
+  /**
+   * 过滤主菜单选中的动作
+   * @param menuName 选中的菜单项名称
+   * @returns {Promise<any>}
+   * 如果成功，resolve 过滤修改之后的菜单项名称
+   * 否则，reject 之后菜单项跳转动作会被忽略
+   */
+  filter_before_menu_select (menuName) {
+    return Promise.resolve(menuName)
   },
   /**
    * 执行登录的动作，返回一个 Promise，获得一个已登录的用户对象
@@ -39,7 +37,7 @@ export default {
       '还没有实现登录验证功能，' +
       '请实现 config.hooks.action_login(username, password)，' +
       '现在任意账号密码均允许登录。')
-    return Promise.resolve({username})
+    return Promise.resolve({ username })
   },
   /**
    * TODO: 登录成功之后执行的动作，一般是跳转到首页
@@ -77,5 +75,13 @@ export default {
       '请实现 config.hooks.action_logout()，' +
       '现在直接通过并清空 Vuex 状态。')
     return Promise.resolve()
+  },
+  func_get_current_user_name () {
+    const vm = this
+    return (vm.me && (vm.me.name || vm.me.nickname || vm.me.username)) || ''
+  },
+  func_get_current_user_avatar_url () {
+    const vm = this
+    return vm.me && vm.me.avatar
   }
 }

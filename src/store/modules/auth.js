@@ -4,17 +4,26 @@
 
 const auth = {
   state: {
-    current_user: null
+    currentUser: null
   },
   mutations: {
-    setCurrentUser (state, user) {
-      // console.log(state, user)
-      state.current_user = user
-      if (user) {
-        localStorage.setItem('current_user', JSON.stringify(user))
-      } else {
-        localStorage.removeItem('current_user')
+    loadCurrentUser (state) {
+      try {
+        state.currentUser = JSON.parse(localStorage.getItem('vue_admin_current_user'))
+      } catch (e) {
+        this.commit('setCurrentUser', null)
       }
+    },
+    dumpCurrentUser (state) {
+      if (state.currentUser) {
+        localStorage.setItem('vue_admin_current_user', JSON.stringify(state.currentUser))
+      } else {
+        localStorage.removeItem('vue_admin_current_user')
+      }
+    },
+    setCurrentUser (state, user) {
+      state.current_user = user
+      this.commit('dumpCurrentUser')
     }
   },
   actions: {

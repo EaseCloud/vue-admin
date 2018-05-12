@@ -1,3 +1,4 @@
+<script src="../../../../../demo/config/menus.js"></script>
 <template>
   <div style="display:inline-block;padding:0 6px;">
     <dropdown trigger="click" @on-click="setTheme">
@@ -71,7 +72,6 @@
       setTheme (themeFile) {
         let menuTheme = themeFile.substr(0, 1)
         let mainTheme = themeFile.substr(-1, 1)
-        console.log(menuTheme, mainTheme)
         if (menuTheme === 'b') {
           // 黑色菜单
           this.$store.commit('changeMenuTheme', 'dark')

@@ -9,8 +9,7 @@ import store from './store'
 
 import mixins from './mixins'
 import mixinsAuth from './mixins/auth'
-
-// console.log(config)
+import mixinsApp from './mixins/app'
 
 export default {
   install (Vue, options = {}) {
@@ -18,22 +17,19 @@ export default {
 
     Vue.mixin(mixins)
     Vue.mixin(mixinsAuth)
+    Vue.mixin(mixinsApp)
 
     const AppConstructor = Vue.extend(App)
 
     window.app = new AppConstructor({
       el: '#app',
       router,
-      store,
+      store
       // store,
       // render: h => h(App),
       // data: {
       //   currentPageName: ''
       // },
-      mounted () {
-        const vm = this
-        vm.config.hooks.action_root_mounted.apply(vm)
-      }
       // created () {
       //   let tagsList = []
       //   appRouter.map(item => {

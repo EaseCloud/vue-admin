@@ -1,94 +1,127 @@
 import _ from 'lodash'
-// import {otherRouter, appRouter} from '@/router/router'
-// import Util from '@/libs/util'
 // import Cookies from 'js-cookie'
 import Vue from 'vue'
+// import config from '../../config'
+// import utils from '../../utils'
 
 const app = {
   state: {
+    menus: [],
+    pages: {}, // Main 下级路由中的所有页面组件
+    /**
+     * pagesOpened 格式：
+     * {
+     *   title: String / Function / Promise,
+     *   route: {
+     *     name: String,
+     *     params: Object<String, Any>,
+     *     query: Object<String, Any>
+     *   }
+     * }
+     * 其中 title 可以通过 finalize 传入 params 做变量计算得到
+     */
+    pagesOpened: [],
+    currentPageIndex: 0,
+    menuTheme: 'dark', // 主题
+    themeColor: '',
+    // ---- 定版的分割线 ----
     cachePage: [],
     lang: '',
     isFullScreen: false,
     openedSubmenuArr: [], // 要展开的菜单数组
-    menuTheme: 'dark', // 主题
-    themeColor: '',
-    pageOpenedList: [{
-      title: '首页',
-      path: '',
-      name: 'home_index'
-    }],
-    currentPageName: '',
-    currentPath: [
-      {
-        title: '首页',
-        path: '',
-        name: 'home_index'
-      }
-    ], // 面包屑数组
-    menuList: [],
-    routers: [
-      // otherRouter,
-      // ...appRouter
-    ],
-    tagsList: [
-      // ...otherRouter.children
-    ],
-    messageCount: 0,
+    // currentPageName: '',
+    currentPath: [], // 面包屑数组
+    // routers: [
+    //   // otherRouter,
+    //   // ...appRouter
+    // ],
+    // tagsList: [
+    //   // ...otherRouter.children
+    // ],
+    // messageCount: 0,
     dontCache: ['text-editor', 'artical-publish'] // 在这里定义你不想要缓存的页面的name属性值(参见路由配置router.js)
   },
   mutations: {
+    updateMenus (state, menus) {
+      state.menus = menus
+    },
+    loadPagesOpened (state) {
+      try {
+        state.pagesOpened = JSON.parse(localStorage.getItem('vue_admin_pages_opened'))
+      } catch (e) {
+        state.pagesOpened = []
+        this.commit('dumpPagesOpened')
+      }
+    },
+    dumpPagesOpened (state) {
+      localStorage.setItem('vue_admin_pages_opened', JSON.stringify(state.pagesOpened))
+    },
+    // /**
+    //  * 查找所有 Main 路由下的所有页面组件，然后根据配置
+    //  * 初始化所有的页面入口
+    //  * @param state
+    //  */
+    // initPageList (state) {
+    //   const pages = {}
+    //   config.main_routes.forEach(route => {
+    //     if (route.component) {
+    //       pages[route.name] = {
+    //         name: route.name,
+    //         // TODO: 需要有动态获取标题的机制
+    //         title: (route.meta && route.meta.title) || '未命名页面',
+    //         locked: !!(route.meta && route.meta.locked)
+    //       }
+    //     }
+    //   })
+    //   state.pages = pages
+    // },
+    openPage (state, { title, name, meta, params = {}, query = {} }) {
+      // 先查找现存的 pagesOpened
+      let pageIndex = _.findIndex(state.pagesOpened, { route: { name, params } })
+      // 没有的话插一个
+      if (pageIndex === -1) {
+        const page = { title, meta, route: { name, params, query } }
+        state.pagesOpened.splice(state.currentPageIndex + 1, 0, page)
+        pageIndex = state.currentPageIndex + 1
+      }
+      state.currentPageIndex = pageIndex
+      // 保存状态
+      this.commit('dumpPagesOpened')
+    },
+    closePage (state, index) {
+      state.pagesOpened.splice(index, 1)
+      this.commit('dumpPagesOpened')
+    },
+    closeAllPages (state) {
+      state.pagesOpened = _.filter(state.pagesOpened, { meta: { locked: true } })
+      state.currentPageIndex = state.pagesOpened.length - 1
+      // state.cachePage.length = 0
+      this.commit('dumpPagesOpened')
+    },
+    closeOtherPages (state) {
+      let j = -1
+      const oldIndex = state.currentPageIndex
+      state.currentPageIndex = 0
+      state.pagesOpened = _.filter(state.pagesOpened, (page, i) => {
+        if (i === oldIndex || page.meta.locked) {
+          j += 1
+          if (i === oldIndex) state.currentPageIndex = j
+          console.log(true, i)
+          return true
+        }
+        console.log(false, i)
+        return false
+      })
+      // let newCachepage = state.cachePage.filter(item => {
+      //   return item === currentName
+      // })
+      // state.cachePage = newCachepage
+      // localStorage.pagesOpened = JSON.stringify(state.pagesOpened)
+      this.commit('dumpPagesOpened')
+    },
+    // ---- 定版的分割线 ----
     setTagsList (state, list) {
       state.tagsList.push(...list)
-    },
-    updateMenulist (state) {
-      // let accessCode = parseInt(Cookies.get('access'))
-      // let menuList = []
-      // appRouter.forEach((item, index) => {
-      //   if (item.access !== undefined) {
-      //     if (Util.showThisRoute(item.access, accessCode)) {
-      //       if (item.children.length === 1) {
-      //         menuList.push(item)
-      //       } else {
-      //         let len = menuList.push(item)
-      //         let childrenArr = []
-      //         childrenArr = item.children.filter(child => {
-      //           if (child.access !== undefined) {
-      //             if (child.access === accessCode) {
-      //               return child
-      //             }
-      //           } else {
-      //             return child
-      //           }
-      //         })
-      //         menuList[len - 1].children = childrenArr
-      //       }
-      //     }
-      //   } else {
-      //     if (item.children.length === 1) {
-      //       menuList.push(item)
-      //     } else {
-      //       let len = menuList.push(item)
-      //       let childrenArr = []
-      //       childrenArr = item.children.filter(child => {
-      //         if (child.access !== undefined) {
-      //           if (Util.showThisRoute(child.access, accessCode)) {
-      //             return child
-      //           }
-      //         } else {
-      //           return child
-      //         }
-      //       })
-      //       if (childrenArr === undefined || childrenArr.length === 0) {
-      //         menuList.splice(len - 1, 1)
-      //       } else {
-      //         let handledItem = JSON.parse(JSON.stringify(menuList[len - 1]))
-      //         handledItem.children = childrenArr
-      //         menuList.splice(len - 1, 1, handledItem)
-      //       }
-      //     }
-      //   }
-      // })
-      // state.menuList = menuList
     },
     changeMenuTheme (state, theme) {
       state.menuTheme = theme
@@ -109,70 +142,53 @@ const app = {
         state.openedSubmenuArr.push(name)
       }
     },
-    closePage (state, name) {
-      state.cachePage.forEach((item, index) => {
-        if (item === name) {
-          state.cachePage.splice(index, 1)
-        }
-      })
-    },
-    initCachepage (state) {
-      if (localStorage.cachePage) {
-        state.cachePage = JSON.parse(localStorage.cachePage)
-      }
-    },
-    removeTag (state, name) {
-      state.pageOpenedList.map((item, index) => {
-        if (item.name === name) {
-          state.pageOpenedList.splice(index, 1)
-        }
-      })
-    },
-    pageOpenedList (state, get) {
-      let openedPage = state.pageOpenedList[get.index]
-      if (get.argu) {
-        openedPage.argu = get.argu
-      }
-      if (get.query) {
-        openedPage.query = get.query
-      }
-      state.pageOpenedList.splice(get.index, 1, openedPage)
-      localStorage.pageOpenedList = JSON.stringify(state.pageOpenedList)
-    },
-    clearAllTags (state) {
-      state.pageOpenedList.splice(1)
-      state.cachePage.length = 0
-      localStorage.pageOpenedList = JSON.stringify(state.pageOpenedList)
-    },
-    clearOtherTags (state, vm) {
-      let currentName = vm.$route.name
-      let currentIndex = 0
-      state.pageOpenedList.forEach((item, index) => {
-        if (item.name === currentName) {
-          currentIndex = index
-        }
-      })
-      if (currentIndex === 0) {
-        state.pageOpenedList.splice(1)
-      } else {
-        state.pageOpenedList.splice(currentIndex + 1)
-        state.pageOpenedList.splice(1, currentIndex - 1)
-      }
-      let newCachepage = state.cachePage.filter(item => {
-        return item === currentName
-      })
-      state.cachePage = newCachepage
-      localStorage.pageOpenedList = JSON.stringify(state.pageOpenedList)
-    },
-    setOpenedList (state) {
-      // state.pageOpenedList = localStorage.pageOpenedList ? JSON.parse(localStorage.pageOpenedList) : [otherRouter.children[0]]
-    },
+    // closePage (state, name) {
+    //   state.cachePage.forEach((item, index) => {
+    //     if (item === name) {
+    //       state.cachePage.splice(index, 1)
+    //     }
+    //   })
+    // },
+    // initCachepage (state) {
+    //   if (localStorage.cachePage) {
+    //     state.cachePage = JSON.parse(localStorage.cachePage)
+    //   }
+    // },
+    // pagesOpened (state, page) {
+    //   // {
+    //   // title: '首页',
+    //   // path: '',
+    //   // name: 'main_home'
+    //   // }
+    //   let openedPage = state.pagesOpened[page.index]
+    //   if (page.params) {
+    //     openedPage.params = page.params
+    //   }
+    //   if (page.query) {
+    //     openedPage.query = page.query
+    //   }
+    //   state.pagesOpened.splice(page.index, 1, openedPage)
+    //   localStorage.pagesOpened = JSON.stringify(state.pagesOpened)
+    // },
+    // /**
+    //  * TODO:
+    //  * 初始化页面（从 localStorage 中读取已打开的页面，没有的话加载默认首页
+    //  * @param state
+    //  */
+    // setOpenedList (state) {
+    //   try {
+    //     state.pagesOpened = localStorage.pagesOpened
+    //       ? JSON.parse(localStorage.pagesOpened) : []
+    //   } catch (e) {
+    //     state.pagesOpened = []
+    //   }
+    // },
     setCurrentPath (state, pathArr) {
       state.currentPath = pathArr
     },
-    setCurrentPageName (state, name) {
-      state.currentPageName = name
-    },
+    // setCurrentPageName (state, name) {
+    //   state.currentPageName = name
+    // },
     setAvator (state, path) {
       localStorage.avatorImgPath = path
     },
@@ -183,16 +199,16 @@ const app = {
     clearOpenedSubmenu (state) {
       state.openedSubmenuArr.length = 0
     },
-    setMessageCount (state, count) {
-      state.messageCount = count
-    },
-    increateTag (state, tagObj) {
-      if (!_.includes(state.dontCache, tagObj.name)) {
+    // setMessageCount (state, count) {
+    //   state.messageCount = count
+    // },
+    addTag (state, tagObj) {
+      if (!tagObj.noCache) {
         state.cachePage.push(tagObj.name)
         localStorage.cachePage = JSON.stringify(state.cachePage)
       }
-      state.pageOpenedList.push(tagObj)
-      localStorage.pageOpenedList = JSON.stringify(state.pageOpenedList)
+      state.pagesOpened.push(tagObj)
+      localStorage.pagesOpened = JSON.stringify(state.pagesOpened)
     }
   }
 }

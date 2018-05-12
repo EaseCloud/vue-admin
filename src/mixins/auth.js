@@ -5,7 +5,15 @@ export default {
   computed: {
     me () {
       const vm = this
-      return vm.$store.state.auth.current_user
+      return vm.$store.state.auth.currentUser
+    },
+    currentUserName () {
+      const vm = this
+      return vm.config.hooks.func_get_current_user_name()
+    },
+    currentUserAvatarUrl () {
+      const vm = this
+      return vm.config.hooks.func_get_current_user_avatar_url()
     }
   },
   methods: {

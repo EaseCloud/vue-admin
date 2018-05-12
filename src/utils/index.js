@@ -1,7 +1,7 @@
-import app from './app'
 import html from './html'
+import general from './general'
 
 export default {
-  app,
-  html
+  html,
+  general
 }

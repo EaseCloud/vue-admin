@@ -7,7 +7,6 @@ import config from '../config'
 import utils from '../utils'
 
 import routes from './routes'
-import mainRoutes from './main'
 
 import MainApp from '../views/main/App.vue'
 
@@ -18,9 +17,13 @@ const router = new VueRouter({
   routes: [
     {
       path: '',
-      name: 'main',
       component: MainApp,
-      children: mainRoutes
+      redirect: config.home_route,
+      children: [
+        // 这条记录使得打开根目录的时候能够重定向到首页
+        // { path: '',  },
+        ...config.main_routes
+      ]
     },
     ...routes,
     ...config.extra_routes
@@ -41,8 +44,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   iView.LoadingBar.start()
-  utils.html.setTitle(to.meta.title)
-
+  utils.html.setHtmlTitle(utils.html.i18nText(to.meta.title))
   next()
   // TODO: 锁屏设定、TAB 页面弹出
   // if (Cookies.get('locking') === '1' && to.name !== 'locking') { // 判断当前是否是锁定状态
@@ -79,8 +81,7 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach((to) => {
-  // TODO: 打开新 TAB
-  // Util.openNewPage(router.app, to.name, to.params, to.query);
+  // console.log('Caught outer $route hook', to)
   iView.LoadingBar.finish()
   window.scrollTo(0, 0)
 })

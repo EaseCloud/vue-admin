@@ -1,29 +1,32 @@
 <template>
-  <div ref="scrollCon" @DOMMouseScroll="handlescroll" @mousewheel="handlescroll" class="tags-outer-scroll-con">
+  <div ref="scrollCon"
+       @DOMMouseScroll="handleScroll"
+       @mousewheel="handleScroll"
+       class="tags-outer-scroll-con">
     <div class="close-all-tag-con">
-      <Dropdown transfer @on-click="handleTagsOption">
-        <Button size="small" type="primary">
+      <dropdown transfer @on-click="handleTagsOption">
+        <i-button size="small" type="primary">
           标签选项
-          <Icon type="arrow-down-b"></Icon>
-        </Button>
-        <DropdownMenu slot="list">
-          <DropdownItem name="clearAll">关闭所有</DropdownItem>
-          <DropdownItem name="clearOthers">关闭其他</DropdownItem>
-        </DropdownMenu>
-      </Dropdown>
+          <icon type="arrow-down-b"></icon>
+        </i-button>
+        <dropdown-menu slot="list">
+          <dropdown-item name="clearAll">关闭所有</dropdown-item>
+          <dropdown-item name="clearOthers">关闭其他</dropdown-item>
+        </dropdown-menu>
+      </dropdown>
     </div>
     <div ref="scrollBody" class="tags-inner-scroll-body" :style="{left: tagBodyLeft + 'px'}">
       <transition-group name="taglist-moving-animation">
         <tag type="dot"
-             v-for="item in pageTagsList"
+             v-for="(page, i) in $store.state.app.pagesOpened"
              ref="tagsPageOpened"
-             :key="item.name"
-             :name="item.name"
-             @on-close="closePage"
-             @click.native="linkTo(item)"
-             :closable="item.name==='home_index'?false:true"
-             :color="item.children?(item.children[0].name===currentPageName?'blue':'default'):(item.name===currentPageName?'blue':'default')"
-        >{{ itemTitle(item) }}
+             :key="page.name || i"
+             :name="page.name"
+             @on-close="closePage($event, i)"
+             @click.native="linkTo(page)"
+             :closable="!(page.meta && page.meta.locked)"
+             :color="i===$store.state.app.currentPageIndex?'blue':'default'"
+        >{{ itemTitle(page) }}
         </tag>
       </transition-group>
     </div>
@@ -37,7 +40,7 @@
   Vue.use(VueI18n)
 
   export default {
-    name: 'tagsPageOpened',
+    name: 'TagsPageOpened',
     data () {
       return {
         currentPageName: this.$route.name,
@@ -46,21 +49,12 @@
         tagsCount: 1
       }
     },
-    props: {
-      pageTagsList: Array,
-      beforePush: {
-        type: Function,
-        default: (item) => {
-          return true
-        }
-      }
-    },
     computed: {
       title () {
         return this.$store.state.app.currentTitle
       },
       tagsList () {
-        return this.$store.state.app.pageOpenedList
+        return this.$store.state.app.pagesOpened
       }
     },
     methods: {
@@ -71,48 +65,37 @@
           return item.title
         }
       },
-      closePage (event, name) {
-        let pageOpenedList = this.$store.state.app.pageOpenedList
-        let lastPageObj = pageOpenedList[0]
-        if (this.currentPageName === name) {
-          let len = pageOpenedList.length
-          for (let i = 1; i < len; i++) {
-            if (pageOpenedList[i].name === name) {
-              if (i < (len - 1)) {
-                lastPageObj = pageOpenedList[i + 1]
-              } else {
-                lastPageObj = pageOpenedList[i - 1]
-              }
-              break
-            }
+      closePage (event, i) {
+        const vm = this
+        // let pagesOpened = vm.$store.state.app.pagesOpened
+        // let lastPageObj = pagesOpened[0]
+        // 如果关闭掉当前打开的标签，要将活动标签移到靠近的其他标签
+        let newPageIndex = i
+        const isCurrentPageClosing = i === vm.$store.state.app.currentPageIndex
+        if (isCurrentPageClosing) {
+          // 如果关掉的是最后一个标签，那么活动标签需要前移
+          if (newPageIndex === vm.$store.state.app.pagesOpened.length - 1) {
+            newPageIndex -= 1
           }
-        } else {
-          let tagWidth = event.target.parentNode.offsetWidth
-          this.tagBodyLeft = Math.min(this.tagBodyLeft + tagWidth, 0)
         }
-        this.$store.commit('removeTag', name)
-        this.$store.commit('closePage', name)
-        pageOpenedList = this.$store.state.app.pageOpenedList
-        localStorage.pageOpenedList = JSON.stringify(pageOpenedList)
-        if (this.currentPageName === name) {
-          this.linkTo(lastPageObj)
-        }
-      },
-      linkTo (item) {
-        let routerObj = {}
-        routerObj.name = item.name
-        if (item.argu) {
-          routerObj.params = item.argu
-        }
-        if (item.query) {
-          routerObj.query = item.query
-        }
-        if (this.beforePush(item)) {
-          this.$router.push(routerObj)
+        let tagWidth = event.target.parentNode.offsetWidth
+        vm.tagBodyLeft = Math.min(vm.tagBodyLeft + tagWidth, 0)
+        vm.$store.commit('closePage', i)
+        // 如果当前标签关掉了，需要跳转
+        if (isCurrentPageClosing) {
+          if (vm.$store.state.app.pagesOpened.length === 0) {
+            vm.$router.push(vm.config.home_route)
+          } else {
+            vm.linkTo(vm.$store.state.app.pagesOpened[newPageIndex])
+          }
         }
       },
-      handlescroll (e) {
-        var type = e.type
+      linkTo (page) {
+        const vm = this
+        vm.$router.push(page.route)
+      },
+      handleScroll (e) {
+        let type = e.type
         let delta = 0
         if (type === 'DOMMouseScroll' || type === 'mousewheel') {
           delta = (e.wheelDelta) ? e.wheelDelta : -(e.detail || 0) * 40
@@ -134,16 +117,17 @@
         this.tagBodyLeft = left
       },
       handleTagsOption (type) {
+        const vm = this
         if (type === 'clearAll') {
-          this.$store.commit('clearAllTags')
-          this.$router.push({
-            name: 'home_index'
-          })
-        } else {
-          this.$store.commit('clearOtherTags', this)
+          vm.$store.commit('closeAllPages')
+          vm.$router.push(vm.config.home_route)
+          vm.tagBodyLeft = 0
+        } else if (type === 'clearOthers') {
+          vm.$store.commit('closeOtherPages')
+          vm.tagBodyLeft = 0
         }
-        this.tagBodyLeft = 0
       },
+      // ---- 定版的分割线 ----
       moveToView (tag) {
         if (tag.offsetLeft < -this.tagBodyLeft) {
           // 标签在可视区域左侧
@@ -158,7 +142,8 @@
       }
     },
     mounted () {
-      this.refsTag = this.$refs.tagsPageOpened
+      // debugger
+      // this.refsTag = this.$refs.tagsPageOpened
       setTimeout(() => {
         this.refsTag.forEach((item, index) => {
           if (this.$route.name === item.name) {

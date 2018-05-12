@@ -5,9 +5,11 @@ export default {
   version: '1.0',
   description: 'You can specify your description text here.',
   router_options: {},
+  main_routes: [],
   extra_routes: [],
-  login_route: {name: 'passport_login'},
-  home_route: {name: 'main_home'},
+  login_route: { name: 'passport_login' },
+  home_route: { name: 'main_home' },
   menus: [],
+  pages: {},
   hooks
 }

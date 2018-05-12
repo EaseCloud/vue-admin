@@ -126,6 +126,25 @@ Vue-Admin 提供了一系列的 mixins 方法以完成用户的登录、验证�
 退出后台登录的操作需要通过 `action_logout` 实现，需要先退出后台登录获得成功 Promise \
 之后才会清空 Vuex 状态。
 
+### 全局 mixin
+
+#### 函数
+
+##### finalize (term, ...)
+
+终结计算一个项的值，接受可变参数 arguments 的传入：
+
+1. 如果 term 为函数，调用函数（传入 arguments 的后续变量），然后递归调用 finalize
+2. 如果 term 为一个 Promise，直接返回
+3. 否则，返回 Promise.resolve(term)
+
+这个方法一般用于属性的求值，有些属性或者配置项的获取，其取值是多态的，也就是说，既支持\
+一个固定的配置值或者作为一个求值的函数，这个时候，可以通过 finalize 归一化这类配置或者\
+取值，最终得到运算获得的最终结果。
+
+#### 属性
+
+
 ### 配置选项
 
 Vue-Admin 框架提供了为数众多的配置选项供用户使用，在 `src/vue-admin/config/default` \
@@ -176,6 +195,17 @@ router_options: {
 }
 ```
 
+#### main_routes
+
+**默认值**: `[]`
+
+主框架下的路由列表，会并入主框架 Main 下面的 children 主路由。
+
+注意应该在此路由的[meta 信息](https://router.vuejs.org/zh-cn/advanced/meta.html)\
+内加入 title 字段，此配置会影响打开页面所展开 TAB 的标题。
+
+> TODO: 对于带参数的 title 信息显示需要考虑，例如某个元素的编辑页面
+
 #### extra_routes
 
 **默认值**: `[]`
@@ -205,10 +235,11 @@ export default [{
   name: 'main_home',
   icon: 'key',
   title: '主界面',
+  noTab: true,
   children: [
     name: 'main_home_dashboard',
     title: '仪表板',
-    route: {name: 'main_home_dashboard'}
+    route: { name: 'main_home_dashboard' }
   ]
 }]
 ```
@@ -221,11 +252,13 @@ export default [{
 \[TODO] 国际化：如果菜单项不指定 `title` 而是指定了 `i18n` 属性，那么对应\
 的标题渲染会依据这个属性计算国际化翻译得到。
 
+另外可以设置 noTab，设置后菜单打开将不会出现标签栏中添加标签页。
+
 ### 钩子机制
 
-一般我们定义两种钩子，一种是动作钩子，一种是过滤器钩子：
+一般我们定义三种钩子：动作钩子，过滤器钩子，以及函数钩子：
 
-正常情况下的钩子调用，我们会通过 `vm.config.hooks.xxx.apply(vm, [...params])` \
+> 正常情况下的钩子调用，我们会通过 `vm.config.hooks.xxx.apply(vm, [...params])` \
 的方式调用，于是，在钩子处理函数内部调用的 `this` 就可以获取到调起的组件实例，\
 而无需将组件实例手动传入。
 
@@ -234,6 +267,7 @@ export default [{
 * 过滤器钩子：以 `filter_` 为前缀，在第一个参数传入需要过滤的对象（后续参数可以）\
   作为附加设置项，然后将对象进行处理之后通过 return 同步返回，处理流程用这个返回\
   的对象继续原有的处理流程
+* 函数钩子：能够支持同步返回计算结果值（而不是 Promise）的方法
   
 #### action_root_mounted ()
 
@@ -247,6 +281,18 @@ export default [{
 通过 Promise 返回展示的主界面侧栏菜单，获取之后替换 `config.menus` 配置，缺省情况下\
 返回 `src/config/menus` 模块的内容，实际使用中，可以根据当前登录用户查询后台获取到\
 实际的菜单格式再返回。
+
+#### filter_before_menu_select (menuName)
+
+用户点击主菜单项之后，会自动执行跳转，通过此过滤器可以拦截跳转动作。
+
+输入值 `menuName` 为选中的菜单项名称。
+
+返回一个 Promise，如果 reject，菜单跳转动作会被取消。
+
+如果 resolve 一个字符串，则跳转行为会替换原有的 menuName。
+
+默认情况下透明通过。
 
 #### action_login (username, password)
 

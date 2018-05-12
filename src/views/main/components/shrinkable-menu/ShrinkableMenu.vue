@@ -6,14 +6,14 @@
       :menu-theme="theme"
       :menu-list="menuList"
       :open-names="openNames"
-      @on-change="handleChange"
+      @on-select="handleChange"
     ></sidebar-menu>
     <sidebar-menu-shrink
       v-show="shrink"
       :menu-theme="theme"
       :menu-list="menuList"
       :icon-color="shrinkIconColor"
-      @on-change="handleChange"
+      @on-select="handleChange"
     ></sidebar-menu-shrink>
   </div>
 </template>
@@ -21,7 +21,6 @@
 <script>
   import _ from 'lodash'
 
-  // import functions from './functions'
   import SidebarMenu from './SidebarMenu.vue'
   import SidebarMenuShrink from './SidebarMenuShrink.vue'
 
@@ -47,43 +46,40 @@
           return _.includes(['dark', 'light'], val)
         }
       },
-      beforePush: {
-        type: Function
-      },
       openNames: {
         type: Array
       }
     },
     computed: {
       bgColor () {
-        return this.theme === 'dark' ? '#495060' : '#fff'
+        return this.theme === 'dark' ? '#495060' : '#ffffff'
       },
       shrinkIconColor () {
-        return this.theme === 'dark' ? '#fff' : '#495060'
+        return this.theme === 'dark' ? '#ffffff' : '#495060'
       }
     },
     methods: {
-      handleChange (name) {
-        let willpush = true
-        if (this.beforePush !== undefined) {
-          if (!this.beforePush(name)) {
-            willpush = false
-          }
-        }
-        if (willpush) {
-          this.$router.push({
-            name: name
-          })
-        }
-        this.$emit('on-change', name)
+      handleChange (menuName) {
+        const vm = this
+        vm.config.hooks.filter_before_menu_select(menuName).then(() => {
+          // 默认情况下，通过菜单列表查找到对应的菜单项，并且跳转到 route 参数指定的路由目标
+          // 如果没有 route 参数，跳转到名称为 name 的路由
+          const menuItem = vm.getMenuItem(menuName)
+          vm.$router.push(menuItem.route || { name: menuName })
+        })
+        vm.$emit('on-change', menuName)
       }
     }
   }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   .ivu-shrinkable-menu {
     height: 100%;
     width: 100%;
+  }
+  // 删除那条难看的右边框竖线
+  .ivu-shrinkable-menu /deep/ .ivu-menu::after {
+    display: none;
   }
 </style>
