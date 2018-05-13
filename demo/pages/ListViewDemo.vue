@@ -28,7 +28,7 @@
               return Promise.resolve(item)
             },
             action_load_data () {
-              return vm.api('user').get({ action: 'fuck' }).then(resp => ({
+              return vm.api('user').get().then(resp => ({
                 page: 1,
                 count: resp.data.count,
                 results: resp.data.results

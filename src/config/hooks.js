@@ -83,5 +83,13 @@ export default {
   func_get_current_user_avatar_url () {
     const vm = this
     return vm.me && vm.me.avatar
+  },
+  /**
+   * 通过 this 可以获取到调用的 vm 组件
+   * 实现 api 模块提交数据之前，转换 payload 格式
+   * 如果需要将提交格式转换成 FormData/json/x-urlencoded 的操作可以改写这个钩子
+   */
+  filter_data_before_api_request (data) {
+    return Promise.resolve(data)
   }
 }

@@ -6,8 +6,12 @@ export default {
   version: '1.0',
   description: 'You can specify your description text here.',
   // API
-  // TODO: API 配置未写文档
   api_root: '/api',
+  /**
+   * 路径格式模板
+   * https://github.com/bramstein/url-template
+   * http://tools.ietf.org/html/rfc6570
+   */
   api_format: '{/id}{/action}/',
   axios_options: {
     // baseURL: config.api_root,
@@ -15,8 +19,6 @@ export default {
     withCredentials: true
     // headers: {'X-Custom-Header': 'foobar'}
   },
-  // TODO: 尚未实现，可以考虑改成 hook 实现
-  api_payload_format: 'json', // json | form-data | urlencoded
   // Router
   router_options: {},
   main_routes: [],
@@ -27,5 +29,6 @@ export default {
   menus: [],
   pages: {},
   // Hooks
+  // TODO: Hooks 太杂乱，应该将源码文件拆开，将文档分节
   hooks
 }

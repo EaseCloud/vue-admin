@@ -176,6 +176,26 @@ Vue-Admin 框架提供了为数众多的配置选项供用户使用，在 `src/v
 
 **默认值**: `Vue Admin Project`
 
+#### api_root
+
+使用 `vm.api(model, root, format)` 构造 RESTFUL 请求对象时的默认 API 根路径。
+
+具体的 API 模块逻辑可以参考 *REST API Client* 一节
+
+#### api_format
+
+**默认值**: `{/id}{/action}/`
+
+由于具体的方法请求会制定 Path params 去将一定参数混入路径，用此参数配置具体的路径格式。
+
+具体协议可以参照 [RFC 6570 Template specification](http://tools.ietf.org/html/rfc6570)
+
+模板解释使用了 npm 库 <https://github.com/bramstein/url-template>
+
+#### axios_options
+
+HTTP 请求默认使用 axios 库，用这个参数可以设定默认的 axios 选项。
+
 #### router_options
 
 **默认值**: `{}`
@@ -319,3 +339,18 @@ Vue-Admin 在获取到用户信息之后，会将用户信息存放在 Vuex 的 
 
 实现后台退出的动作并返回 Promise。
 
+#### func_get_current_user_name ()
+
+同步获取当前已登录用户的显示用户名，以便 UI 框架渲染当前已登录状态栏。
+
+#### func_get_current_user_avatar_url ()
+
+同步获取当前已登录用户的头像URL，以便 UI 框架渲染当前已登录状态栏。
+
+#### filter_data_before_api_request (data)
+
+实现 api 模块提交数据之前，转换 payload 格式
+
+如果需要将提交格式转换成 FormData/json/x-urlencoded 的操作可以改写这个钩子
+
+通过 this 可以获取到调用的 vm 组件
