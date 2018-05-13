@@ -17,5 +17,9 @@ export default {
       const vm = this
       return vm.utils.general.finalize(...arguments)
     }
+  },
+  mounted () {
+    const vm = this
+    if (vm.reload instanceof Function) vm.reload()
   }
 }

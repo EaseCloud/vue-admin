@@ -49,7 +49,8 @@
                 </dropdown-menu>
               </dropdown>
               <!-- TODO: 头像获取尚未实现 -->
-              <avatar :src="currentUserAvatarUrl" style="background: #619fe7; margin-left: 10px;"></avatar>
+              <avatar :src="currentUserAvatarUrl"
+                      style="background: #619fe7; margin-left: 10px;"></avatar>
             </row>
           </div>
         </div>

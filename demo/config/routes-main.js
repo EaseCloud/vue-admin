@@ -1,5 +1,6 @@
 import Home from '../pages/Home.vue'
 import HelloWorld from '../pages/HelloWorld.vue'
+import ListViewDemo from '../pages/ListViewDemo.vue'
 
 /* TODO: 要补充 meta 的文档 */
 export default [{
@@ -23,5 +24,12 @@ export default [{
   component: Home,
   meta: {
     title: '克隆首页'
+  }
+}, {
+  path: 'list_view',
+  name: 'main_list_view',
+  component: ListViewDemo,
+  meta: {
+    title: '列表模型'
   }
 }]

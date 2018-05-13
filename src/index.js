@@ -11,8 +11,11 @@ import mixins from './mixins'
 import mixinsAuth from './mixins/auth'
 import mixinsApp from './mixins/app'
 
+import api from './plugins/api'
+
 export default {
   install (Vue, options = {}) {
+    Vue.use(api)
     Vue.use(iView)
 
     Vue.mixin(mixins)

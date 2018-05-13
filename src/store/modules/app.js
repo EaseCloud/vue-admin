@@ -21,7 +21,7 @@ const app = {
      * 其中 title 可以通过 finalize 传入 params 做变量计算得到
      */
     pagesOpened: [],
-    currentPageIndex: 0,
+    currentPageIndex: -1,
     menuTheme: 'dark', // 主题
     themeColor: '',
     // ---- 定版的分割线 ----
@@ -81,6 +81,7 @@ const app = {
       // 没有的话插一个
       if (pageIndex === -1) {
         const page = { title, meta, route: { name, params, query } }
+        if (!state.pagesOpened) state.pagesOpened = []
         state.pagesOpened.splice(state.currentPageIndex + 1, 0, page)
         pageIndex = state.currentPageIndex + 1
       }
