@@ -9,11 +9,12 @@
       return {
         listViewOptions: {
           model: 'user',
-          cols: [{
+          fields: [{
             key: 'id',
             label: 'ID'
           }, {
             key: 'username',
+            type: 'html',
             label: '用户名'
           }, {
             key: 'email',

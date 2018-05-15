@@ -34,7 +34,7 @@
 </script>
 
 <style lang="less" scoped>
-  @import "../../style/defines";
+  @import "../../../style/defines";
 
   .page-content {
     position: absolute;

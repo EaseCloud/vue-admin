@@ -74,6 +74,28 @@ devServer: {
 
 \[TODO\]
 
+### 数据驱动
+
+#### 字段设置
+
+样例：
+
+```
+fields: [{
+  key: 'gender',
+  label: '性别',
+  type: 'radio',
+  filter (item) => {
+  },
+  mapper: {M: '男', F: '女', __default__: '保密'}
+  filtering: { // 列表视图可用
+    type: text
+  },
+  // TODO: 需要考虑多列排序的问题
+  ordering: 'gender'
+}]
+```
+
 ### ListViewTable
 
 \[TODO\]
