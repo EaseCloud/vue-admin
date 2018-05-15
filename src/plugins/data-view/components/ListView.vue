@@ -1,14 +1,24 @@
 <template>
   <card class="page-content">
     <div slot="title" class="page-header">
-      <h3 class="title">ListView 列表标题</h3>
-      <h4 class="subtitle">副标题</h4>
+      <h3 class="title">{{title}}</h3>
+      <h4 class="subtitle">{{subtitle}}</h4>
       <div class="controls">
         <i-button>保存</i-button>
         <i-button>关闭</i-button>
       </div>
     </div>
-    <list-view-table v-bind="listViewOptions"></list-view-table>
+    <list-view-table v-bind="listViewOptions"
+                     ref="table"></list-view-table>
+    <div class="page-footer">
+      <page :total="$refs.table && $refs.table.pager.count"
+            :current="Number($route.query.page) || 1"
+            :page-size="Number($route.query.page_size) || 10"
+            show-sizer
+            show-total
+            @on-change="pageTo(Number($event))"
+            @on-page-size-change="pageSizeTo(Number($event))"></page>
+    </div>
   </card>
 </template>
 
@@ -21,13 +31,28 @@
     computed: {
       listViewOptions () {
         const vm = this
-        return { ...vm.$attrs, ...vm.$props }
+        return {
+          ...vm.$attrs,
+          ...vm.$props,
+          page: vm.$route.query.page || 1,
+          pageSize: vm.$route.query.page_size || 1
+        }
       }
     },
     methods: {
       reload () {
         // const vm = this
-        // console.log(vm.$props)
+        window.vv = this
+      },
+      pageTo (page) {
+        const vm = this
+        vm.$router.replace({ query: { ...vm.$route.query, page } })
+        vm.$refs.table.pageTo(page)
+      },
+      pageSizeTo (pageSize) {
+        const vm = this
+        vm.$router.replace({ query: { ...vm.$route.query, page_size: pageSize } })
+        vm.$refs.table.pageSizeTo(pageSize)
       }
     }
   }
@@ -42,6 +67,7 @@
     left: 10px;
     right: 10px;
     bottom: 10px;
+    padding-bottom: 60px;
     .page-header {
       .clearfix();
       .title {
@@ -58,6 +84,15 @@
       .controls {
         float: right;
       }
+    }
+    .page-footer {
+      position: absolute;
+      text-align: right;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 14px 16px;
+      border-top: 1px solid rgb(233, 234, 236);
     }
   }
 </style>

@@ -7,10 +7,15 @@
              :data="data">
     </i-table>
     <div class="list-view-table-footer">
-      <page :total="pager.count"
+      <page v-if="options.show_pager"
+            :total="pager.count"
             :current="pager.page"
+            :page-size="pager.pageSize"
             size="small"
-            @on-change="pageTo(Number($event))"></page>
+            show-sizer
+            show-total
+            @on-change="pageTo(Number($event))"
+            @on-page-size-change="pageSizeTo(Number($event))"></page>
     </div>
   </div>
 </template>
@@ -33,6 +38,8 @@
     components: { ...tableComponents },
     props: {
       model: { type: String, required: true },
+      title: { type: String, default: '列表视图' },
+      subtitle: { type: String, default: 'ListView' },
       pk: { type: String, default: 'id' },
       fields: { type: Array, required: true },
       // 行级操作按钮

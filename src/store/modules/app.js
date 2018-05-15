@@ -78,12 +78,15 @@ const app = {
     openPage (state, { title, name, meta, params = {}, query = {} }) {
       // 先查找现存的 pagesOpened
       let pageIndex = _.findIndex(state.pagesOpened, { route: { name, params } })
-      // 没有的话插一个
       if (pageIndex === -1) {
+        // 没有的话插一个
         const page = { title, meta, route: { name, params, query } }
         if (!state.pagesOpened) state.pagesOpened = []
         state.pagesOpened.splice(state.currentPageIndex + 1, 0, page)
         pageIndex = state.currentPageIndex + 1
+      } else {
+        // 有的话替换掉 query 条件
+        state.pagesOpened[pageIndex].route = { name, params, query }
       }
       state.currentPageIndex = pageIndex
       // 保存状态
