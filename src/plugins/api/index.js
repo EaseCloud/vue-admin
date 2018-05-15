@@ -37,8 +37,6 @@ function parseArgs (method, args) {
   }
   const hasBody = httpMethodsParseBody[method.toLowerCase()]
   const options = { method, params: {}, query: {} }
-  console.log('options', options)
-  console.log('hasBody', hasBody)
   switch (args.length) {
     case 3:
       if (hasBody) {
@@ -70,7 +68,6 @@ function parseArgs (method, args) {
     default:
       throw new Error('最多3个参数 [params, data, query], 但是传入了' + args.length + '个')
   }
-  console.log('options', options)
   return options
 }
 
@@ -98,8 +95,6 @@ class RestResource {
     return config.hooks.filter_data_before_api_request.apply(
       this.vm, [data]
     ).then(data => {
-      console.log(params)
-      console.log(this.root, this.model, this.urlTemplate.expand(params))
       return this.axios.request({
         method,
         url: urljoin(this.root, this.model, this.urlTemplate.expand(params)),

@@ -2,6 +2,8 @@ export default {
   hooks: {
     // 所有的主线动作都要带钩
     async action_load_data () {
+      const vm = this
+      return vm.config.hooks.action_list_view_load_data.apply(vm)
     },
     async filter_item_before_render (item) {
       return Promise.resolve(item)

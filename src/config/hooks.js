@@ -96,5 +96,16 @@ export default {
    */
   async action_get_model_edit_route (model, pk) {
     return { name: `main_${model}_edit`, params: { id: pk } }
+  },
+  /**
+   * TODO: 默认情况没有实现
+   * ListView 根据接口配置获取数据
+   * @returns {Promise<void>}
+   */
+  async action_list_view_load_data () {
+    const vm = this
+    return vm.api().get({
+      // page
+    })
   }
 }

@@ -45,5 +45,26 @@ export default {
       }
     })
     return value
+  },
+  /**
+   * 输出对象到 Console
+   * @param obj
+   * @param method
+   */
+  echo (obj, method = 'log') {
+    console[method](obj)
+  },
+  async waitFor (item, key, timeout = 5000, interval = 50) {
+    const vm = this
+    const deadline = Date.now() + timeout
+    return new Promise((resolve, reject) => {
+      const check = () => {
+        let value = vm.evaluate(item, key)
+        if (value) resolve(value)
+        if (Date.now() > deadline) reject(new Error('waitFor timed out'))
+        setTimeout(check, interval)
+      }
+      check()
+    })
   }
 }

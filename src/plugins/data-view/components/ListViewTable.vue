@@ -1,10 +1,17 @@
 <template>
-  <div>
+  <div class="list-view-table">
     <i-table v-if="initialized"
              :columns="columns"
+             :loading="loading"
              :size="size"
              :data="data">
     </i-table>
+    <div class="list-view-table-footer">
+      <page :total="pager.count"
+            :current="pager.page"
+            size="small"
+            @on-change="pageTo(Number($event))"></page>
+    </div>
   </div>
 </template>
 
@@ -38,18 +45,27 @@
           can_create: true,
           can_delete: true,
           can_edit: true,
-          show_actions: true
+          show_actions: true,
+          show_pager: false
         })
       },
-      // TODO: 斟酌一下分页的传入用何种方式比较合适
-      pager: {
-        type: Object,
-        default: () => ({
-          page: 1,
-          page_count: 1,
-          page_size: 10
-        })
+      // // TODO: 斟酌一下分页的传入用何种方式比较合适
+      pageSize: {
+        type: Number,
+        default: 10
       },
+      page: {
+        type: Number,
+        default: 1
+      },
+      // pager: {
+      //   type: Object,
+      //   default: () => ({
+      //     page: 1,
+      //     page_count: 1,
+      //     page_size: 10
+      //   })
+      // },
       filters: { type: Object, default: () => ({}) },
       // hooks: {
       //   type: Object
@@ -66,6 +82,8 @@
       return {
         // 是否已初始化
         initialized: false,
+        // 是否正在加载中
+        loading: true,
         // 经过渲染预处理的 iView table 猎头数据
         columns: [],
         // 经过渲染预处理的数据
@@ -74,8 +92,15 @@
         items: [],
         // 选中的项目列表，主键 pk 的列表
         selectedItems: [],
+        // 固化查询条件
         query: { ...vm.filters },
-        total: 0
+        // 固化分页条件
+        pager: {
+          page: vm.page,
+          pageSize: vm.pageSize,
+          pageCount: 1,
+          count: 0
+        }
         // TODO: 改为 plugins 实现
         // preview_image: null
       }
@@ -89,12 +114,12 @@
     methods: {
       async reload () {
         const vm = this
-        // console.log(vm.hooks)
+        vm.loading = true
         const { page, count, results } = await vm.hooks.action_load_data.apply(vm)
-        vm.total = count
         // 整除：https://stackoverflow.com/a/4228528/2544762
-        vm.pager.page_count = ~~(count / vm.pager.page_size)
+        vm.pager.pageCount = ~~((count - 1) / vm.pager.pageSize) + 1
         vm.pager.page = page
+        vm.pager.count = count
         // 预处理所有数据
         const items = []
         await Promise.all(results.map(async function (item, i) {
@@ -103,6 +128,7 @@
         vm.items = items
         // 预渲染
         await vm.preRenderData()
+        vm.loading = false
       },
       /**
        * 预渲染所有的已获得对象
@@ -137,6 +163,9 @@
         }))
         return row
       },
+      /**
+       * 渲染单个单元格
+       */
       renderCell (type, value, index, h, field) {
         // const vm = this
         // CHECKLIST: <data-view-types> <list-view>
@@ -173,13 +202,13 @@
           return h(`未定义的字段类型: ${type}`)
         }
       },
-      /**
-       * 根据指定的 field 选项以及数据行的对象，渲染出具体的 iView
-       * table 列定义对象
-       * @param type
-       * @param value
-       * @param h
-       */
+      // /**
+      //  * 根据指定的 field 选项以及数据行的对象，渲染出具体的 iView
+      //  * table 列定义对象
+      //  * @param type
+      //  * @param value
+      //  * @param h
+      //  */
       // renderColumn (field, index) {
       //   const vm = this
       //   const type =  vm.finalize(field.type, item) || 'text'
@@ -188,25 +217,6 @@
       //   } else if (type === 'render') {
       //   }
       // },
-      //     setProperty(item, keyStr, value) {
-      //       const vm = this
-      //       // 缺省 keyStr 的时候直接返回 item
-      //       if (!keyStr) return item;
-      //       // 执行 keyStr 级联求值
-      //       let obj = item;
-      //       if (typeof (keyStr || '') !== 'string') {
-      //         console.warn('getProperty 属性的 key 取值不规范');
-      //         console.log('keyStr:', keyStr);
-      //         console.log('item:', item);
-      //       }
-      //       const keys = keyStr.split('.')
-      //       for (let i = 0; i < keys.length - 1; ++i) {
-      //         const key = keys[i]
-      //         if (!obj[key]) vm.$set(obj, key, {})
-      //         obj = obj[key]
-      //       }
-      //       vm.$set(obj, keys[keys.length - 1], value)
-      //     },
       //     setQueryKey(key, value) {
       //       const vm = this;
       //       vm.$router.replace({
@@ -221,32 +231,42 @@
       //       vm.$router.replace({ query });
       //       vm.reload();
       //     },
-      //     dateformat(date, format = 'yyyy-mm-dd') {
-      //       return dateformat(date, format);
-      //     },
-      //     echo(obj) {
-      //       console.log(obj);
-      //     },
-      //     waitFor(obj, prop, timeout = 5000) {
-      //       const vm = this;
-      //       let timedOut = false;
-      //       return new Promise((resolve, reject) => {
-      //         let timerTimeout = setTimeout(() => {
-      //           timedOut = true;
-      //           reject();
-      //         }, timeout);
-      //         const func = () => {
-      //           let value = vm.getProperty(obj, prop)
-      //           if (value) {
-      //             clearTimeout(timerTimeout);
-      //             resolve(value);
-      //           } else if (!timedOut) setTimeout(func, 200);
-      //         };
-      //         func();
-      //       });
-      //     },
       //   },
       // };
+      /**
+       * 修改当前查询集的查询条件并且刷新数据
+       */
+      async doQuery (query) {
+        const vm = this
+        vm._.forEach(query, (value, key) => {
+          // 删除查询条件机制
+          if (value === null || value === undefined) {
+            delete vm.query[key]
+          } else {
+            vm.query[key] = value
+          }
+        })
+        // // TODO: 添加文档
+        // vm.$emit('query', query)
+        // // TODO: 为何这里要加 nextTick，另外为何不是先 reload 再 emit
+        // vm.$nextTick(() => {
+        //   vm.reload()
+        // })
+        await vm.reload()
+        vm.$emit('query', vm.query)
+      },
+      async pageTo (page) {
+        const vm = this
+        vm.pager.page = page
+        await vm.reload()
+        vm.$emit('page_to', page)
+      },
+      async pageSizeTo (pageSize) {
+        const vm = this
+        vm.pager.pageSize = pageSize
+        await vm.reload()
+        vm.$emit('page_size_to', pageSize)
+      },
       /**
        * 初始化所有的行列配置以适配 iView Table 组件的输入格式
        * @returns {Promise<void>}
@@ -322,3 +342,15 @@
     }
   }
 </script>
+
+<style lang="less" scoped>
+  @import "../../../style/defines";
+
+  .list-view-table-footer {
+    margin: 10px 0;
+    .clearfix();
+    .ivu-page {
+      float: right;
+    }
+  }
+</style>
