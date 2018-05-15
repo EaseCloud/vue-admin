@@ -29,7 +29,7 @@
       pk: { type: String, default: 'id' },
       fields: { type: Array, required: true },
       // 行级操作按钮
-      actions: { type: Array, default: () => [] },
+      actions: { type: Array, default: () => ['edit', 'delete'] },
       // 页面级操作按钮
       listActions: { type: Array, default: () => [] },
       options: {
@@ -142,16 +142,33 @@
         // CHECKLIST: <data-view-types> <list-view>
         // console.log(`RENDER[${index}]:`, type, value)
         if (type === 'label' || type === 'text') {
-          // return h('Button', {
-          //   props: {
-          //     type: 'text',
-          //     size: 'small'
-          //   }
-          // }, value)
           return h(tableComponents.TableFieldText, { props: { value } })
         } else if (type === 'html') {
           return h(tableComponents.TableFieldHtml, { props: { value } })
-          // } else if (type === 'render') {
+        } else if (type === 'tag') {
+          // TODO: 尚未实现
+          return h('div', `TODO:${type}`)
+        } else if (type === 'link') {
+          // TODO: 尚未实现
+          return h('div', `TODO:${type}`)
+        } else if (type === 'image') {
+          // TODO: 尚未实现
+          return h('div', `TODO:${type}`)
+        } else if (type === 'image-text') {
+          // TODO: 尚未实现
+          return h('div', `TODO:${type}`)
+          // } else if (type === 'switch') {
+          //   // TODO: 尚未实现
+          //   return h('div', `TODO:${type}`)
+          // } else if (type === 'html') {
+          //   // TODO: 尚未实现
+          //   return h('div', `TODO:${type}`)
+          // } else if (type === 'html') {
+          //   // TODO: 尚未实现
+          //   return h('div', `TODO:${type}`)
+        } else if (type === 'render') {
+          // TODO: 尚未实现
+          return h('div', `TODO:${type}`)
         } else {
           return h(`未定义的字段类型: ${type}`)
         }
@@ -230,6 +247,10 @@
       //     },
       //   },
       // };
+      /**
+       * 初始化所有的行列配置以适配 iView Table 组件的输入格式
+       * @returns {Promise<void>}
+       */
       async initialize () {
         const vm = this
         const columns = []
@@ -250,7 +271,37 @@
         // TODO: 初始化操作列
         if (vm.options.show_actions) {
           columns.push({
-            title: '操作'
+            title: '操作',
+            render (h, { row, index }) {
+              const controls = []
+              vm.actions.forEach(action => {
+                if (action === 'edit') {
+                  controls.push(h(
+                    'Button', {
+                      props: { size: 'small', type: 'ghost' },
+                      on: { click: () => vm.actionEdit(vm.items[index]) }
+                    }, '编辑'
+                  ))
+                } else if (action === 'delete') {
+                  controls.push(h('Poptip', {
+                    props: {
+                      confirm: true,
+                      title: '确认删除这项数据？'
+                    },
+                    on: { 'on-ok': () => vm.actionDelete(vm.items[index]) }
+                  }, [h(
+                    'Button', {
+                      props: { size: 'small', type: 'dashed' }
+                    }, '删除'
+                  )]))
+                } else {
+                  // General actions
+                }
+                // 为避免按钮粘在一起，加一个空格以分开
+                controls.push(vm._v(' '))
+              })
+              return h('div', controls)
+            }
           })
         }
         vm.columns = columns

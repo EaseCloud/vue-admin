@@ -6,7 +6,7 @@
   export default {
     name: 'TableFieldHtml',
     props: {
-      value: String
+      value: {}
     }
   }
 </script>

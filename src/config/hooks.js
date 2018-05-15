@@ -87,5 +87,14 @@ export default {
    */
   async filter_data_before_api_request (data) {
     return data
+  },
+  /**
+   * 根据数据模型名称和 id 获取编辑页面路由
+   * @param model
+   * @param pk
+   * @returns {Promise<{name: string, params: {id: *}}>}
+   */
+  async action_get_model_edit_route (model, pk) {
+    return { name: `main_${model}_edit`, params: { id: pk } }
   }
 }

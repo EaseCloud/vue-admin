@@ -11,6 +11,17 @@ import config from '../../config'
 // All http methods: https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
 const httpMethodsSafe = ['get', 'head', 'connect', 'options', 'trace']
 const httpMethodsUnsafe = ['post', 'put', 'delete', 'patch']
+const httpMethodsParseBody = {
+  get: false,
+  head: false,
+  connect: false,
+  options: false,
+  trace: false,
+  post: true,
+  put: true,
+  delete: false,
+  patch: true
+}
 const httpMethods = [...httpMethodsSafe, ...httpMethodsUnsafe]
 
 /**
@@ -18,38 +29,40 @@ const httpMethods = [...httpMethodsSafe, ...httpMethodsUnsafe]
  * 调用的 http 方法
  * @param method
  * @param args 传入的参数数组，即 api(model).get(...args) 或者 api(model).post(...args) 的参数数组
- * @returns {{method: string, params: {}, data: {}, query: {}}}
+ * @returns {{method: *, params: {}, query: {}}}
  */
 function parseArgs (method, args) {
   if (httpMethods.indexOf(method.toLowerCase()) === -1) {
     throw new Error('不支持的 http 方法：' + method)
   }
-  const isSafe = httpMethodsSafe.indexOf(method.toLowerCase()) > -1
+  const hasBody = httpMethodsParseBody[method.toLowerCase()]
   const options = { method, params: {}, query: {} }
+  console.log('options', options)
+  console.log('hasBody', hasBody)
   switch (args.length) {
     case 3:
-      if (isSafe) {
-        throw new Error('最多2个参数 [params, query], 但是传入了' + args.length + '个')
-      } else {
+      if (hasBody) {
         options.params = args[0]
         options.data = args[1]
         options.query = args[2]
+      } else {
+        throw new Error('最多2个参数 [params, query], 但是传入了' + args.length + '个')
       }
       break
     case 2:
-      if (isSafe) {
-        options.params = args[0]
-        options.query = args[1]
-      } else {
+      if (hasBody) {
         options.params = args[0]
         options.data = args[1]
+      } else {
+        options.params = args[0]
+        options.query = args[1]
       }
       break
     case 1:
-      if (isSafe) {
-        options.params = args[0]
-      } else {
+      if (hasBody) {
         options.data = args[0]
+      } else {
+        options.params = args[0]
       }
       break
     case 0:
@@ -57,6 +70,7 @@ function parseArgs (method, args) {
     default:
       throw new Error('最多3个参数 [params, data, query], 但是传入了' + args.length + '个')
   }
+  console.log('options', options)
   return options
 }
 
@@ -84,6 +98,8 @@ class RestResource {
     return config.hooks.filter_data_before_api_request.apply(
       this.vm, [data]
     ).then(data => {
+      console.log(params)
+      console.log(this.root, this.model, this.urlTemplate.expand(params))
       return this.axios.request({
         method,
         url: urljoin(this.root, this.model, this.urlTemplate.expand(params)),
@@ -104,8 +120,10 @@ export default {
       methods: {
         // 从性能角度来看，可以考虑将多次的构造缓存下来，支持重复使用
         api (model) {
-          const resource = new RestResource(model)
-          resource.vm = this
+          const vm = this
+          const resource = new RestResource(model || vm.model)
+          // 保留 vm 的引用
+          resource.vm = vm
           return resource
         }
       }

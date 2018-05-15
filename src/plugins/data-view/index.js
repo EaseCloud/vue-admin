@@ -49,6 +49,34 @@ export default {
               vm.$set(field, key, value)
             }
           })
+        },
+        /**
+         * 根据数据模型名称和 id 获取编辑页面路由
+         * @param model
+         * @param pk
+         * @returns {Promise<{name: string, params: {id: *}}>}
+         */
+        async getModelEditRoute (model, pk) {
+          const vm = this
+          return vm.config.hooks.action_get_model_edit_route.apply(vm, [model, pk])
+        },
+        /**
+         * 行级编辑动作
+         * @param item
+         * @returns {Promise<void>}
+         */
+        async actionEdit (item) {
+          const vm = this
+          return vm.hooks.action_edit.apply(vm, [item])
+        },
+        /**
+         * 行级删除动作
+         * @param item
+         * @returns {Promise<void>}
+         */
+        async actionDelete (item) {
+          const vm = this
+          return vm.hooks.action_delete.apply(vm, [item])
         }
       }
     })
