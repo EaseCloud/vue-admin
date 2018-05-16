@@ -1,0 +1,16 @@
+{
+  "user": [
+    { "id": 1, "username": "admin", "email": "admin@example.com" },
+    { "id": 2, "username": "amy", "email": "amy@example.com" },
+    { "id": 3, "username": "bob", "email": "bob@example.com" },
+    { "id": 4, "username": "cathy", "email": "cathy@example.com" },
+    { "id": 5, "username": "dijkstra", "email": "dijkstra@example.com" },
+    { "id": 6, "username": "elsa", "email": "elsa@example.com" },
+    { "id": 7, "username": "franklin", "email": "franklin@example.com" },
+    { "id": 8, "username": "george", "email": "george@example.com" },
+    { "id": 9, "username": "hilary", "email": "hilary@example.com" },
+    { "id": 10, "username": "ivy", "email": "ivy@example.com" },
+    { "id": 11, "username": "joseph", "email": "joseph@example.com" },
+    { "id": 12, "username": "kindle", "email": "kindle@example.com" }
+  ]
+}

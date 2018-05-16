@@ -1,6 +1,6 @@
 import Home from '../pages/Home.vue'
 import HelloWorld from '../pages/HelloWorld.vue'
-import ListViewDemo from '../pages/ListViewDemo.vue'
+import UserList from '../pages/UserList.vue'
 
 /* TODO: 要补充 meta 的文档 */
 export default [{
@@ -27,9 +27,9 @@ export default [{
   }
 }, {
   path: 'list_view',
-  name: 'main_list_view',
-  component: ListViewDemo,
+  name: 'main_user_list',
+  component: UserList,
   meta: {
-    title: '列表模型'
+    title: '用户列表'
   }
 }]

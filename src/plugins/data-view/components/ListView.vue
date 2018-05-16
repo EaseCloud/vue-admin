@@ -34,8 +34,8 @@
         return {
           ...vm.$attrs,
           ...vm.$props,
-          page: vm.$route.query.page || 1,
-          pageSize: vm.$route.query.page_size || 1
+          page: Number(vm.$route.query.page) || 1,
+          pageSize: Number(vm.$route.query.page_size) || 10
         }
       }
     },

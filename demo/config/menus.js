@@ -18,7 +18,7 @@ export default [{
   route: { name: 'main_home_clone' }
 }, {
   name: 'menu_list_view',
-  icon: 'grid',
-  title: '列表示例',
-  route: { name: 'main_list_view' }
+  icon: 'person',
+  title: '用户列表',
+  route: { name: 'main_user_list' }
 }]
