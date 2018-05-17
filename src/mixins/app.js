@@ -49,55 +49,57 @@ export default {
      * 匹配路由的 name 和 params，一致则认为是同一个 page，不一致则认为是新的 page
      * @param route
      */
-    openPage ({ name, params = {}, query = {} }) {
+    async openPage ({ name, params = {}, query = {} }) {
       const vm = this
       // 必须存在路由，否则直接判死刑
       const route = vm.getMainRouteItem(name)
       if (!route) throw new Error('没有找到匹配的路由：' + name)
-      vm.finalize(route.meta && route.meta.title, params).then(title => {
-        vm.$store.commit('openPage', { name, params, query, title, meta: route.meta })
-      })
+      const title = await vm.finalize(route.meta && route.meta.title, params)
+      vm.$store.commit('openPage', { name, params, query, title, meta: route.meta })
+    },
+    /**
+     * 给进去一个路由，维护 pagesOpened
+     * 用新的路由直接替换掉当前的 tab 选项
+     * 匹配规则：
+     * 匹配路由的 name 和 params，一致则认为是同一个 page，不一致则认为是新的 page
+     * @param route
+     */
+    async replacePage ({ name, params = {}, query = {} }) {
+      const vm = this
+      // 必须存在路由，否则直接判死刑
+      const route = vm.getMainRouteItem(name)
+      if (!route) throw new Error('没有找到匹配的路由：' + name)
+      const title = await vm.finalize(route.meta && route.meta.title, params)
+      vm.$store.commit('replacePage', { name, params, query, title, meta: route.meta })
+    },
+    closePage (index) {
+      const vm = this
+      // let pagesOpened = vm.$store.state.app.pagesOpened
+      // let lastPageObj = pagesOpened[0]
+      // 如果关闭掉当前打开的标签，要将活动标签移到靠近的其他标签
+      let newPageIndex = index
+      const isCurrentPageClosing = index === vm.$store.state.app.currentPageIndex
+      if (isCurrentPageClosing) {
+        // 如果关掉的是最后一个标签，那么活动标签需要前移
+        if (newPageIndex === vm.$store.state.app.pagesOpened.length - 1) {
+          newPageIndex -= 1
+        }
+      }
+      // let tagWidth = event.target.parentNode.offsetWidth
+      // vm.tagBodyLeft = Math.min(vm.tagBodyLeft + tagWidth, 0)
+      vm.$store.commit('closePage', index)
+      // 如果当前标签关掉了，需要跳转
+      if (isCurrentPageClosing) {
+        if (vm.$store.state.app.pagesOpened.length === 0) {
+          vm.$router.push(vm.config.home_route)
+        } else {
+          vm.$router.push(vm.$store.state.app.pagesOpened[newPageIndex].route)
+        }
+      }
+    },
+    closeCurrentPage () {
+      const vm = this
+      vm.closePage(vm.$store.state.app.currentPageIndex)
     }
-    // /**
-    //  * 打开新的 TAB 窗口页
-    //  * TODO: 这里的机制不够完整，同一个页面不同参数应该支持不同的 tab，譬如说不同商品的详情页不该独占，后期改进
-    //  * @param name
-    //  * @param params
-    //  * @param query
-    //  */
-    // openNewPage (name, params, query) {
-    //   console.log('OpenNewPage', name, params, query)
-    //   const vm = this
-    //   let pagesOpened = vm.$store.state.app.pagesOpened
-    //   let found = false
-    //   for (let i = 0; i < pagesOpened.length; ++i) {
-    //     if (name === pagesOpened[i].name) { // 页面已经打开
-    //       vm.$store.commit(
-    //         'pageOpenedList',
-    //         { index: i, params, query }
-    //       )
-    //       found = true
-    //       break
-    //     }
-    //   }
-    //   if (!found) {
-    //     // TODO: 非 menu 的页面会有问题
-    //     const menuItem = vm.getMenuItem(name)
-    //     vm.$store.commit('addTag', {
-    //       ...menuItem, params, query
-    //     })
-    //   }
-    //   vm.$store.commit('setCurrentPageName', name)
-    // },
-    // /**
-    //  * 打开页面，传入路由对象
-    //  * @param name
-    //  * @param params
-    //  * @param query
-    //  */
-    // openPage ({ name, params = {}, query = {} }) {
-    //   const vm = this
-    //   vm.openNewPage(name, params, query)
-    // }
   }
 }

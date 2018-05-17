@@ -17,6 +17,9 @@
             type: 'html',
             label: '用户名'
           }, {
+            key: 'mobile',
+            label: '手机'
+          }, {
             key: 'email',
             label: '电子邮箱'
           // }, {

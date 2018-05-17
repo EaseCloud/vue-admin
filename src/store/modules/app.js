@@ -92,6 +92,20 @@ const app = {
       // 保存状态
       this.commit('dumpPagesOpened')
     },
+    replacePage (state, { title, name, meta, params = {}, query = {} }) {
+      // 先查找现存的 pagesOpened
+      let pageIndex = _.findIndex(state.pagesOpened, { route: { name, params } })
+      // 无论如何都要替换掉当前的页面
+      const page = { title, meta, route: { name, params, query } }
+      if (!state.pagesOpened) state.pagesOpened = []
+      state.pagesOpened.splice(state.currentPageIndex, 1, page)
+      // 保存状态
+      this.commit('dumpPagesOpened')
+      // 如果发现有同一个页面的话，将其关掉
+      if (pageIndex > 1) {
+        this.commit('closePage', pageIndex)
+      }
+    },
     closePage (state, index) {
       state.pagesOpened.splice(index, 1)
       this.commit('dumpPagesOpened')
@@ -193,8 +207,8 @@ const app = {
     // setCurrentPageName (state, name) {
     //   state.currentPageName = name
     // },
-    setAvator (state, path) {
-      localStorage.avatorImgPath = path
+    setAvatar (state, path) {
+      localStorage.avatarImgPath = path
     },
     switchLang (state, lang) {
       state.lang = lang

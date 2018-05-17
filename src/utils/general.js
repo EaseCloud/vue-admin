@@ -12,11 +12,14 @@ export default {
    * 2. 如果 term 为一个 Promise，直接返回
    * 3. 否则，返回 Promise.resolve(term)
    * @param term
+   * @param args
    * @returns Promise<Any> 获取最终结果的 Promise，不保证同步
    */
-  async finalize (term) {
+  async finalize (term, ...args) {
     if (!term) return term
-    if (term instanceof Function) return this.finalize(term.apply(arguments.slice(1)))
+    if (term instanceof Function) {
+      return this.finalize(term.apply(this, args))
+    }
     if (term.then instanceof Function) return term
     return term
   },
@@ -38,13 +41,45 @@ export default {
     key.split('.').forEach(k => {
       if (!k) return
       try {
-        if (typeof value === 'undefined') value = null
+        if (value === void 0) value = null
         value = value && value[k]
       } catch (e) {
         console.error('evaluate 求值错误', e)
       }
     })
     return value
+  },
+  /**
+   * 级联写入一个属性值，使用 vm.$set
+   * 例如
+   * @param item
+   * @param key
+   * @param value
+   * @returns {*}
+   */
+  setProperty (item, key, value) {
+    const vm = this
+    // 缺省 keyStr 的时候直接返回 item
+    if (!key) return item
+    const index = key.indexOf('.')
+    if (index > -1) {
+      const k = key.substr(0, index)
+      if (!item[k]) {
+        if (vm.$set) {
+          vm.$set(item, k, {})
+        } else {
+          item[k] = {}
+        }
+      }
+      vm.setProperty(item[k], key.substr(index + 1), value)
+    } else {
+      if (vm.$set) {
+        vm.$set(item, key, value)
+      } else {
+        item[key] = value
+      }
+    }
+    return item
   },
   /**
    * 输出对象到 Console

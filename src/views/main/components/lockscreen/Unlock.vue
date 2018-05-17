@@ -1,21 +1,21 @@
 <template>
   <transition name="show-unlock">
     <div class="unlock-body-con" v-if="showUnlock" @keydown.enter="handleUnlock">
-      <div @click="handleClickAvator" class="unlock-avator-con" :style="{marginLeft: avatorLeft}">
-        <img class="unlock-avator-img" :src="avatorPath">
-        <div class="unlock-avator-cover">
-          <span><Icon type="unlocked" :size="30"></Icon></span>
+      <div @click="handleClickAvatar" class="unlock-avatar-con" :style="{marginLeft: avatarLeft}">
+        <img class="unlock-avatar-img" :src="avatarPath">
+        <div class="unlock-avatar-cover">
+          <span><icon type="unlocked" :size="30"></icon></span>
           <p>解锁</p>
         </div>
       </div>
-      <div class="unlock-avator-under-back" :style="{marginLeft: avatorLeft}"></div>
+      <div class="unlock-avatar-under-back" :style="{marginLeft: avatarLeft}"></div>
       <div class="unlock-input-con">
         <div class="unlock-input-overflow-con">
           <div class="unlock-overflow-body" :style="{right: inputLeft}">
             <input ref="inputEle" v-model="password" class="unlock-input" type="password" placeholder="密码同登录密码"/>
             <button ref="unlockBtn" @mousedown="unlockMousedown" @mouseup="unlockMouseup" @click="handleUnlock"
                     class="unlock-btn">
-              <Icon color="white" type="key"></Icon>
+              <icon color="white" type="key"></icon>
             </button>
           </div>
         </div>
@@ -32,7 +32,7 @@
     name: 'Unlock',
     data () {
       return {
-        avatorLeft: '0px',
+        avatarLeft: 0,
         inputLeft: '400px',
         password: '',
         check: null
@@ -45,22 +45,22 @@
       }
     },
     computed: {
-      avatorPath () {
-        return localStorage.avatorImgPath
+      avatarPath () {
+        return localStorage.avatarImgPath
       }
     },
     methods: {
       validator () {
         return true // 你可以在这里写密码验证方式，如发起ajax请求将用户输入的密码this.password与数据库用户密码对比
       },
-      handleClickAvator () {
-        this.avatorLeft = '-180px'
+      handleClickAvatar () {
+        this.avatarLeft = '-180px'
         this.inputLeft = '0px'
         this.$refs.inputEle.focus()
       },
       handleUnlock () {
         if (this.validator()) {
-          this.avatorLeft = '0px'
+          this.avatarLeft = 0
           this.inputLeft = '400px'
           this.password = ''
           Cookies.set('locking', '0')
@@ -90,7 +90,7 @@
     margin-top: -200px;
     transform-origin: center center;
     z-index: 10;
-    .unlock-avator-con {
+    .unlock-avatar-con {
       position: absolute;
       left: 50%;
       top: 50%;
@@ -105,13 +105,13 @@
       transition: all .5s;
       z-index: 12;
       box-shadow: 0 0 10px 2px rgba(255, 255, 255, .3);
-      .unlock-avator-img {
+      .unlock-avatar-img {
         width: 100%;
         height: 100%;
         display: block;
         z-index: 7;
       }
-      .unlock-avator-cover {
+      .unlock-avatar-cover {
         width: 100%;
         height: 100%;
         background: rgba(0, 0, 0, .6);
@@ -133,12 +133,12 @@
           font-weight: 500;
         }
       }
-      &:hover .unlock-avator-cover {
+      &:hover .unlock-avatar-cover {
         opacity: 1;
         transition: opacity .2s;
       }
     }
-    .unlock-avator-under-back {
+    .unlock-avatar-under-back {
       position: absolute;
       left: 50%;
       top: 50%;

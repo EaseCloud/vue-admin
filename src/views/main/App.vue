@@ -29,7 +29,7 @@
             <breadcrumb-nav :currentPath="currentPath"></breadcrumb-nav>
           </div>
         </div>
-        <div class="header-avator-con">
+        <div class="header-avatar-con">
           <full-screen v-model="isFullScreen"></full-screen>
           <lock-screen></lock-screen>
           <message-tip v-model="$store.state.app.messageCount"></message-tip>
@@ -56,7 +56,7 @@
         </div>
       </div>
       <div class="tags-con">
-        <tags-page-opened></tags-page-opened>
+        <tags-page-opened ref="tagsPageOpened"></tags-page-opened>
       </div>
     </div>
     <div class="single-page-con" :style="{left: shrink?'60px':'200px'}">
@@ -170,6 +170,7 @@
 
   // TODO: 面包屑尚未实现
   export default {
+    name: 'Main',
     components: {
       ShrinkableMenu,
       TagsPageOpened,
@@ -191,9 +192,9 @@
       currentPath () {
         return this.$store.state.app.currentPath // 当前面包屑数组
       },
-      avatorPath () {
+      avatarPath () {
         // TODO: 根据业务实现
-        return localStorage.avatorImgPath
+        return localStorage.avatarImgPath
       }
     },
     methods: {
@@ -402,7 +403,7 @@
         padding: 10px;
         overflow: hidden;
       }
-      .header-avator-con {
+      .header-avatar-con {
         position: absolute;
         right: 0;
         top: 0;

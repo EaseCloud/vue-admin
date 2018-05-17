@@ -83,24 +83,21 @@ class RestResource {
     this.root = root
     this.urlTemplate = template.parse(format)
     httpMethods.forEach(method => {
-      this[method] = function () {
+      this[method] = async function () {
         // console.log(method, arguments)
         return _this.request(method.toUpperCase(), ...arguments)
       }
     })
   }
 
-  request (method = 'GET') {
-    const { params, data, query } = parseArgs(method, [...arguments].slice(1))
-    return config.hooks.filter_data_before_api_request.apply(
-      this.vm, [data]
-    ).then(data => {
-      return this.axios.request({
-        method,
-        url: urljoin(this.root, this.model, this.urlTemplate.expand(params)),
-        params: query,
-        data
-      })
+  async request (method = 'GET', ...args) {
+    let { params, data, query } = parseArgs(method, args)
+    data = await config.hooks.filter_data_before_api_request.apply(this.vm, [data])
+    return this.axios.request({
+      method,
+      url: urljoin(this.root, this.model, this.urlTemplate.expand(params)),
+      params: query,
+      data
     })
   }
 }

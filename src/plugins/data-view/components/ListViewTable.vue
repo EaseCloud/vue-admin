@@ -56,7 +56,6 @@
           show_pager: false
         })
       },
-      // // TODO: 斟酌一下分页的传入用何种方式比较合适
       pageSize: {
         type: Number,
         default: 10
@@ -65,18 +64,7 @@
         type: Number,
         default: 1
       },
-      // pager: {
-      //   type: Object,
-      //   default: () => ({
-      //     page: 1,
-      //     page_count: 1,
-      //     page_size: 10
-      //   })
-      // },
       filters: { type: Object, default: () => ({}) },
-      // hooks: {
-      //   type: Object
-      // },
       size: {
         default: 'small',
         validator (value) {
@@ -247,7 +235,7 @@
         const vm = this
         vm._.forEach(query, (value, key) => {
           // 删除查询条件机制
-          if (value === null || value === undefined) {
+          if (value === null || value === void 0) {
             delete vm.query[key]
           } else {
             vm.query[key] = value

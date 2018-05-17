@@ -1,6 +1,6 @@
 import Home from '../pages/Home.vue'
-import HelloWorld from '../pages/HelloWorld.vue'
 import UserList from '../pages/UserList.vue'
+import UserEdit from '../pages/UserEdit.vue'
 
 /* TODO: 要补充 meta 的文档 */
 export default [{
@@ -12,24 +12,20 @@ export default [{
     locked: true
   }
 }, {
-  path: 'hello',
-  name: 'main_hello',
-  component: HelloWorld,
-  meta: {
-    title: '你好世界'
-  }
-}, {
-  path: 'home_clone',
-  name: 'main_home_clone',
-  component: Home,
-  meta: {
-    title: '克隆首页'
-  }
-}, {
-  path: 'list_view',
+  path: 'user',
   name: 'main_user_list',
   component: UserList,
   meta: {
     title: '用户列表'
+  }
+}, {
+  path: 'user/:id',
+  name: 'main_user_edit',
+  component: UserEdit,
+  meta: {
+    title (params) {
+      if (!Number(params.id)) return '创建用户'
+      return `用户[${params.id}]`
+    }
   }
 }]

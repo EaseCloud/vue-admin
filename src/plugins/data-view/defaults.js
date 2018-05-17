@@ -5,8 +5,15 @@ export default {
       const vm = this
       return vm.config.hooks.action_list_view_load_data.apply(vm)
     },
+    async action_load_data_single (id) {
+      const vm = this
+      return vm.config.hooks.action_edit_view_load_data.apply(vm, [id])
+    },
     async filter_item_before_render (item) {
-      return Promise.resolve(item)
+      return item
+    },
+    async filter_item_before_render_single (item) {
+      return item
     },
     async action_edit (item) {
       const vm = this
@@ -16,11 +23,18 @@ export default {
     },
     async action_delete (item) {
       const vm = this
-      console.log(vm.model)
       const pk = await vm.finalize(vm.pk, item)
       const id = await vm.evaluate(item, pk)
       await vm.api().delete({ id })
       return vm.reload()
+    },
+    async action_create () {
+      const vm = this
+      vm.$router.push(await vm.getModelEditRoute(vm.model, 0))
+    },
+    async action_redirect_list () {
+      const vm = this
+      vm.$router.push(await vm.getModelListRoute(vm.model))
     }
   }
 }

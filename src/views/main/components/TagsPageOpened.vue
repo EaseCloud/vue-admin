@@ -22,8 +22,8 @@
              ref="tagsPageOpened"
              :key="page.name || i"
              :name="page.name"
-             @on-close="closePage($event, i)"
-             @click.native="linkTo(page)"
+             @on-close="closePage(i)"
+             @click.native="$router.push(page.route)"
              :closable="!(page.meta && page.meta.locked)"
              :color="i===$store.state.app.currentPageIndex?'blue':'default'"
         >{{ itemTitle(page) }}
@@ -64,35 +64,6 @@
         } else {
           return item.title
         }
-      },
-      closePage (event, i) {
-        const vm = this
-        // let pagesOpened = vm.$store.state.app.pagesOpened
-        // let lastPageObj = pagesOpened[0]
-        // 如果关闭掉当前打开的标签，要将活动标签移到靠近的其他标签
-        let newPageIndex = i
-        const isCurrentPageClosing = i === vm.$store.state.app.currentPageIndex
-        if (isCurrentPageClosing) {
-          // 如果关掉的是最后一个标签，那么活动标签需要前移
-          if (newPageIndex === vm.$store.state.app.pagesOpened.length - 1) {
-            newPageIndex -= 1
-          }
-        }
-        let tagWidth = event.target.parentNode.offsetWidth
-        vm.tagBodyLeft = Math.min(vm.tagBodyLeft + tagWidth, 0)
-        vm.$store.commit('closePage', i)
-        // 如果当前标签关掉了，需要跳转
-        if (isCurrentPageClosing) {
-          if (vm.$store.state.app.pagesOpened.length === 0) {
-            vm.$router.push(vm.config.home_route)
-          } else {
-            vm.linkTo(vm.$store.state.app.pagesOpened[newPageIndex])
-          }
-        }
-      },
-      linkTo (page) {
-        const vm = this
-        vm.$router.push(page.route)
       },
       handleScroll (e) {
         let type = e.type

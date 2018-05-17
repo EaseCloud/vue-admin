@@ -89,6 +89,14 @@ export default {
     return data
   },
   /**
+   * 根据数据模型名称和获取列表页面路由
+   * @param model
+   * @returns {Promise<{name: string}>}
+   */
+  async action_get_model_list_route (model) {
+    return { name: `main_${model}_list` }
+  },
+  /**
    * 根据数据模型名称和 id 获取编辑页面路由
    * @param model
    * @param pk
@@ -99,13 +107,68 @@ export default {
   },
   /**
    * TODO: 默认情况没有实现
-   * ListView 根据接口配置获取数据
-   * @returns {Promise<void>}
+   * ListView 使用：根据接口配置获取数据
+   * @returns {Promise<>}
    */
   async action_list_view_load_data () {
     const vm = this
     return vm.api().get({
       // page
     })
+  },
+  /**
+   * EditView 使用：根据接口配置获取单个数据
+   * @returns {Promise<>}
+   */
+  async action_edit_view_load_data (id) {
+    const vm = this
+    const resp = await vm.api().get({ id })
+    return resp.data
+  },
+  /**
+   * EditView 使用：创建一个对象
+   * @returns {Promise<>}
+   */
+  async action_edit_view_create_item (item) {
+    const vm = this
+    const resp = await vm.api().post(item)
+    vm.$Message.success('操作成功')
+    return resp.data
+  },
+  /**
+   * EditView 使用：更新一个对象
+   * @returns {Promise<>}
+   */
+  async action_edit_view_update_item (item) {
+    const vm = this
+    const id = vm.evaluate(item, await vm.finalize(vm.pk))
+    const resp = await vm.api().patch({ id }, item)
+    vm.$Message.success('操作成功')
+    return resp.data
+  },
+  /**
+   * EditView/ListView 使用：删除一个对象
+   * @returns {Promise<>}
+   */
+  async action_data_view_delete_item (item) {
+    const vm = this
+    const id = vm.evaluate(item, await vm.finalize(vm.pk))
+    vm.$Message.info('已成功删除对象')
+    return vm.api().delete({ id })
+  },
+  /**
+   * EditView 使用：保存对象之前的过滤动作
+   * @returns {Promise<>}
+   */
+  async filter_edit_view_pre_save (item) {
+    return item
+  },
+  /**
+   * EditView 使用：保存对象之后的动作
+   * 默认：保存之后重新打开
+   * @returns {Promise<>}
+   */
+  async action_edit_view_post_save (item) {
+    return item
   }
 }

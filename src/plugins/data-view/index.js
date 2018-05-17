@@ -24,7 +24,7 @@ export default {
           let value = vm.evaluate(item, key)
           // 2. 根据 filter 过滤
           if (field.filter) {
-            value = field.filter.apply(vm, [value])
+            value = await field.filter.apply(vm, [value])
           }
           // 3. 根据 mapper 过滤
           if (field.mapper) {
@@ -45,10 +45,19 @@ export default {
           }
           Object.keys(defaults).forEach(key => {
             const value = defaults[key]
-            if (typeof field[key] === 'undefined') {
+            if (field[key] === void 0) {
               vm.$set(field, key, value)
             }
           })
+        },
+        /**
+         * 根据数据模型名称获取列表页面路由
+         * @param model
+         * @returns {Promise<{name: string, params: {id: *}}>}
+         */
+        async getModelListRoute (model) {
+          const vm = this
+          return vm.config.hooks.action_get_model_list_route.apply(vm, [model])
         },
         /**
          * 根据数据模型名称和 id 获取编辑页面路由
@@ -77,6 +86,22 @@ export default {
         async actionDelete (item) {
           const vm = this
           return vm.hooks.action_delete.apply(vm, [item])
+        },
+        /**
+         * 跳转到列表
+         * @returns {Promise<void>}
+         */
+        async redirectList () {
+          const vm = this
+          return vm.hooks.action_redirect_list.apply(vm, [vm.model])
+        },
+        /**
+         * 跳转到创建页面
+         * @returns {Promise<void>}
+         */
+        async redirectCreate () {
+          const vm = this
+          return vm.hooks.action_create.apply(vm)
         }
       }
     })

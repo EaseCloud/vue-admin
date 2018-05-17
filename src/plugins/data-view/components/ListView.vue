@@ -1,11 +1,11 @@
 <template>
-  <card class="page-content">
+  <card class="page-content list-view">
     <div slot="title" class="page-header">
       <h3 class="title">{{title}}</h3>
       <h4 class="subtitle">{{subtitle}}</h4>
       <div class="controls">
-        <i-button>保存</i-button>
-        <i-button>关闭</i-button>
+        <i-button @click="redirectCreate" type="success">新建</i-button>
+        <i-button @click="closeCurrentPage">关闭</i-button>
       </div>
     </div>
     <list-view-table v-bind="listViewOptions"
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+  import defaults from '../defaults'
   import ListViewTable from './ListViewTable.vue'
 
   export default {
@@ -37,6 +38,10 @@
           page: Number(vm.$route.query.page) || 1,
           pageSize: Number(vm.$route.query.page_size) || 10
         }
+      },
+      hooks () {
+        const vm = this
+        return { ...defaults.hooks, ...(vm.$attrs.hooks || {}) }
       }
     },
     methods: {
@@ -61,7 +66,7 @@
 <style lang="less" scoped>
   @import "../../../style/defines";
 
-  .page-content {
+  .page-content.list-view {
     position: absolute;
     top: 10px;
     left: 10px;
