@@ -9,40 +9,30 @@ export default {
     },
     currentUserName () {
       const vm = this
-      return vm.config.hooks.func_get_current_user_name()
+      return vm.config.hooks.func_get_current_user_name.apply(vm)
     },
     currentUserAvatarUrl () {
       const vm = this
-      return vm.config.hooks.func_get_current_user_avatar_url()
+      return vm.config.hooks.func_get_current_user_avatar_url.apply(vm)
     }
   },
   methods: {
-    login (username, password) {
+    async login (username, password) {
       const vm = this
-      return config.hooks.action_login.apply(
-        vm, [username, password]
-      ).then(user => {
-        vm.$store.commit('setCurrentUser', user)
-        config.hooks.action_after_login.apply(vm)
-      })
+      const user = await config.hooks.action_login.apply(vm, [username, password])
+      vm.$store.commit('setCurrentUser', user)
+      config.hooks.action_after_login.apply(vm)
     },
-    authenticate (reload = false) {
+    async authenticate (reload = false) {
       const vm = this
-      if (!reload && vm.me) return Promise.resolve(vm.me)
-      return new Promise((resolve, reject) => {
-        config.hooks.action_authenticate().then(user => {
-          vm.$store.commit('setCurrentUser', user)
-          resolve(vm.me)
-        }, () => {
-          // 如果后台验证失败，还要顺道清空本地的 Vuex 状态
-          vm.$store.commit('setCurrentUser', null)
-          reject(new Error('尚未登录'))
-        })
-      })
+      if (!reload && vm.me) return vm.me
+      const user = await config.hooks.action_authenticate.apply(vm)
+      vm.$store.commit('setCurrentUser', user)
+      return user
     },
     logout () {
       const vm = this
-      config.hooks.action_logout().then(() => {
+      config.hooks.action_logout.apply(vm).then(() => {
         vm.$store.commit('setCurrentUser', null)
       })
     },

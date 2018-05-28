@@ -22,14 +22,11 @@ const auth = {
       }
     },
     setCurrentUser (state, user) {
-      state.current_user = user
+      state.currentUser = user
       this.commit('dumpCurrentUser')
-    }
-  },
-  actions: {
-    logout (dispatch) {
-      dispatch('setCurrentUser', null)
-
+    },
+    logout (state) {
+      this.commit('setCurrentUser', null)
       // Cookies.remove('user')
       // Cookies.remove('password')
       // Cookies.remove('access')

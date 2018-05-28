@@ -1,5 +1,5 @@
 <template>
-  <div class="main" :class="{'main-hide-text': shrink}">
+  <div class="main" :class="{'main-hide-text': shrink}" v-if="me">
     <div class="sidebar-menu-con"
          :class="{dark: $store.state.app.menuTheme==='dark'}"
          :style="{width: shrink?'60px':'200px', overflow: shrink ? 'visible' : 'auto'}">
@@ -211,11 +211,10 @@
             name: 'ownspace_index'
           })
         } else if (name === 'loginout') {
-          // 退出登录
-          this.$store.commit('logout', this)
-          this.$store.commit('clearOpenedSubmenu')
-          this.$router.push({
-            name: 'login'
+          vm.config.hooks.action_logout.apply(vm).then(() => {
+            vm.$store.commit('logout')
+            vm.$store.commit('clearOpenedSubmenu')
+            vm.config.hooks.action_goto_login.apply(vm)
           })
         }
       },
