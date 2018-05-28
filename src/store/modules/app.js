@@ -124,7 +124,6 @@ const app = {
         if (i === oldIndex || page.meta.locked) {
           j += 1
           if (i === oldIndex) state.currentPageIndex = j
-          console.log(true, i)
           return true
         }
         console.log(false, i)
