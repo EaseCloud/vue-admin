@@ -10,10 +10,10 @@
     </div>
     <list-view-table v-bind="listViewOptions"
                      ref="table"></list-view-table>
-    <div class="page-footer">
+    <div class="page-footer" v-if="listViewOptions.showPager">
       <page :total="$refs.table && $refs.table.pager.count"
             :current="Number($route.query.page) || 1"
-            :page-size="Number($route.query.page_size) || 10"
+            :page-size="Number(listViewOptions.pageSize) || 10"
             show-sizer
             show-total
             @on-change="pageTo(Number($event))"
@@ -33,10 +33,11 @@
       listViewOptions () {
         const vm = this
         return {
-          ...vm.$attrs,
-          ...vm.$props,
+          showPager: true,
           page: Number(vm.$route.query.page) || 1,
-          pageSize: Number(vm.$route.query.page_size) || 10
+          pageSize: Number(vm.$route.query.page_size) || 10,
+          ...vm.$attrs,
+          ...vm.$props
         }
       },
       hooks () {
@@ -47,7 +48,7 @@
     methods: {
       reload () {
         // const vm = this
-        window.vv = this
+        // console.log(vm.listViewOptions)
       },
       pageTo (page) {
         const vm = this

@@ -153,7 +153,12 @@
             row[key] = await vm.getFieldValue(field, item)
           } else if (type === 'html') {
             row[key] = await vm.getFieldValue(field, item)
+          } else if (type === 'image') {
+            row[key] = await vm.getFieldValue(field, item)
           } else if (type === 'render') {
+          } else {
+            console.warn('尚未定义 ListViewTable 的 preRenderDataRow 字段处理类型：', type)
+            row[key] = await vm.getFieldValue(field, item)
           }
         }))
         return row
@@ -176,8 +181,7 @@
           // TODO: 尚未实现
           return h('div', `TODO:${type}`)
         } else if (type === 'image') {
-          // TODO: 尚未实现
-          return h('div', `TODO:${type}`)
+          return h(tableComponents.TableFieldImage, { props: { value, field } })
         } else if (type === 'image-text') {
           // TODO: 尚未实现
           return h('div', `TODO:${type}`)

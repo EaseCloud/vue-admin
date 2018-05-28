@@ -13,6 +13,7 @@ import mixinsApp from './mixins/app'
 
 import pluginApi from './plugins/api'
 import pluginDataView from './plugins/data-view'
+import pluginImageViewer from './plugins/image-viewer'
 
 export default {
   install (Vue, options = {}) {
@@ -20,6 +21,7 @@ export default {
 
     Vue.use(pluginApi)
     Vue.use(pluginDataView)
+    Vue.use(pluginImageViewer)
 
     Vue.mixin(mixins)
     Vue.mixin(mixinsAuth)

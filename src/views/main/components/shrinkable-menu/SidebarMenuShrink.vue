@@ -10,7 +10,7 @@
                     type="text">
             <icon :size="20" :color="iconColor" :type="item.icon"></icon>
           </i-button>
-          <dropdown-menu style="width: 200px;" slot="list">
+          <dropdown-menu style="width: 200px;" slot="list" v-if="item.children && item.children.length">
             <template v-for="(child, i) in (item.children || [])">
               <dropdown-item :name="child.name" :key="i">
                 <icon :type="child.icon"></icon>

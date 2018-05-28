@@ -1,4 +1,5 @@
 export default {
   TableFieldHtml: () => import('./TableFieldHtml'),
-  TableFieldText: () => import('./TableFieldText')
+  TableFieldText: () => import('./TableFieldText'),
+  TableFieldImage: () => import('./TableFieldImage')
 }
