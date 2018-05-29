@@ -1,9 +1,10 @@
 <template>
   <i-menu ref="sideMenu"
           :active-name="$route.name"
-          :open-names="openNames"
           :theme="menuTheme"
+          :open-names="$store.state.app.menusOpened"
           width="auto"
+          @on-open-change="$store.commit('setMenusOpened', $event); $emit('on-open-change', $event)"
           @on-select="$emit('on-select', $event)">
     <template v-for="item in menuList">
       <submenu v-if="item.children && item.children.length"
@@ -47,9 +48,6 @@
       menuTheme: {
         type: String,
         default: 'dark'
-      },
-      openNames: {
-        type: Array
       }
     },
     updated () {

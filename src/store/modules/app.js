@@ -7,6 +7,7 @@ import Vue from 'vue'
 const app = {
   state: {
     menus: [],
+    menusOpened: [],
     pages: {}, // Main 下级路由中的所有页面组件
     /**
      * pagesOpened 格式：
@@ -27,7 +28,6 @@ const app = {
     // ---- 定版的分割线 ----
     lang: '',
     isFullScreen: false,
-    openedSubmenuArr: [], // 要展开的菜单数组
     // currentPageName: '',
     currentPath: [], // 面包屑数组
     // routers: [
@@ -135,6 +135,9 @@ const app = {
       // localStorage.pagesOpened = JSON.stringify(state.pagesOpened)
       this.commit('dumpPagesOpened')
     },
+    setMenusOpened (state, menus) {
+      state.menusOpened = menus
+    },
     // ---- 定版的分割线 ----
     setTagsList (state, list) {
       state.tagsList.push(...list)
@@ -144,19 +147,6 @@ const app = {
     },
     changeMainTheme (state, mainTheme) {
       state.themeColor = mainTheme
-    },
-    addOpenSubmenu (state, name) {
-      let hasThisName = false
-      let isEmpty = false
-      if (name.length === 0) {
-        isEmpty = true
-      }
-      if (state.openedSubmenuArr.indexOf(name) > -1) {
-        hasThisName = true
-      }
-      if (!hasThisName && !isEmpty) {
-        state.openedSubmenuArr.push(name)
-      }
     },
     // closePage (state, name) {
     //   state.cachePage.forEach((item, index) => {
@@ -211,9 +201,6 @@ const app = {
     switchLang (state, lang) {
       state.lang = lang
       Vue.config.lang = lang
-    },
-    clearOpenedSubmenu (state) {
-      state.openedSubmenuArr.length = 0
     }
     // setMessageCount (state, count) {
     //   state.messageCount = count

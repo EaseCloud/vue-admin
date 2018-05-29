@@ -7,8 +7,8 @@
         <shrinkable-menu
           :shrink="shrink"
           :theme="$store.state.app.menuTheme"
-          :open-names="openedSubmenuArr"
-          :menu-list="$store.state.app.menus">
+          :menu-list="$store.state.app.menus"
+          @on-open-change="scrollBarResize">
           <div slot="top" class="logo-con">
             <img v-show="!shrink" src="../../../assets/images/logo.jpg" key="max-logo"/>
             <img v-show="shrink" src="../../../assets/images/logo-min.jpg" key="min-logo"/>
@@ -186,8 +186,7 @@
       return {
         shrink: false,
         userName: '',
-        isFullScreen: false,
-        openedSubmenuArr: this.$store.state.app.openedSubmenuArr
+        isFullScreen: false
       }
     },
     computed: {
@@ -215,7 +214,7 @@
         } else if (name === 'loginout') {
           vm.config.hooks.action_logout.apply(vm).then(() => {
             vm.$store.commit('logout')
-            vm.$store.commit('clearOpenedSubmenu')
+            vm.$store.commit('setMenusOpened', [])
             vm.config.hooks.action_goto_login.apply(vm)
           })
         }
@@ -229,7 +228,9 @@
       //   }
       // },
       scrollBarResize () {
-        this.$refs.scrollBar.resize()
+        setTimeout(() => {
+          this.$refs.scrollBar.resize()
+        }, 50)
       }
     },
     watch: {
@@ -243,15 +244,10 @@
         // }
         vm.openPage(to)
         localStorage.currentPageName = to.name
-      },
+      }
       // lang () {
       //   setCurrentPath(this, this.$route.name) // 在切换语言时用于刷新面包屑
       // },
-      openedSubmenuArr () {
-        setTimeout(() => {
-          this.scrollBarResize()
-        }, 300)
-      }
     },
     mounted () {
       const vm = this

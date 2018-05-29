@@ -5,7 +5,7 @@
       v-show="!shrink"
       :menu-theme="theme"
       :menu-list="menuList"
-      :open-names="openNames"
+      @on-open-change="$emit('on-open-change', $event)"
       @on-select="handleChange"
     ></sidebar-menu>
     <sidebar-menu-shrink
@@ -45,9 +45,6 @@
         validator (val) {
           return _.includes(['dark', 'light'], val)
         }
-      },
-      openNames: {
-        type: Array
       }
     },
     computed: {
@@ -61,7 +58,6 @@
     methods: {
       handleChange (menuName) {
         const vm = this
-        // TODO: 展开当前菜单尚未实现
         vm.config.hooks.filter_before_menu_select(menuName).then(() => {
           // 默认情况下，通过菜单列表查找到对应的菜单项，并且跳转到 route 参数指定的路由目标
           // 如果没有 route 参数，跳转到名称为 name 的路由
