@@ -127,16 +127,17 @@
     },
     watch: {
       $route (to) {
-        this.currentPageName = to.name
-        this.$nextTick(() => {
-          this.refsTag.forEach((item, index) => {
+        const vm = this
+        vm.currentPageName = to.name
+        vm.$nextTick(() => {
+          vm.refsTag.forEach((item, index) => {
             if (to.name === item.name) {
-              let tag = this.refsTag[index].$el
-              this.moveToView(tag)
+              let tag = vm.refsTag[index].$el
+              vm.moveToView(tag)
             }
           })
         })
-        this.tagsCount = this.tagsList.length
+        vm.tagsCount = vm.tagsList.length
       }
     }
   }

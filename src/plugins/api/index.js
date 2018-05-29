@@ -75,6 +75,9 @@ class RestResource {
   constructor (model,
                root = config.api_root || '',
                format = config.api_format || '{/id}{/action}/') {
+    if (!model) {
+      throw new Error('没有为 api 指定对应的 model')
+    }
     const _this = this
     // 动态生成实例，使得动态配置 config.axios_options 修改可以动态生效
     this.vm = null

@@ -42,9 +42,12 @@ const router = new VueRouter({
 //   // TODO:
 // })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async function (to, from, next) {
   iView.LoadingBar.start()
-  utils.html.setHtmlTitle(utils.html.i18nText(to.meta.title))
+  const title = typeof to.meta.title === 'function'
+    ? await utils.general.finalize(to.meta.title(to.params))
+    : await utils.general.finalize(to.meta.title)
+  utils.html.setHtmlTitle(utils.html.i18nText(title))
   next()
   // TODO: 锁屏设定、TAB 页面弹出
   // if (Cookies.get('locking') === '1' && to.name !== 'locking') { // 判断当前是否是锁定状态

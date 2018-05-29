@@ -2,8 +2,7 @@ export default [{
   name: 'menu_home',
   icon: 'ios-home',
   title: '首页',
-  route: { name: 'main_home' },
-  noCache: true
+  route: { name: 'main_home' }
 }, {
   name: 'menu_list_view',
   icon: 'person',

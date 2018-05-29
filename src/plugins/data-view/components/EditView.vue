@@ -34,10 +34,14 @@
       }
     },
     data () {
-      return {}
+      return {
+        cacheName: '',
+        cachePath: ''
+      }
     },
     methods: {
       reload () {
+        // const vm = this
       },
       async save () {
         const vm = this
@@ -56,6 +60,23 @@
         const vm = this
         await vm.save()
         vm.closeCurrentPage()
+      }
+    },
+    mounted () {
+      const vm = this
+      vm.cacheName = vm.$route.name
+      vm.cachePath = vm.$route.path
+    },
+    watch: {
+      $route (to) {
+        const vm = this
+        // 使用 cacheName 和 cachePage 缓存属性来避免同组件跳转时的内容不更新
+        if (to.name === vm.cacheName && to.path !== vm.cachePath) {
+          vm.cachePath = to.path
+          vm.$nextTick(() => {
+            vm.$refs.form.reload()
+          })
+        }
       }
     }
   }

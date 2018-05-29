@@ -25,7 +25,6 @@ const app = {
     menuTheme: 'dark', // 主题
     themeColor: '',
     // ---- 定版的分割线 ----
-    cachePage: [],
     lang: '',
     isFullScreen: false,
     openedSubmenuArr: [], // 要展开的菜单数组
@@ -215,18 +214,10 @@ const app = {
     },
     clearOpenedSubmenu (state) {
       state.openedSubmenuArr.length = 0
-    },
+    }
     // setMessageCount (state, count) {
     //   state.messageCount = count
     // },
-    addTag (state, tagObj) {
-      if (!tagObj.noCache) {
-        state.cachePage.push(tagObj.name)
-        localStorage.cachePage = JSON.stringify(state.cachePage)
-      }
-      state.pagesOpened.push(tagObj)
-      localStorage.pagesOpened = JSON.stringify(state.pagesOpened)
-    }
   }
 }
 

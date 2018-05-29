@@ -7,28 +7,36 @@
                :required="field.final.required"
                label-position="left">
       <!-- type: input -->
-      <div class="field-item field-item-input"
-           :style="{width: field.final.width || '250px'}"
-           v-if="!field.type || field.type === 'input'">
-        <i-input v-model="field.value"
-                 @input="updateField(field)"
-                 :type="field.final.htmlType || 'text'"
-                 :disabled="field.final.disabled"
-                 :readonly="field.final.readonly"
-                 :placeholder="field.final.placeholder"></i-input>
-      </div>
+      <form-field-input v-if="(field.type||'input')==='input'"
+                        v-model="field.value"
+                        :field="field"
+                        @input="updateField(field)"></form-field-input>
       <!-- type: label -->
+      <form-field-label v-else-if="field.type==='label'"
+                        v-model="field.value"
+                        :field="field"
+                        @input="updateField(field)"></form-field-label>
+      <!-- type: select -->
+      <form-field-select v-else-if="field.type==='select'"
+                        v-model="field.value"
+                        :field="field"
+                        @input="updateField(field)"></form-field-select>
       <div v-else-if="field.type === 'label'"
            :style="{width: field.final.width || false}">
         {{field.value}}
       </div>
+      <div v-else>未实现的字段类型：{{field.type}}</div>
     </form-item>
 
   </i-form>
 </template>
 
 <script>
+  import formComponents from '../components/form'
+
   export default {
+    name: 'EmbedForm',
+    components: { ...formComponents },
     props: {
       fields: {
         type: Array,

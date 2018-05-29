@@ -14,8 +14,8 @@
       // TODO: 所有属性支持的 finalize 函数格式需要确定并且文档化
       id: { type: Number, default: 0 },
       model: { type: String, required: true },
-      title: { type: String, default: '编辑视图' },
-      subtitle: { type: String, default: 'EditView' },
+      title: { type: [String, Function], default: '编辑视图' },
+      subtitle: { type: [String, Function], default: 'EditView' },
       pk: { type: String, default: 'id' },
       fields: { type: Array, required: true },
       // 操作按钮
@@ -44,26 +44,34 @@
     },
     data () {
       const vm = this
-      // 为了避免在没有任何动作之前点击保存提交的表单会有字段 undefined 的情况
-      // 所有指定的 default 值的字段都会先手动设置进去
-      const defaultItem = {}
-      vm.fields.forEach(field => {
-        // write init field value
-        if (field.value === void 0 && field.default !== void 0) {
-          vm.$set(field, 'value', field.default)
-        }
-        vm.writeField(field, defaultItem)
-      })
       return {
         id_: vm.id,
         loading: false,
         initialized: false,
-        item: defaultItem
+        item: null
       }
     },
     methods: {
+      async initData () {
+        const vm = this
+        // 为了避免在没有任何动作之前点击保存提交的表单会有字段 undefined 的情况
+        // 所有指定的 default 值的字段都会先手动设置进去
+        const defaultItem = {}
+        vm.fields.forEach(field => {
+          // write init field value
+          if (field.value === void 0 && field.default !== void 0) {
+            vm.$set(field, 'value', field.default)
+          }
+          vm.writeField(field, defaultItem)
+        })
+        vm.id_ = vm.id
+        vm.loading = false
+        vm.initialized = false
+        vm.item = defaultItem
+      },
       async reload () {
         const vm = this
+        await vm.initData()
         // 获取主体信息，如果 id_ 为 0 即为新增，不获取数据
         if (vm.id_) {
           vm.loading = true
