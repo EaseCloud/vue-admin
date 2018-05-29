@@ -1,7 +1,8 @@
 <template>
   <div class="table-field-switch">
-    <i-switch :value="value" @input="change"
-              :disabled="!!field.disabled">
+    <i-switch :value="value"
+              @input="change"
+              :disabled="disabled">
       <template slot="open">{{field.textOpen}}</template>
       <template slot="close">{{field.textClose}}</template>
     </i-switch>
@@ -21,6 +22,16 @@
       },
       vmTable: {
         type: Object
+      }
+    },
+    computed: {
+      disabled () {
+        const vm = this
+        if (vm.field.disabled instanceof Function) {
+          return vm.field.disabled.apply(vm.vmTable, [vm.vmTable.items[vm.index]])
+        } else {
+          return !!vm.field.disabled
+        }
       }
     },
     methods: {
