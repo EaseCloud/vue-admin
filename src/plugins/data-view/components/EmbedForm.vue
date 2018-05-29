@@ -26,6 +26,11 @@
                         v-model="field.value"
                         :field="field"
                         @input="updateField(field, $event)"></form-field-image>
+      <!-- type: switch -->
+      <form-field-switch v-else-if="field.type==='switch'"
+                        v-model="field.value"
+                        :field="field"
+                        @input="updateField(field, $event)"></form-field-switch>
       <div v-else-if="field.type === 'label'"
            :style="{width: field.final.width || false}">
         {{field.value}}
