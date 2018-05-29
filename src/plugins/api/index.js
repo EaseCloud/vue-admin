@@ -96,7 +96,7 @@ class RestResource {
   async request (method = 'GET', ...args) {
     let { params, data, query } = parseArgs(method, args)
     data = await config.hooks.filter_data_before_api_request.apply(this.vm, [data])
-    return this.axios.request({
+    return api.request({
       method,
       url: urljoin(this.root, this.model, this.urlTemplate.expand(params)),
       params: query,
@@ -105,12 +105,33 @@ class RestResource {
   }
 }
 
+// Axios instance
+let api = axios.create(config.axios_options)
+
+function notifyResponseMessage (response) {
+  if (!window.app) return
+  if (response.data.msg && !response.data.silent && window.app) {
+    if (response.data.ok) window.app.$Message.success(response.data.msg)
+    else window.app.$Message.warning(response.data.msg)
+  }
+}
+
+// 自动错误处理器
+api.interceptors.response.use(response => {
+  notifyResponseMessage(response)
+  return response
+}, error => {
+  notifyResponseMessage(error.response)
+  return Promise.reject(error)
+})
+
 export default {
   install (Vue, options = {}) {
     Vue.mixin({
       computed: {
         // 动态生成实例，使得动态配置 config.axios_options 修改可以动态生效
-        axios: () => axios.create(config.axios_options)
+        // axios: () => axios.create(config.axios_options)
+        axios: () => api
       },
       methods: {
         // 从性能角度来看，可以考虑将多次的构造缓存下来，支持重复使用

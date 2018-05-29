@@ -155,6 +155,8 @@
             row[key] = await vm.getFieldValue(field, item)
           } else if (type === 'image') {
             row[key] = await vm.getFieldValue(field, item)
+          } else if (type === 'switch') {
+            row[key] = await vm.getFieldValue(field, item)
           } else if (type === 'render') {
           } else {
             console.warn('尚未定义 ListViewTable 的 preRenderDataRow 字段处理类型：', type)
@@ -167,7 +169,7 @@
        * 渲染单个单元格
        */
       renderCell (type, value, index, h, field) {
-        // const vm = this
+        const vm = this
         // CHECKLIST: <data-view-types> <list-view>
         // console.log(`RENDER[${index}]:`, type, value)
         if (type === 'label' || type === 'text') {
@@ -182,10 +184,13 @@
           return h('div', `TODO:${type}`)
         } else if (type === 'image') {
           return h(tableComponents.TableFieldImage, { props: { value, field } })
-        } else if (type === 'image-text') {
+          // } else if (type === 'image-text') {
           // TODO: 尚未实现
-          return h('div', `TODO:${type}`)
-          // } else if (type === 'switch') {
+          // return h('div', `TODO:${type}`)
+        } else if (type === 'switch') {
+          return h(tableComponents.TableFieldSwitch, {
+            props: { value, field, index, vmTable: vm }
+          })
           //   // TODO: 尚未实现
           //   return h('div', `TODO:${type}`)
           // } else if (type === 'html') {
