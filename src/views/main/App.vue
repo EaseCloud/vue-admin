@@ -61,9 +61,11 @@
     </div>
     <div class="single-page-con" :style="{left: shrink?'60px':'200px'}">
       <div class="single-page">
-        <keep-alive>
-          <router-view></router-view>
-        </keep-alive>
+        <!-- TODO: 如果开启 keep-alive 尚未实现编辑之后能够列表页自动刷新，这里要细致处理好 -->
+        <!-- TODO: 开了之后导致所有的内容无法更新，考虑上一个前进刷新后退不刷新 -->
+        <!--<keep-alive>-->
+        <router-view></router-view>
+        <!--</keep-alive>-->
       </div>
     </div>
   </div>

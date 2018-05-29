@@ -5,6 +5,7 @@
       <h4 class="subtitle">{{subtitle}}</h4>
       <div class="controls">
         <i-button @click="redirectCreate" type="success">新建</i-button>
+        <i-button @click="refresh" type="ghost">刷新</i-button>
         <i-button @click="closeCurrentPage">关闭</i-button>
       </div>
     </div>
@@ -46,9 +47,9 @@
       }
     },
     methods: {
-      reload () {
-        // const vm = this
-        // console.log(vm.listViewOptions)
+      refresh () {
+        const vm = this
+        vm.$refs.table.reload()
       },
       pageTo (page) {
         const vm = this

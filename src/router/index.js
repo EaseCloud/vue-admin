@@ -30,20 +30,9 @@ const router = new VueRouter({
   ]
 })
 
-// router.beforeEach((to, from, next) => {
-//   iView.LoadingBar.start()
-//   // TODO:
-//   next()
-// })
-//
-// router.beforeEach((to) => {
-//   iView.LoadingBar.finish()
-//   window.scrollTo(0, 0)
-//   // TODO:
-// })
-
 router.beforeEach(async function (to, from, next) {
   iView.LoadingBar.start()
+  // 动态更新 html 标题
   const title = typeof to.meta.title === 'function'
     ? await utils.general.finalize(to.meta.title(to.params))
     : await utils.general.finalize(to.meta.title)
@@ -84,7 +73,6 @@ router.beforeEach(async function (to, from, next) {
 })
 
 router.afterEach((to) => {
-  // console.log('Caught outer $route hook', to)
   iView.LoadingBar.finish()
   window.scrollTo(0, 0)
 })

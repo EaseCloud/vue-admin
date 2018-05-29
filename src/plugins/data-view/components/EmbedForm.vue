@@ -10,17 +10,22 @@
       <form-field-input v-if="(field.type||'input')==='input'"
                         v-model="field.value"
                         :field="field"
-                        @input="updateField(field)"></form-field-input>
+                        @input="updateField(field, $event)"></form-field-input>
       <!-- type: label -->
       <form-field-label v-else-if="field.type==='label'"
                         v-model="field.value"
                         :field="field"
-                        @input="updateField(field)"></form-field-label>
+                        @input="updateField(field, $event)"></form-field-label>
       <!-- type: select -->
       <form-field-select v-else-if="field.type==='select'"
+                         v-model="field.value"
+                         :field="field"
+                         @input="updateField(field, $event)"></form-field-select>
+      <!-- type: image -->
+      <form-field-image v-else-if="field.type==='image'"
                         v-model="field.value"
                         :field="field"
-                        @input="updateField(field)"></form-field-select>
+                        @input="updateField(field, $event)"></form-field-image>
       <div v-else-if="field.type === 'label'"
            :style="{width: field.final.width || false}">
         {{field.value}}
@@ -60,14 +65,12 @@
         const field = vm._.find(vm.fields, { key })
         if (field) {
           field.value = value
-          vm.updateField(field)
+          vm.updateField(field, value)
         }
       },
-      async updateField (field) {
+      async updateField (field, data) {
         const vm = this
-        if (field.onUpdate) {
-          await field.onUpdate.apply(vm, [field])
-        }
+        if (field.onUpdate) await field.onUpdate.apply(vm, [field, data])
         vm.$emit('update', field)
       },
       /**
