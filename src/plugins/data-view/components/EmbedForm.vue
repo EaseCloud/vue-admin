@@ -11,6 +11,11 @@
                         v-model="field.value"
                         :field="field"
                         @input="updateField(field, $event)"></form-field-input>
+      <!-- type: number -->
+      <form-field-number v-else-if="field.type==='number'"
+                         v-model="field.value"
+                         :field="field"
+                         @input="updateField(field, $event)"></form-field-number>
       <!-- type: label -->
       <form-field-label v-else-if="field.type==='label'"
                         v-model="field.value"
@@ -28,9 +33,9 @@
                         @input="updateField(field, $event)"></form-field-image>
       <!-- type: switch -->
       <form-field-switch v-else-if="field.type==='switch'"
-                        v-model="field.value"
-                        :field="field"
-                        @input="updateField(field, $event)"></form-field-switch>
+                         v-model="field.value"
+                         :field="field"
+                         @input="updateField(field, $event)"></form-field-switch>
       <div v-else-if="field.type === 'label'"
            :style="{width: field.final.width || false}">
         {{field.value}}

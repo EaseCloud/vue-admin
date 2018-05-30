@@ -56,10 +56,11 @@
         vm.$router.replace({ query: { ...vm.$route.query, page } })
         vm.$refs.table.pageTo(page)
       },
-      pageSizeTo (pageSize) {
+      async pageSizeTo (pageSize) {
         const vm = this
         vm.$router.replace({ query: { ...vm.$route.query, page_size: pageSize } })
-        vm.$refs.table.pageSizeTo(pageSize)
+        const table = await vm.waitFor(vm.$refs, 'table')
+        table.pageSizeTo(pageSize)
       }
     }
   }

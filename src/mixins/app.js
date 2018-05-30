@@ -76,24 +76,20 @@ export default {
       const vm = this
       // let pagesOpened = vm.$store.state.app.pagesOpened
       // let lastPageObj = pagesOpened[0]
-      // 如果关闭掉当前打开的标签，要将活动标签移到靠近的其他标签
-      let newPageIndex = index
       const isCurrentPageClosing = index === vm.$store.state.app.currentPageIndex
-      if (isCurrentPageClosing) {
-        // 如果关掉的是最后一个标签，那么活动标签需要前移
-        if (newPageIndex === vm.$store.state.app.pagesOpened.length - 1) {
-          newPageIndex -= 1
-        }
-      }
       // let tagWidth = event.target.parentNode.offsetWidth
       // vm.tagBodyLeft = Math.min(vm.tagBodyLeft + tagWidth, 0)
+
+      // commit 之后 vm.$store.state.app.currentPageIndex 会自动跳转至正确的页面
       vm.$store.commit('closePage', index)
       // 如果当前标签关掉了，需要跳转
       if (isCurrentPageClosing) {
+        // 没有了就打开首页
         if (vm.$store.state.app.pagesOpened.length === 0) {
           vm.$router.push(vm.config.home_route)
         } else {
-          vm.$router.push(vm.$store.state.app.pagesOpened[newPageIndex].route)
+          vm.$router.push(
+            vm.$store.state.app.pagesOpened[vm.$store.state.app.currentPageIndex].route)
         }
       }
     },

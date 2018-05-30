@@ -1,12 +1,17 @@
 <template>
-  <div class="table-field-html" v-html="value"></div>
+  <div class="table-field-html"
+       :style="field.style || {}"
+       v-html="value"></div>
 </template>
 
 <script>
   export default {
     name: 'TableFieldHtml',
     props: {
-      value: {}
+      value: {},
+      field: {
+        type: Object
+      }
     }
   }
 </script>

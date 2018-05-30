@@ -227,10 +227,10 @@
       //     vm.openNewPage(name, this.$route.params || {}, this.$route.query || {})
       //   }
       // },
-      scrollBarResize () {
-        setTimeout(() => {
-          this.$refs.scrollBar.resize()
-        }, 50)
+      async scrollBarResize () {
+        const vm = this
+        const scrollBar = await vm.waitFor(vm.$refs, 'scrollBar')
+        scrollBar.resize()
       }
     },
     watch: {

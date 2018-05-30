@@ -107,6 +107,9 @@ const app = {
     },
     closePage (state, index) {
       state.pagesOpened.splice(index, 1)
+      if (state.currentPageIndex >= Math.max(1, index)) {
+        state.currentPageIndex = state.currentPageIndex - 1
+      }
       this.commit('dumpPagesOpened')
     },
     closeAllPages (state) {

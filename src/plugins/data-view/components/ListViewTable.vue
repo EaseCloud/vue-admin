@@ -165,6 +165,9 @@
         }))
         return row
       },
+      renderHeader (type, column, index, h, field) {
+        return h(tableComponents.TableHeaderField, { props: { column, field } })
+      },
       /**
        * 渲染单个单元格
        */
@@ -173,9 +176,9 @@
         // CHECKLIST: <data-view-types> <list-view>
         // console.log(`RENDER[${index}]:`, type, value)
         if (type === 'label' || type === 'text') {
-          return h(tableComponents.TableFieldText, { props: { value } })
+          return h(tableComponents.TableFieldText, { props: { value, field } })
         } else if (type === 'html') {
-          return h(tableComponents.TableFieldHtml, { props: { value } })
+          return h(tableComponents.TableFieldHtml, { props: { value, field } })
         } else if (type === 'tag') {
           // TODO: 尚未实现
           return h('div', `TODO:${type}`)
@@ -287,6 +290,10 @@
             title: label,
             render (h, { row, index }) {
               return vm.renderCell(type, row[key], index, h, field)
+            },
+            // 渲染列头
+            renderHeader (h, { column, index }) {
+              return vm.renderHeader(type, column, index, h, field)
             }
           }
         }))
