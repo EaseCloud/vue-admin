@@ -10,8 +10,8 @@
         <i-button @click="closeCurrentPage">关闭</i-button>
       </div>
     </div>
-    <edit-view-form v-bind="editViewOptions"
-                    ref="form"></edit-view-form>
+    <edit-view-form v-bind="editViewOptions" ref="form">
+    </edit-view-form>
   </card>
 </template>
 
@@ -40,8 +40,10 @@
       }
     },
     methods: {
-      reload () {
-        // const vm = this
+      async refresh () {
+        const vm = this
+        const form = await vm.waitFor(vm.$refs, 'form')
+        await form.reload()
       },
       async save () {
         // TODO: 提交之前应该实现 validate 验证方法，以校验 required 等字段的情况
@@ -55,7 +57,7 @@
           await vm.replacePage(route)
           vm.$router.push(route)
         }
-        await vm.reload()
+        await vm.refresh()
       },
       async submit () {
         const vm = this
@@ -111,9 +113,10 @@
       }
     }
   }
+
   .edit-view /deep/ .ivu-card-body {
     position: absolute;
-    top: 61px;
+    top: 62px;
     left: 0;
     bottom: 0;
     right: 0;

@@ -33,21 +33,22 @@
                         @input="updateField(field, $event)"></form-field-image>
       <!-- type: gallery -->
       <form-field-gallery v-else-if="field.type==='gallery'"
-                        v-model="field.value"
-                        :field="field"
-                        @input="updateField(field, $event)"></form-field-gallery>
+                          v-model="field.value"
+                          :field="field"
+                          @input="updateField(field, $event)"></form-field-gallery>
       <!-- type: switch -->
       <form-field-switch v-else-if="field.type==='switch'"
                          v-model="field.value"
                          :field="field"
                          @input="updateField(field, $event)"></form-field-switch>
-      <div v-else-if="field.type === 'label'"
-           :style="{width: field.final.width || false}">
-        {{field.value}}
-      </div>
+      <!-- type: render -->
+      <form-field-render v-else-if="field.type==='render'"
+                         v-model="field.value"
+                         :field="field"
+                         @input="updateField(field, $event)"></form-field-render>
+      <!-- type: undefined -->
       <div v-else>未实现的字段类型：{{field.type}}</div>
     </form-item>
-
   </i-form>
 </template>
 

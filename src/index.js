@@ -11,17 +11,19 @@ import mixins from './mixins'
 import mixinsAuth from './mixins/auth'
 import mixinsApp from './mixins/app'
 
+import pluginImageViewer from './plugins/image-viewer'
 import pluginApi from './plugins/api'
 import pluginDataView from './plugins/data-view'
-import pluginImageViewer from './plugins/image-viewer'
+import pluginDialogs from './plugins/dialogs'
 
 export default {
   install (Vue, options = {}) {
     Vue.use(iView)
 
+    Vue.use(pluginImageViewer)
     Vue.use(pluginApi)
     Vue.use(pluginDataView)
-    Vue.use(pluginImageViewer)
+    Vue.use(pluginDialogs)
 
     Vue.mixin(mixins)
     Vue.mixin(mixinsAuth)
