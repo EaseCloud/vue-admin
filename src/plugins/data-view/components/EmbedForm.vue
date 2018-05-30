@@ -31,6 +31,11 @@
                         v-model="field.value"
                         :field="field"
                         @input="updateField(field, $event)"></form-field-image>
+      <!-- type: gallery -->
+      <form-field-gallery v-else-if="field.type==='gallery'"
+                        v-model="field.value"
+                        :field="field"
+                        @input="updateField(field, $event)"></form-field-gallery>
       <!-- type: switch -->
       <form-field-switch v-else-if="field.type==='switch'"
                          v-model="field.value"

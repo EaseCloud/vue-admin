@@ -1,11 +1,11 @@
 <template>
-  <div class="field-item field-item-image"
+  <div class="field-item field-item-gallery"
        :style="{width: !!field.final.width && field.final.width}">
-    <div class="block-image" v-if="value">
-      <img :src="value">
+    <div class="block-image" v-for="(url, i) in value" :key="url">
+      <img :src="url">
       <div class="block-image-cover">
-        <icon type="eye" @click.native="previewImages([value])"></icon>
-        <icon type="trash-a" @click.native="update(null)"></icon>
+        <icon type="eye" @click.native="previewImages(value, i)"></icon>
+        <icon type="trash-a" @click.native="removeImage(i)"></icon>
       </div>
     </div>
     <!-- TODO: 不重要：上传进度效果未实现 -->
@@ -17,13 +17,14 @@
     <!--:on-exceeded-size="handleMaxSize"-->
     <!--action="//jsonplaceholder.typicode.com/posts/"-->
     <!--:default-file-list="defaultList"-->
-    <upload v-else
+    <upload v-if="!field.max || value.length < field.max"
             ref="upload"
             :show-upload-list="false"
             :format="['jpg','jpeg','png']"
             :max-size="2048"
             :before-upload="handleUpload"
             :action="field.action || ''"
+            multiple
             type="drag"
             :style="{width: '75px', height: '75px', boxSizing: 'content-box'}"
             class="block-upload">
@@ -36,7 +37,7 @@
 
 <script>
   export default {
-    name: 'FormFieldImage',
+    name: 'FormFieldGallery',
     props: {
       value: {},
       field: {
@@ -52,13 +53,23 @@
       }
     },
     methods: {
-      update (value) {
+      addImage (value) {
         const vm = this
-        vm.$emit('input', value)
+        vm.$emit('input', {
+          action: 'add',
+          file: value
+        })
+      },
+      removeImage (index) {
+        const vm = this
+        vm.$emit('input', {
+          action: 'remove',
+          index
+        })
       },
       handleUpload (file) {
         const vm = this
-        vm.update(file)
+        vm.addImage(file)
         return false
       }
     }
@@ -83,21 +94,22 @@
     border-radius: 4px;
     overflow: hidden;
     position: relative;
-    margin-right: 4px;
+    &:hover {
+      box-shadow: 1px 1px 2px rgba(0, 0, 0, .1);
+    }
+    margin-right: 10px;
+    margin-top: 10px;
     padding: 4px;
     background: white;
     box-sizing: border-box;
     img {
-      width: -10px+@sz;
+      width: -10px+jsz;
       height: -10px+@sz;
       display: block;
       object-fit: cover;
     }
     &:hover .block-image-cover {
       display: block;
-    }
-    &:hover {
-      box-shadow: 1px 1px 2px rgba(0, 0, 0, .1);
     }
   }
 
@@ -131,6 +143,7 @@
     overflow: hidden;
     background: #fff;
     position: relative;
+    margin-top: 10px;
     &:hover {
       box-shadow: 1px 1px 2px rgba(0, 0, 0, .1);
     }

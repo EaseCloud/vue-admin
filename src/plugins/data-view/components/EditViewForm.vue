@@ -101,17 +101,12 @@
         const vm = this
         if (field.type === 'label' || field.type === 'link') {
           // skip readonly fields
+        } else if (field.type === 'images' || field.type === 'gallery') {
+          // do nothing
         } else if (field.type === 'geo') {
           // vm.setProperty(item, field.key && field.key.lat || 'geo_lat', field.value.lat)
           // vm.setProperty(item, field.key && field.key.lng || 'geo_lng', field.value.lng)
           // vm.setProperty(item, field.key && field.key.label || 'geo_label', field.value.label)
-        } else if (field.type === 'image') {
-          // do nothing
-          // vm.setProperty(item, field.key.read, field.value);
-          // vm.setProperty(item, field.key.write, field.value && field.value.id);
-        } else if (field.type === 'gallery') {
-          // vm.setProperty(item, field.key.read, field.value || []);
-          // vm.setProperty(item, field.key.write, (field.value || []).map(image => image.id));
         } else {
           vm.setProperty(item, field.key, field.value)
         }
@@ -138,11 +133,6 @@
         const type = await vm.finalize(field.type, vm.item)
         // CHECKLIST: <data-view-types> <edit-view>
         if (type === 'geo') {
-          // TODO: 尚未实现
-          throw new Error(`尚未实现的表单字段：${type}`)
-        } else if (type === 'image') {
-          value = await vm.evaluate(vm.item, field.key)
-        } else if (type === 'gallery') {
           // TODO: 尚未实现
           throw new Error(`尚未实现的表单字段：${type}`)
         } else if (type === 'link') {
