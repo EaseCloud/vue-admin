@@ -3,7 +3,7 @@ import iView from 'iview'
 
 import 'iview/dist/styles/iview.css'
 
-// import config from './config'
+import config from './config'
 import router from './router'
 import store from './store'
 
@@ -26,6 +26,9 @@ export default {
     Vue.mixin(mixins)
     Vue.mixin(mixinsAuth)
     Vue.mixin(mixinsApp)
+
+    // Custom mixins
+    Vue.mixin(config.mixins)
 
     const AppConstructor = Vue.extend(App)
 

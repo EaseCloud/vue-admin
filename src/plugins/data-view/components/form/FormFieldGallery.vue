@@ -98,12 +98,13 @@
       box-shadow: 1px 1px 2px rgba(0, 0, 0, .1);
     }
     margin-right: 10px;
-    margin-top: 10px;
+    // TODO: 多图产生换行的时候间距没有了，有空的时候再改
+    /*margin-top: 10px;*/
     padding: 4px;
     background: white;
     box-sizing: border-box;
     img {
-      width: -10px+jsz;
+      width: -10px+@sz;
       height: -10px+@sz;
       display: block;
       object-fit: cover;
@@ -143,7 +144,7 @@
     overflow: hidden;
     background: #fff;
     position: relative;
-    margin-top: 10px;
+    /*margin-top: 10px;*/
     &:hover {
       box-shadow: 1px 1px 2px rgba(0, 0, 0, .1);
     }

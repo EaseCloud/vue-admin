@@ -101,7 +101,7 @@
         const vm = this
         if (field.type === 'label' || field.type === 'link') {
           // skip readonly fields
-        } else if (field.type === 'images' || field.type === 'gallery') {
+        } else if (field.type === 'image' || field.type === 'gallery') {
           // do nothing
         } else if (field.type === 'geo') {
           // vm.setProperty(item, field.key && field.key.lat || 'geo_lat', field.value.lat)

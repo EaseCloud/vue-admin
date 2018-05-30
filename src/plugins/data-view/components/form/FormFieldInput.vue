@@ -1,10 +1,11 @@
 <template>
   <div class="field-item field-item-input"
-       :style="{width: field.final.width || '250px'}" >
+       :style="{width: field.width || '250px'}" >
     <i-input class="form-field-input"
              :value="value"
              @input="$emit('input', $event)"
              :type="field.final.htmlType || 'text'"
+             :rows="field.rows || 5"
              :disabled="field.final.disabled"
              :readonly="field.final.readonly"
              :placeholder="field.final.placeholder"></i-input>

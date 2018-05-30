@@ -44,6 +44,7 @@
         // const vm = this
       },
       async save () {
+        // TODO: 提交之前应该实现 validate 验证方法，以校验 required 等字段的情况
         const vm = this
         const isCreate = !vm.$refs.form.id_
         await vm.$refs.form.save()
@@ -109,5 +110,13 @@
         float: right;
       }
     }
+  }
+  .edit-view /deep/ .ivu-card-body {
+    position: absolute;
+    top: 61px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    overflow: auto;
   }
 </style>

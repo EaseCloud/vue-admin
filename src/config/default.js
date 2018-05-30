@@ -19,6 +19,8 @@ export default {
     withCredentials: true
     // headers: {'X-Custom-Header': 'foobar'}
   },
+  // CustomMixins
+  mixins: {},
   // Router
   router_options: {},
   main_routes: [],
