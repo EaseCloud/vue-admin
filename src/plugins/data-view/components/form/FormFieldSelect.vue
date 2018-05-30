@@ -7,10 +7,20 @@
               :placeholder="field.placeholder"
               :value="value"
               @input="$emit('input', $event)">
-      <i-option v-for="choice in choices"
-                :key="choice.value||choice.key"
-                :value="choice.value||choice.key">{{choice.text||choice.label}}
-      </i-option>
+      <template v-for="choice in choices">
+        <option-group v-if="choice.children"
+                      :key="choice.value||choice.key"
+                      :label="choice.text||choice.label">
+          <i-option v-for="subChoice in choice.children"
+                    :key="subChoice.value||subChoice.key"
+                    :value="subChoice.value||subChoice.key">{{subChoice.text||subChoice.label}}
+          </i-option>
+        </option-group>
+        <i-option v-else
+                  :key="choice.value||choice.key"
+                  :value="choice.value||choice.key">{{choice.text||choice.label}}
+        </i-option>
+      </template>
     </i-select>
   </div>
 </template>
