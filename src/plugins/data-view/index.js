@@ -123,7 +123,16 @@ export default {
               render (h) {
                 el = h('edit-view-form', {
                   style: { marginTop: '16px' },
-                  props: editViewOptions
+                  props: editViewOptions,
+                  on: {
+                    update (field) {
+                      console.log(el.componentInstance)
+                      console.log(field, field.value)
+                      const index = editViewOptions.fields.indexOf(field)
+                      editViewOptions.fields.splice(index, 1)
+                      el.componentInstance.$forceUpdate()
+                    }
+                  }
                 })
                 return el
               },

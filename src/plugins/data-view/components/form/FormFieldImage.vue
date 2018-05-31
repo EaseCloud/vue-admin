@@ -51,7 +51,13 @@
         percentage: 0
       }
     },
+    mounted () {
+      const vm = this
+      vm.field.el = this
+    },
     methods: {
+      reload () {
+      },
       update (value) {
         const vm = this
         vm.$emit('input', value)
