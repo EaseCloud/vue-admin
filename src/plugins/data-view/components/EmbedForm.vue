@@ -69,10 +69,18 @@
         initialized: false
       }
     },
+    mounted () {
+      // 注册 field.reload 方法
+      const vm = this
+      vm.fields.forEach((field, i) => {
+        field.reload = () => {
+          vm.fields.splice(i, 1, field)
+        }
+      })
+    },
     methods: {
       async reload () {
         const vm = this
-        // console.log(JSON.parse(JSON.stringify(vm.fields)))
         await vm.finalizeFields()
         vm.initialized = true
       },

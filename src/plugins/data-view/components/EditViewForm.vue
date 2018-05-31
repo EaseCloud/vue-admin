@@ -176,6 +176,7 @@
         let itemToSave = vm.item
         const isCreate = !vm.id_
         itemToSave = await vm.config.hooks.filter_edit_view_pre_save.apply(vm, [vm.item])
+        vm.$emit('pre_save', itemToSave)
         let itemAfterSave
         if (isCreate) {
           // 新建的情况
@@ -186,6 +187,7 @@
         }
         vm.id_ = itemAfterSave[await vm.finalize(vm.pk)]
         await vm.config.hooks.action_edit_view_post_save.apply(vm, [itemAfterSave])
+        vm.$emit('post_save', itemAfterSave)
       },
       async erase () {
         const vm = this

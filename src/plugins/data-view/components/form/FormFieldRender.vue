@@ -18,11 +18,14 @@
       const vm = this
       return vm.field.render(h, vm.field, vm.field.context.item, vm.data)
     },
+    mounted () {
+      const vm = this
+      vm.field.el = this
+    },
     methods: {
       async reload () {
         const vm = this
         vm.data = await vm.field.renderData(vm.field, vm.field.context.item)
-        // vm.$forceUpdate()
       }
     }
   }
