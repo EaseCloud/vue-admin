@@ -125,13 +125,13 @@ export default {
                   style: { marginTop: '16px' },
                   props: editViewOptions,
                   on: {
-                    update (field) {
-                      console.log(el.componentInstance)
-                      console.log(field, field.value)
-                      const index = editViewOptions.fields.indexOf(field)
-                      editViewOptions.fields.splice(index, 1)
-                      el.componentInstance.$forceUpdate()
-                    }
+                    // update (field) {
+                    //   console.log(el.componentInstance)
+                    //   console.log(field, field.value)
+                    //   const index = editViewOptions.fields.indexOf(field)
+                    //   editViewOptions.fields.splice(index, 1)
+                    //   el.componentInstance.$forceUpdate()
+                    // }
                   }
                 })
                 return el
