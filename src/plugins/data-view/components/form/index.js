@@ -6,5 +6,7 @@ export default {
   FormFieldGallery: () => import('./FormFieldGallery.vue'),
   FormFieldNumber: () => import('./FormFieldNumber.vue'),
   FormFieldSwitch: () => import('./FormFieldSwitch.vue'),
+  FormFieldDistrict: () => import('./FormFieldDistrict.vue'),
+  FormFieldListView: () => import('./FormFieldListView.vue'),
   FormFieldRender: () => import('./FormFieldRender.vue')
 }

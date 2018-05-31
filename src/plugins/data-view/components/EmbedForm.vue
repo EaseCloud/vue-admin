@@ -41,6 +41,16 @@
                          v-model="field.value"
                          :field="field"
                          @input="updateField(field, $event)"></form-field-switch>
+      <!-- type: district -->
+      <form-field-district v-else-if="field.type==='district'"
+                           v-model="field.value"
+                           :field="field"
+                           @input="updateField(field, $event)"></form-field-district>
+      <!-- type: list-view -->
+      <form-field-list-view v-else-if="field.type==='list-view'"
+                            v-model="field.value"
+                            :field="field"
+                            @input="updateField(field, $event)"></form-field-list-view>
       <!-- type: render -->
       <form-field-render v-else-if="field.type==='render'"
                          v-model="field.value"
