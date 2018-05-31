@@ -75,7 +75,7 @@ const app = {
     //   state.pages = pages
     // },
     openPage (state, { title, name, meta, params = {}, query = {} }) {
-      // 先查找现存的 pagesOpened
+      // 先查找现存的 pagesOpened，仅匹配 name, params
       let pageIndex = _.findIndex(state.pagesOpened, { route: { name, params } })
       if (pageIndex === -1) {
         // 没有的话插一个

@@ -51,6 +51,10 @@ export default {
      */
     async openPage ({ name, params = {}, query = {} }) {
       const vm = this
+      // 由于路由重复判定会用 params 和 name 匹配，因此要先将 params 取值归一化到 string 类型
+      vm._.each(params, (v, k) => {
+        params[k] = v.toString()
+      })
       // 必须存在路由，否则直接判死刑
       const route = vm.getMainRouteItem(name)
       if (!route) throw new Error('没有找到匹配的路由：' + name)

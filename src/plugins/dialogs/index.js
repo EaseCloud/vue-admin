@@ -3,7 +3,7 @@ export default {
     Vue.mixin({
       computed: {},
       methods: {
-        async confirm (message, {
+        async $confirm (message, {
           title = '操作确认',
           width = 540,
           okText = '确认',
