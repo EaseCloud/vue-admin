@@ -51,6 +51,11 @@
                             v-model="field.value"
                             :field="field"
                             @input="updateField(field, $event)"></form-field-list-view>
+      <!-- type: object -->
+      <form-field-object v-else-if="field.type==='object'"
+                         v-model="field.value"
+                         :field="field"
+                         @input="updateField(field, $event)"></form-field-object>
       <!-- type: render -->
       <form-field-render v-else-if="field.type==='render'"
                          v-model="field.value"

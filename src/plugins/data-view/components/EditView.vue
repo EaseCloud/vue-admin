@@ -5,8 +5,13 @@
       <h4 class="subtitle">{{subtitle}}</h4>
       <div class="controls">
         <!-- TODO: custom actions -->
+        <i-button v-for="(action, i) in actions" :key="i"
+                  :type="action.buttonType"
+                  @click="action.action">{{action.label}}
+        </i-button>
         <i-button @click="save">保存并继续编辑</i-button>
         <i-button type="primary" @click="submit">保存</i-button>
+        <i-button @click="refresh">刷新</i-button>
         <i-button @click="closeCurrentPage">关闭</i-button>
       </div>
     </div>

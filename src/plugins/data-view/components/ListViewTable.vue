@@ -307,6 +307,7 @@
               const controls = []
               vm.actions.forEach(action => {
                 if (action === 'edit') {
+                  if (!vm.options.can_edit) return
                   controls.push(h(
                     'Button', {
                       props: { size: 'small', type: 'ghost' },
@@ -314,6 +315,7 @@
                     }, '编辑'
                   ))
                 } else if (action === 'delete') {
+                  if (!vm.options.can_delete) return
                   controls.push(h('Poptip', {
                     props: {
                       confirm: true,
@@ -326,7 +328,12 @@
                     }, '删除'
                   )]))
                 } else {
-                  // General actions
+                  controls.push(h(
+                    'Button', {
+                      props: { size: 'small', type: action.buttonType },
+                      on: { click: () => action.action(vm.items[index]) }
+                    }, action.label
+                  ))
                 }
                 // 为避免按钮粘在一起，加一个空格以分开
                 controls.push(vm._v(' '))

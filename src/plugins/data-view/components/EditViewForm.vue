@@ -19,7 +19,7 @@
       pk: { type: String, default: 'id' },
       fields: { type: Array, required: true },
       // 操作按钮
-      actions: { type: Array, default: () => ['edit', 'delete'] },
+      actions: { type: Array, default: () => [] },
       options: {
         type: Object,
         default: () => ({
@@ -138,9 +138,6 @@
         } else if (type === 'link') {
           // TODO: 尚未实现
           throw new Error(`尚未实现的表单字段：${type}`)
-        } else if (type === 'object') {
-          // TODO: 尚未实现
-          throw new Error(`尚未实现的表单字段：${type}`)
         } else {
           value = await vm.evaluate(vm.item, field.key)
         }
@@ -157,8 +154,10 @@
         if (mapper) value = mapper[value]
         // Update，会直接影响到内层 EmbedForm 的绑定值
         vm.$set(field, 'value', value)
+        // 主动更新
+        if (field.el) field.el.reload()
         // 强制刷新（不刷新的话试过 FormFieldImage 内部更新不了）
-        vm.fields.splice(vm.fields.indexOf(field), 1, field)
+        else vm.fields.splice(vm.fields.indexOf(field), 1, field)
       },
       async render () {
         const vm = this

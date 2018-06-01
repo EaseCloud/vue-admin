@@ -103,6 +103,44 @@ export default {
           const vm = this
           return vm.hooks.action_create.apply(vm)
         },
+        async pickObject (listViewOptions, {
+          title = '选取对象',
+          width = 540,
+          okText = '确认',
+          cancelText = '取消',
+          scrollable = true
+        } = {}) {
+          const vm = this
+          return new Promise((resolve, reject) => {
+            let el
+            listViewOptions.options = listViewOptions.options || {}
+            listViewOptions.options.show_pager = true
+            listViewOptions.options.show_actions = true
+            listViewOptions.actions = [{
+              label: '选择',
+              action (item) {
+                resolve(item)
+                vm.$Modal.remove()
+              }
+            }]
+            vm.$Modal.confirm({
+              title,
+              width,
+              okText,
+              cancelText,
+              scrollable,
+              render (h) {
+                el = h('list-view-table', {
+                  style: { marginTop: '16px' },
+                  props: listViewOptions
+                })
+                return el
+              },
+              onOk: reject,
+              onCancel: reject
+            })
+          })
+        },
         async modalEditView (editViewOptions, {
           title = '编辑模型',
           width = 540,

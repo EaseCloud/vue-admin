@@ -110,9 +110,11 @@ let api = axios.create(config.axios_options)
 
 function notifyResponseMessage (response) {
   if (!window.app) return
-  if (response.data.msg && !response.data.silent && window.app) {
-    if (response.data.ok) window.app.$Message.success(response.data.msg)
-    else window.app.$Message.warning(response.data.msg)
+  if (response.data.msg) {
+    if (response.data.silent) return
+    window.app.$Message[response.data.ok ? 'success' : 'warning'](response.data.msg)
+  } else if (response.status >= 400) {
+    window.app.$Message.error(JSON.stringify(response.data))
   }
 }
 

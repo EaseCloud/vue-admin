@@ -122,8 +122,7 @@ export default {
    */
   async action_edit_view_load_data (id) {
     const vm = this
-    const resp = await vm.api().get({ id })
-    return resp.data
+    return vm.config.hooks.action_model_get_item.apply(vm, [vm.model, id])
   },
   /**
    * EditView 使用：创建一个对象
@@ -153,8 +152,29 @@ export default {
   async action_data_view_delete_item (item) {
     const vm = this
     const id = vm.evaluate(item, await vm.finalize(vm.pk))
+    await vm.config.hooks.action_model_delete_item.apply(vm, [vm.model, id])
     vm.$Message.info('已成功删除对象')
-    return vm.api().delete({ id })
+  },
+  /**
+   * 获取模型的对象
+   * @param model
+   * @param id
+   * @returns {Promise<*>}
+   */
+  async action_model_delete_item (model, id) {
+    const vm = this
+    return vm.api(model).delete({ id })
+  },
+  /**
+   * 获取模型的对象
+   * @param model
+   * @param id
+   * @returns {Promise<*>}
+   */
+  async action_model_get_item (model, id) {
+    const vm = this
+    const resp = await vm.api(model).get({ id })
+    return resp.data
   },
   /**
    * EditView 使用：保存对象之前的过滤动作
