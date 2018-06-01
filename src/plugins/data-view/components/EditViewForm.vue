@@ -156,8 +156,6 @@
         vm.$set(field, 'value', value)
         // 主动更新
         if (field.el) field.el.reload()
-        // 强制刷新（不刷新的话试过 FormFieldImage 内部更新不了）
-        else vm.fields.splice(vm.fields.indexOf(field), 1, field)
       },
       async render () {
         const vm = this

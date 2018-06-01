@@ -39,7 +39,6 @@
   export default {
     name: 'FormFieldGallery',
     props: {
-      value: {},
       field: {
         type: Object,
         default: () => {
@@ -48,11 +47,20 @@
     },
     data () {
       return {
+        value: [],
         status: 'finished',
         percentage: 0
       }
     },
+    mounted () {
+      const vm = this
+      vm.field.el = this
+    },
     methods: {
+      reload () {
+        const vm = this
+        vm.value = vm.field.value
+      },
       addImage (value) {
         const vm = this
         vm.$emit('input', {

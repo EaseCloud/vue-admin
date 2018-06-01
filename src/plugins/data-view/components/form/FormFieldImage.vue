@@ -38,7 +38,6 @@
   export default {
     name: 'FormFieldImage',
     props: {
-      value: {},
       field: {
         type: Object,
         default: () => {
@@ -47,6 +46,7 @@
     },
     data () {
       return {
+        value: null,
         status: 'finished',
         percentage: 0
       }
@@ -57,6 +57,8 @@
     },
     methods: {
       reload () {
+        const vm = this
+        vm.value = vm.field.value
       },
       update (value) {
         const vm = this
