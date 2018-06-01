@@ -1,4 +1,3 @@
-<script src="../../../../../demo/config/menus.js"></script>
 <template>
   <div style="display:inline-block;padding:0 6px;">
     <dropdown trigger="click" @on-click="setTheme">
@@ -26,9 +25,13 @@
   import _ from 'lodash'
   import Cookies from 'js-cookie'
 
-  import './theme/r.css'
-  import './theme/g.css'
-  import './theme/y.css'
+  // import './theme/r.css'
+  // import './theme/g.css'
+  // import './theme/y.css'
+  import r from './theme/r'
+  import g from './theme/g'
+  import y from './theme/y'
+
   const setThemeCss = mainTheme => {
     _.each(document.getElementsByClassName('vue-admin-theme'), el => {
       el.parentElement.removeChild(el)
@@ -40,7 +43,7 @@
       document.head.appendChild(el)
     }
   }
-  const css = {}
+  const css = { r, g, y }
 
   export default {
     name: 'themeSwitch',
@@ -114,13 +117,6 @@
       }
     },
     created () {
-      document.querySelectorAll('head > style').forEach(el => {
-        if (/^\.vue-admin-theme-/.test(el.textContent)) {
-          const cssName = /^\.vue-admin-theme-([\w\d]+)/.exec(el.textContent)[1]
-          css[cssName] = el.textContent
-          el.parentElement.removeChild(el)
-        }
-      })
       let name = Cookies.get('user')
       if (localStorage.theme) {
         let hasThisUser = JSON.parse(localStorage.theme).some(item => {
