@@ -2,12 +2,12 @@
   <div class="field-item field-item-switch"
        :style="{width: field.final.width || 'auto'}">
     <template v-if="item">
-      <i-button type="text" v-if="item"
+      <i-button type="text" v-if="item" size="small"
                 @click="navigate(item)">{{item[field.displayName||'name']}}
       </i-button>
-      <i-button @click="$emit('input', null)">置空</i-button>
+      <i-button type="dashed" @click="$emit('input', null)" size="small">置空</i-button>
     </template>
-    <i-button v-else @click="pick">选择</i-button>
+    <i-button @click="pick" size="small">选择</i-button>
   </div>
 </template>
 
@@ -41,7 +41,7 @@
       },
       async pick () {
         const vm = this
-        vm.item = await vm.pickObject(vm.field.listViewOptions)
+        vm.item = await vm.pickObject(vm.field.listViewOptions, vm.field.modalOptions || {})
         vm.$emit('input', vm.item.id)
       },
       async navigate (item) {

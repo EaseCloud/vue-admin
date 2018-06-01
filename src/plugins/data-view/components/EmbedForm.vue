@@ -63,6 +63,11 @@
                          @input="updateField(field, $event)"></form-field-render>
       <!-- type: undefined -->
       <div v-else>未实现的字段类型：{{field.type}}</div>
+
+      <!-- description -->
+      <div v-if="field.description" style="color: #80848f"
+           :style="field.descriptionStyle">{{field.description}}
+      </div>
     </form-item>
   </i-form>
 </template>

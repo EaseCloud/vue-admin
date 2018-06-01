@@ -356,6 +356,9 @@
     },
     mounted () {
       const vm = this
+      vm.fields.forEach(field => {
+        field.$view = vm
+      })
       vm.initialize()
     }
   }

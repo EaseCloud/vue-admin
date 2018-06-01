@@ -1,7 +1,7 @@
 <template>
   <div class="table-field-switch">
     <i-switch :value="value"
-              @input="change"
+              @input="update"
               :disabled="disabled">
       <template slot="open">{{field.textOpen}}</template>
       <template slot="close">{{field.textClose}}</template>
@@ -25,6 +25,10 @@
       }
     },
     computed: {
+      item () {
+        const vm = this
+        return vm.vmTable.items[vm.index]
+      },
       disabled () {
         const vm = this
         if (vm.field.disabled instanceof Function) {
@@ -35,15 +39,13 @@
       }
     },
     methods: {
-      change (value) {
+      update (value) {
         const vm = this
-        const onChange = vm.field.onChange || async function (val, field, index) {
-          const vmTable = this
-          const item = vmTable.items[index]
-          await vmTable.api().patch({ id: item.id }, { is_active: val })
-          vmTable.reload()
+        const onUpdate = vm.field.onUpdate || async function (field, value, item) {
+          await vm.vmTable.api().patch({ id: item[vm.vmTable.pk] }, { is_active: value })
+          vm.vmTable.reload()
         }
-        onChange.apply(vm.vmTable, [value, vm.field, vm.index])
+        onUpdate.apply(vm.vmTable, [vm.field, value, vm.item])
       }
     }
   }
