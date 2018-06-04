@@ -1,7 +1,11 @@
 import App from './views/App.vue'
 import iView from 'iview'
+import VueQuillEditor from 'vue-quill-editor'
 
 import 'iview/dist/styles/iview.css'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
 
 import config from './config'
 import router from './router'
@@ -18,6 +22,7 @@ import pluginDialogs from './plugins/dialogs'
 
 export default {
   install (Vue, options = {}) {
+    Vue.use(VueQuillEditor)
     Vue.use(iView)
 
     Vue.use(pluginImageViewer)
