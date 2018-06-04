@@ -37,10 +37,20 @@ export default {
     /**
      * 从 MainRoute 中获取指定名称的路由项目
      * @param name 路由的名称
+     * @param routeList 搜索的路由列表范围，主要用于递归
      */
-    getMainRouteItem (name) {
+    getMainRouteItem (name, routeList = null) {
       const vm = this
-      return vm._.find(vm.config.main_routes, { name })
+      let result
+      const routes = routeList || vm.config.main_routes
+      routes.forEach(route => {
+        if (route.name === name) {
+          result = route
+        } else if (route.children) {
+          result = result || vm.getMainRouteItem(name, route.children)
+        }
+      })
+      return result
     },
     /**
      * 给进去一个路由，维护 pagesOpened，如果有，切换至匹配的 pages
