@@ -5,7 +5,8 @@
       <img :src="url">
       <div class="block-image-cover">
         <icon type="eye" @click.native="previewImages(value, i)"></icon>
-        <icon type="trash-a" @click.native="removeImage(i)"></icon>
+        <icon type="trash-a" @click.native="removeImage(i)"
+              v-if="!field.readonly && !field.disabled"></icon>
       </div>
     </div>
     <!-- TODO: 不重要：上传进度效果未实现 -->
@@ -17,7 +18,7 @@
     <!--:on-exceeded-size="handleMaxSize"-->
     <!--action="//jsonplaceholder.typicode.com/posts/"-->
     <!--:default-file-list="defaultList"-->
-    <upload v-if="!field.max || value.length < field.max"
+    <upload v-if="!field.readonly && !field.disabled && !field.max || value.length < field.max"
             ref="upload"
             :show-upload-list="false"
             :format="['jpg','jpeg','png']"
@@ -32,6 +33,7 @@
         <icon type="camera" size="20"></icon>
       </div>
     </upload>
+    <div v-if="(field.readonly || field.disabled) && !field.value.length">（无）</div>
   </div>
 </template>
 

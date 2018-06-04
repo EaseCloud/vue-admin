@@ -4,7 +4,13 @@
       <h3 class="title">{{title}}</h3>
       <h4 class="subtitle">{{subtitle}}</h4>
       <div class="controls">
-        <i-button @click="redirectCreate" type="success">新建</i-button>
+        <i-button v-for="(action, i) in listActions" :key="i"
+                  :type="action.buttonType"
+                  @click="action.action">{{action.label}}
+        </i-button>
+        <i-button v-if="options.can_create"
+                  @click="redirectCreate" type="success">新建
+        </i-button>
         <i-button @click="refresh" type="ghost">刷新</i-button>
         <i-button @click="closeCurrentPage">关闭</i-button>
       </div>

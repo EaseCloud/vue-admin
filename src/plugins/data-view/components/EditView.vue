@@ -4,13 +4,19 @@
       <h3 class="title">{{title}}</h3>
       <h4 class="subtitle">{{subtitle}}</h4>
       <div class="controls">
-        <!-- TODO: custom actions -->
         <i-button v-for="(action, i) in actions" :key="i"
                   :type="action.buttonType"
                   @click="action.action">{{action.label}}
         </i-button>
-        <i-button @click="save">保存并继续编辑</i-button>
-        <i-button type="primary" @click="submit">保存</i-button>
+        <i-button v-if="editViewOptions.options.can_edit"
+                  @click="save">保存并继续编辑
+        </i-button>
+        <i-button v-if="editViewOptions.options.can_edit"
+                  type="primary" @click="submit">保存
+        </i-button>
+        <i-button v-if="editViewOptions.options.can_delete"
+                  type="error" @click="remove">删除
+        </i-button>
         <i-button @click="refresh">刷新</i-button>
         <i-button @click="closeCurrentPage">关闭</i-button>
       </div>
@@ -67,6 +73,12 @@
       async submit () {
         const vm = this
         await vm.save()
+        vm.closeCurrentPage()
+      },
+      async remove () {
+        const vm = this
+        await vm.$confirm('确认删除？')
+        await vm.$refs.form.deleteItem()
         vm.closeCurrentPage()
       }
     },

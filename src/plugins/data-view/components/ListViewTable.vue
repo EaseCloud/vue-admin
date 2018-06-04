@@ -305,13 +305,14 @@
             title: '操作',
             render (h, { row, index }) {
               const controls = []
+              const item = vm.items[index]
               vm.actions.forEach(action => {
                 if (action === 'edit') {
                   if (!vm.options.can_edit) return
                   controls.push(h(
                     'Button', {
                       props: { size: 'small', type: 'ghost' },
-                      on: { click: () => vm.actionEdit(vm.items[index]) }
+                      on: { click: () => vm.actionEdit(item) }
                     }, '编辑'
                   ))
                 } else if (action === 'delete') {
@@ -321,13 +322,17 @@
                       confirm: true,
                       title: '确认删除这项数据？'
                     },
-                    on: { 'on-ok': () => vm.actionDelete(vm.items[index]) }
+                    on: { 'on-ok': () => vm.actionDelete(item) }
                   }, [h(
                     'Button', {
                       props: { size: 'small', type: 'dashed' }
                     }, '删除'
                   )]))
                 } else {
+                  if ((action.display instanceof Function && !action.display.apply(vm, [item])) ||
+                    (!action.display && action.display !== void 0)) {
+                    return
+                  }
                   controls.push(h(
                     'Button', {
                       props: { size: 'small', type: action.buttonType },

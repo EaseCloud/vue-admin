@@ -168,6 +168,10 @@
       // TODO:
       async validate () {
       },
+      async deleteItem () {
+        const vm = this
+        await vm.actionDelete(vm.item)
+      },
       async save () {
         const vm = this
         let itemToSave = vm.item
