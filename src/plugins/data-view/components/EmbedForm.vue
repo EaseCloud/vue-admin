@@ -31,6 +31,11 @@
                         v-model="field.value"
                         :field="field"
                         @input="updateField(field, $event)"></form-field-radio>
+      <!-- type: rate -->
+      <form-field-rate v-else-if="field.type==='rate'"
+                       v-model="field.value"
+                       :field="field"
+                       @input="updateField(field, $event)"></form-field-rate>
       <!-- type: image -->
       <form-field-image v-else-if="field.type==='image'"
                         v-model="field.value"
@@ -100,11 +105,13 @@
       }
     },
     mounted () {
-      // 注册 field.reload 方法
       const vm = this
       vm.fields.forEach((field, i) => {
-        field.reload = () => {
-          vm.fields.splice(i, 1, field)
+        // 注册 field.reload 方法
+        field.reload = () => vm.fields.splice(i, 1, field)
+        // 设置默认值
+        if (field.value === void 0 && field.default) {
+          vm.$set(field, 'value', field.default)
         }
       })
     },
@@ -113,6 +120,9 @@
         const vm = this
         await vm.finalizeFields()
         vm.initialized = true
+      },
+      // TODO:
+      async validate () {
       },
       setField (key, value) {
         const vm = this

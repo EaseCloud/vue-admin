@@ -165,9 +165,6 @@
         }))
         vm.initialized = true
       },
-      // TODO:
-      async validate () {
-      },
       async deleteItem () {
         const vm = this
         await vm.actionDelete(vm.item)

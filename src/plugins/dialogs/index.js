@@ -74,6 +74,88 @@ export default {
               onCancel: reject
             })
           })
+        },
+        async modalEditView (editViewOptions, {
+          title = '编辑模型',
+          width = 540,
+          okText = '确认',
+          cancelText = '取消',
+          scrollable = true
+        } = {}) {
+          const vm = this
+          return new Promise((resolve, reject) => {
+            let el
+            vm.$Modal.confirm({
+              title,
+              width,
+              okText,
+              cancelText,
+              loading: true,
+              scrollable,
+              render (h) {
+                el = h('edit-view-form', {
+                  style: { marginTop: '16px' },
+                  props: editViewOptions
+                })
+                return el
+              },
+              async onOk () {
+                const $Modal = this
+                const form = el.componentInstance
+                await form.save().then(() => {
+                  vm.$Modal.remove()
+                  resolve()
+                }, err => {
+                  $Modal.buttonLoading = false
+                  reject(err)
+                })
+              },
+              onCancel: reject
+            })
+          })
+        },
+        async modalForm (formOptions, {
+          title = '填写表单',
+          width = 540,
+          okText = '确认',
+          cancelText = '取消',
+          scrollable = true
+        } = {}) {
+          const vm = this
+          return new Promise((resolve, reject) => {
+            let el
+            vm.$Modal.confirm({
+              title,
+              width,
+              okText,
+              cancelText,
+              loading: true,
+              scrollable,
+              render (h) {
+                el = h('embed-form', {
+                  style: { marginTop: '16px' },
+                  props: formOptions
+                })
+                return el
+              },
+              async onOk () {
+                const $Modal = this
+                const $form = el.componentInstance
+                const result = {}
+                $form.fields.forEach(field => {
+                  if (field.key) vm.setProperty(result, field.key, field.value)
+                })
+                $Modal.remove()
+                resolve(result)
+                // TODO: 要考虑实现一个 validator 机制
+                // }, err => {
+                //   $Modal.buttonLoading = false
+                //   reject(err)
+                // })
+              },
+              onCancel: reject
+            })
+          })
         }
         // modalForm ({ title, fields, actions }) {
         //   const vm = this

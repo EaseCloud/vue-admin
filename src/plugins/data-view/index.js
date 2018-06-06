@@ -140,54 +140,6 @@ export default {
               onCancel: reject
             })
           })
-        },
-        async modalEditView (editViewOptions, {
-          title = '编辑模型',
-          width = 540,
-          okText = '确认',
-          cancelText = '取消',
-          scrollable = true
-        } = {}) {
-          const vm = this
-          return new Promise((resolve, reject) => {
-            let el
-            vm.$Modal.confirm({
-              title,
-              width,
-              okText,
-              cancelText,
-              loading: true,
-              scrollable,
-              render (h) {
-                el = h('edit-view-form', {
-                  style: { marginTop: '16px' },
-                  props: editViewOptions,
-                  on: {
-                    // update (field) {
-                    //   console.log(el.componentInstance)
-                    //   console.log(field, field.value)
-                    //   const index = editViewOptions.fields.indexOf(field)
-                    //   editViewOptions.fields.splice(index, 1)
-                    //   el.componentInstance.$forceUpdate()
-                    // }
-                  }
-                })
-                return el
-              },
-              async onOk () {
-                const $Modal = this
-                const form = el.componentInstance
-                await form.save().then(() => {
-                  vm.$Modal.remove()
-                  resolve()
-                }, err => {
-                  $Modal.buttonLoading = false
-                  reject(err)
-                })
-              },
-              onCancel: reject
-            })
-          })
         }
       }
     })
