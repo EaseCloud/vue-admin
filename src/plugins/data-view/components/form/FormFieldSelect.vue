@@ -1,5 +1,5 @@
 <template>
-  <div class="field-item field-item-label"
+  <div class="field-item field-item-select"
        :style="{width: field.final.width || '250px'}">
     <i-select v-if="choices"
               class="form-field-select"

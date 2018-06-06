@@ -26,6 +26,11 @@
                          v-model="field.value"
                          :field="field"
                          @input="updateField(field, $event)"></form-field-select>
+      <!-- type: radio -->
+      <form-field-radio v-else-if="field.type==='radio'"
+                        v-model="field.value"
+                        :field="field"
+                        @input="updateField(field, $event)"></form-field-radio>
       <!-- type: image -->
       <form-field-image v-else-if="field.type==='image'"
                         v-model="field.value"
@@ -48,9 +53,9 @@
                            @input="updateField(field, $event)"></form-field-district>
       <!-- type: editor -->
       <form-field-editor v-else-if="field.type==='editor'"
-                            v-model="field.value"
-                            :field="field"
-                            @input="updateField(field, $event)"></form-field-editor>
+                         v-model="field.value"
+                         :field="field"
+                         @input="updateField(field, $event)"></form-field-editor>
       <!-- type: object -->
       <form-field-object v-else-if="field.type==='object'"
                          v-model="field.value"

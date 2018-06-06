@@ -26,7 +26,6 @@ export default {
       const pk = await vm.finalize(vm.pk, item)
       const id = await vm.evaluate(item, pk)
       await vm.api().delete({ id })
-      return vm.reload()
     },
     async action_create () {
       const vm = this

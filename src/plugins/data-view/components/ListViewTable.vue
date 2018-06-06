@@ -5,6 +5,7 @@
              :loading="loading"
              :size="size"
              :data="data">
+      <slot name="footer" slot="footer"></slot>
     </i-table>
     <div class="list-view-table-footer">
       <page v-if="options.show_pager"
@@ -43,7 +44,7 @@
       pk: { type: String, default: 'id' },
       fields: { type: Array, required: true },
       // 行级操作按钮
-      actions: { type: Array, default: () => ['edit', 'delete'] },
+      actions: { type: Array, default: () => [] },
       // 页面级操作按钮
       listActions: { type: Array, default: () => [] },
       options: {
@@ -158,6 +159,7 @@
           } else if (type === 'switch') {
             row[key] = await vm.getFieldValue(field, item)
           } else if (type === 'render') {
+            row[key] = item
           } else {
             console.warn('尚未定义 ListViewTable 的 preRenderDataRow 字段处理类型：', type)
             row[key] = await vm.getFieldValue(field, item)
@@ -203,8 +205,7 @@
           //   // TODO: 尚未实现
           //   return h('div', `TODO:${type}`)
         } else if (type === 'render') {
-          // TODO: 尚未实现
-          return h('div', `TODO:${type}`)
+          return field.render(h, value, field, index)
         } else {
           return h(`未定义的字段类型: ${type}`)
         }
@@ -296,53 +297,55 @@
               return vm.renderHeader(type, column, index, h, field)
             }
           }
+          // 其他动态属性
+          if (field.width) columns[i].width = field.width
+          if (field.minWidth) columns[i].minWidth = field.minWidth
+          if (field.maxWidth) columns[i].maxWidth = field.maxWidth
         }))
-        // console.log(columns)
         // TODO: 初始化勾选列
-        // TODO: 初始化操作列
-        if (vm.options.show_actions) {
+        if (vm.options.show_actions === void 0 || vm.options.show_actions) {
           columns.push({
             title: '操作',
             render (h, { row, index }) {
               const controls = []
               const item = vm.items[index]
               vm.actions.forEach(action => {
-                if (action === 'edit') {
-                  if (!vm.options.can_edit) return
-                  controls.push(h(
-                    'Button', {
-                      props: { size: 'small', type: 'ghost' },
-                      on: { click: () => vm.actionEdit(item) }
-                    }, '编辑'
-                  ))
-                } else if (action === 'delete') {
-                  if (!vm.options.can_delete) return
-                  controls.push(h('Poptip', {
-                    props: {
-                      confirm: true,
-                      title: '确认删除这项数据？'
-                    },
-                    on: { 'on-ok': () => vm.actionDelete(item) }
-                  }, [h(
-                    'Button', {
-                      props: { size: 'small', type: 'dashed' }
-                    }, '删除'
-                  )]))
-                } else {
-                  if ((action.display instanceof Function && !action.display.apply(vm, [item])) ||
-                    (!action.display && action.display !== void 0)) {
-                    return
-                  }
-                  controls.push(h(
-                    'Button', {
-                      props: { size: 'small', type: action.buttonType },
-                      on: { click: () => action.action(vm.items[index]) }
-                    }, action.label
-                  ))
+                if ((action.display instanceof Function && !action.display.apply(vm, [item])) ||
+                  (!action.display && action.display !== void 0)) {
+                  return
                 }
+                controls.push(h(
+                  'Button', {
+                    props: { size: 'small', type: action.buttonType },
+                    on: { click: () => action.action.apply(vm, [item]) }
+                  }, action.label
+                ))
                 // 为避免按钮粘在一起，加一个空格以分开
                 controls.push(vm._v(' '))
               })
+              if (vm.options.can_edit === void 0 || vm.options.can_edit) {
+                controls.push(h(
+                  'Button', {
+                    props: { size: 'small', type: 'ghost' },
+                    on: { click: () => vm.actionEdit(item) }
+                  }, '编辑'
+                ))
+                controls.push(vm._v(' '))
+              }
+              if (vm.options.can_delete === void 0 || vm.options.can_delete) {
+                controls.push(h('Poptip', {
+                  props: {
+                    confirm: true,
+                    title: '确认删除这项数据？'
+                  },
+                  on: { 'on-ok': () => vm.actionDelete(item) }
+                }, [h(
+                  'Button', {
+                    props: { size: 'small', type: 'dashed' }
+                  }, '删除'
+                )]))
+                controls.push(vm._v(' '))
+              }
               return h('div', controls)
             }
           })

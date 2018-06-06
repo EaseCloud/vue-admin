@@ -24,6 +24,18 @@ export default {
     return term
   },
   /**
+   * [同步调用版本，不支持 Promise]
+   * 终结计算一个项的值，接受可变参数 arguments 的传入
+   * 1. 如果 term 为函数，调用函数（传入 arguments 的后续变量），然后递归调用 finalize
+   * 2. 否则，返回 Promise.resolve(term)
+   * @param term
+   * @param args
+   * @returns Promise<Any> 获取最终结果的 Promise，不保证同步
+   */
+  finalizeSync (term, ...args) {
+    return term instanceof Function ? this.finalizeSync(term.apply(this, args)) : term
+  },
+  /**
    * 对一个对象级联求值
    * 例如：
    *   evaluate({

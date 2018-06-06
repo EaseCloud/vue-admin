@@ -8,15 +8,16 @@
                   :type="action.buttonType"
                   @click="action.action">{{action.label}}
         </i-button>
-        <i-button v-if="options.can_create"
+        <i-button v-if="options.can_create===void 0 || options.can_create"
                   @click="redirectCreate" type="success">新建
         </i-button>
         <i-button @click="refresh" type="ghost">刷新</i-button>
         <i-button @click="closeCurrentPage">关闭</i-button>
       </div>
     </div>
-    <list-view-table v-bind="listViewOptions"
-                     ref="table"></list-view-table>
+    <list-view-table v-bind="listViewOptions" ref="table">
+      <slot name="footer" slot="footer"></slot>
+    </list-view-table>
     <div class="page-footer" v-if="listViewOptions.showPager">
       <page :total="$refs.table && $refs.table.pager.count"
             :current="Number($route.query.page) || 1"
@@ -107,6 +108,25 @@
       right: 0;
       padding: 14px 16px;
       border-top: 1px solid rgb(233, 234, 236);
+      background: white;
+      z-index: 2;
+    }
+    & /deep/ .ivu-card-body {
+      position: absolute;
+      top: 62px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding-bottom: 60px;
+    }
+    .list-view-table {
+      position: absolute;
+      top: 0;
+      bottom: 62px;
+      left: 0;
+      right: 0;
+      padding: 16px;
+      overflow-y: auto;
     }
   }
 </style>

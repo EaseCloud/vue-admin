@@ -4,17 +4,21 @@
       <h3 class="title">{{title}}</h3>
       <h4 class="subtitle">{{subtitle}}</h4>
       <div class="controls">
-        <i-button v-for="(action, i) in actions" :key="i"
-                  :type="action.buttonType"
-                  @click="action.action">{{action.label}}
-        </i-button>
-        <i-button v-if="editViewOptions.options.can_edit"
+        <template v-for="(action, i) in actions"
+                  v-if="$refs.form && (action.display===void 0||finalizeSync(action.display, $refs.form.item))">
+          <i-button :key="i"
+                    :type="action.buttonType"
+                    @click="action.action.apply(this, [$refs.form.item])">{{action.label}}
+          </i-button>
+          <i :key="'_'+i"><!--避免按钮之间粘在一起--></i>
+        </template>
+        <i-button v-if="editViewOptions.options.can_edit===(void 0) || editViewOptions.options.can_edit"
                   @click="save">保存并继续编辑
         </i-button>
-        <i-button v-if="editViewOptions.options.can_edit"
+        <i-button v-if="editViewOptions.options.can_edit===(void 0) || editViewOptions.options.can_edit"
                   type="primary" @click="submit">保存
         </i-button>
-        <i-button v-if="editViewOptions.options.can_delete"
+        <i-button v-if="editViewOptions.options.can_delete===(void 0) || editViewOptions.options.can_delete"
                   type="error" @click="remove">删除
         </i-button>
         <i-button @click="refresh">刷新</i-button>

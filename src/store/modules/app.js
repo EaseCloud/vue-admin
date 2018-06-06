@@ -128,7 +128,6 @@ const app = {
           if (i === oldIndex) state.currentPageIndex = j
           return true
         }
-        console.log(false, i)
         return false
       })
       // let newCachepage = state.cachePage.filter(item => {
