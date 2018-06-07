@@ -79,7 +79,7 @@
         item = await vm.hooks.action_load_data_single.apply(vm, [vm.id_])
         item = await vm.hooks.filter_item_before_render_single.apply(vm, [item])
         await $form.setItem(item)
-        vm.$emit('loaded')
+        vm.$emit('loaded', item)
         vm.loading = false
       },
       async deleteItem () {

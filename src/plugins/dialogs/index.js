@@ -147,7 +147,6 @@ export default {
                   resolve(JSON.parse(JSON.stringify($form.item)))
                 } catch (err) {
                   $Modal.buttonLoading = false
-                  reject(err)
                 }
               },
               onCancel: reject

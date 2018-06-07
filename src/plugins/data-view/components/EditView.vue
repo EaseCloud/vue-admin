@@ -26,8 +26,12 @@
         <i-button @click="closeCurrentPage">关闭</i-button>
       </div>
     </div>
-    <edit-view-form v-bind="editViewOptions" ref="form">
+    <slot name="before"></slot>
+    <edit-view-form v-bind="editViewOptions"
+                    @loaded="$emit('loaded', $event)"
+                    ref="form">
     </edit-view-form>
+    <slot></slot>
   </card>
 </template>
 
