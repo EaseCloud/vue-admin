@@ -141,26 +141,19 @@ export default {
               async onOk () {
                 const $Modal = this
                 const $form = el.componentInstance
-                const result = {}
-                $form.fields.forEach(field => {
-                  if (field.key) vm.setProperty(result, field.key, field.value)
-                })
-                $Modal.remove()
-                resolve(result)
-                // TODO: 要考虑实现一个 validator 机制
-                // }, err => {
-                //   $Modal.buttonLoading = false
-                //   reject(err)
-                // })
+                try {
+                  await $form.validate()
+                  vm.$Modal.remove()
+                  resolve(JSON.parse(JSON.stringify($form.item)))
+                } catch (err) {
+                  $Modal.buttonLoading = false
+                  reject(err)
+                }
               },
               onCancel: reject
             })
           })
         }
-        // modalForm ({ title, fields, actions }) {
-        //   const vm = this
-        //   vm.$Modal
-        // }
       }
     })
   }

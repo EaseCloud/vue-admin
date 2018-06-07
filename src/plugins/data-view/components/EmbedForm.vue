@@ -184,8 +184,30 @@
           vm.setProperty(item, field.key, field.value)
         }
       },
-      // TODO:
+      /**
+       * 校验表单，通过 Promise 返回校验结果
+       * 1. 校验所有 required 字段
+       * 2. 校验所有 field 中定义的 validator 方法
+       *    validator 方法内部 this 指向 EmbedForm
+       *    传入第一个参数为根据 field.key 获取的 value
+       *    传入第二个参数为 field 本身
+       */
       async validate () {
+        const vm = this
+        return Promise.all(vm.fields.map(field => new Promise(async (resolve, reject) => {
+          // 先校验 required
+          if (field.final.required && !field.value) {
+            const msg = `必须填写【${field.label}】字段`
+            vm.$Message.warning(msg)
+            reject(new Error(msg))
+          }
+          // 校验
+          if (field.validator) {
+            const value = await vm.evaluate(vm.item, field.key, field.default)
+            field.validator.apply(vm, [value, field]).then(resolve, reject)
+          }
+          resolve()
+        })))
       },
       getField (key) {
         const vm = this
