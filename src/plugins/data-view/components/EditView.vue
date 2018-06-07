@@ -18,7 +18,8 @@
         <i-button v-if="editViewOptions.options.can_edit===(void 0) || editViewOptions.options.can_edit"
                   type="primary" @click="submit">保存
         </i-button>
-        <i-button v-if="editViewOptions.options.can_delete===(void 0) || editViewOptions.options.can_delete"
+        <i-button v-if="Number($route.params.id) &&
+                        (editViewOptions.options.can_delete===(void 0) || editViewOptions.options.can_delete)"
                   type="error" @click="remove">删除
         </i-button>
         <i-button @click="refresh">刷新</i-button>
