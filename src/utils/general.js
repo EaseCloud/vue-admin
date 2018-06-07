@@ -44,8 +44,9 @@ export default {
    * 返回：'BINGO'
    * @param item Object
    * @param key String
+   * @param defaultValue 默认值，如果求值结果是 undefined，返回这个值
    */
-  evaluate (item, key) {
+  evaluate (item, key, defaultValue = void 0) {
     // 缺省 key 的时候直接返回 item
     if (!key) return item
     // 执行级联求值
@@ -59,7 +60,7 @@ export default {
         console.error('evaluate 求值错误', e)
       }
     })
-    return value
+    return value === void 0 ? defaultValue : value
   },
   /**
    * 级联写入一个属性值，使用 vm.$set

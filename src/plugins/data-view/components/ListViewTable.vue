@@ -125,6 +125,8 @@
         // 预渲染
         await vm.preRenderData()
         vm.loading = false
+        // 发送读取完成事件
+        vm.$emit('loaded', items)
       },
       /**
        * 预渲染所有的已获得对象
@@ -338,7 +340,7 @@
                     confirm: true,
                     title: '确认删除这项数据？'
                   },
-                  on: { 'on-ok': () => vm.actionDelete(item) }
+                  on: { 'on-ok': () => vm.actionDelete(item).then(() => vm.reload()) }
                 }, [h(
                   'Button', {
                     props: { size: 'small', type: 'dashed' }

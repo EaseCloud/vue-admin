@@ -29,7 +29,7 @@
     },
     mounted () {
       const vm = this
-      vm.field.el = this
+      vm.field.$el = this
     },
     methods: {
       async reload () {

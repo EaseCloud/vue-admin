@@ -1,7 +1,6 @@
 <template>
-  <embed-form v-if="initialized"
-              :fields="fields"
-              @update="onUpdate"
+  <embed-form :fields="fields"
+              @update="$emit('update', $event)"
               ref="form"></embed-form>
 </template>
 
@@ -40,130 +39,48 @@
       hooks () {
         const vm = this
         return { ...defaults.hooks, ...(vm.$attrs.hooks || {}) }
+      },
+      item () {
+        const vm = this
+        return vm.$refs.form.item
       }
     },
     data () {
       const vm = this
       return {
         id_: vm.id,
-        loading: false,
-        initialized: false,
-        item: null
+        loading: false
       }
     },
     methods: {
-      async initData () {
-        const vm = this
-        // 为了避免在没有任何动作之前点击保存提交的表单会有字段 undefined 的情况
-        // 所有指定的 default 值的字段都会先手动设置进去
-        const defaultItem = {}
-        vm.fields.forEach(field => {
-          field.value = null
-          // write init field value
-          if (field.default !== void 0) {
-            vm.$set(field, 'value', field.default)
-          }
-          vm.writeField(field, defaultItem)
-        })
-        vm.id_ = vm.id
-        vm.loading = false
-        vm.initialized = false
-        vm.item = defaultItem
-      },
       async reload () {
         const vm = this
-        await vm.initData()
+        const $form = await vm.waitFor(vm.$refs, 'form')
+        await vm.waitFor($form, 'initialized')
+        // 手动调用（非 mounted 首次加载）时，手动触发 $form 的 reload
+        if (vm.initialized) await $form.reload()
         // 获取主体信息，如果 id_ 为 0 即为新增，不获取数据
-        if (vm.id_) {
-          vm.loading = true
-          let item = await vm.hooks.action_load_data_single.apply(vm, [vm.id_])
-          item = await vm.hooks.filter_item_before_render_single.apply(vm, [item])
-          vm.item = item
-          await vm.render()
-          vm.$emit('loaded')
-        }
-        return vm.render()
-      },
-      async setField (key, value) {
-        const vm = this
-        // TODO: 试下这个 waitFor 是不是多余的
-        vm.waitFor(vm.$refs, 'form').then(form => {
-          form.setField(key, value)
-        })
-      },
-      /**
-       * 如果 field 发生了变动（从 EmbedForm 中传递出来）
-       * 需要根据字段类型，将对应的数据返写到 item 对象中
-       * @param field
-       * @param item
-       */
-      async writeField (field, item) {
-        const vm = this
-        if (field.type === 'label' || field.type === 'link') {
-          // skip readonly fields
-        } else if (field.type === 'image' || field.type === 'gallery') {
-          // do nothing
-        } else if (field.type === 'geo') {
-          // vm.setProperty(item, field.key && field.key.lat || 'geo_lat', field.value.lat)
-          // vm.setProperty(item, field.key && field.key.lng || 'geo_lng', field.value.lng)
-          // vm.setProperty(item, field.key && field.key.label || 'geo_label', field.value.label)
-        } else {
-          vm.setProperty(item, field.key, field.value)
-        }
-      },
-      /**
-       * 接受并控制从 EmbedForm 中传出的 update 事件
-       * @param field
-       * @returns {Promise<void>}
-       */
-      async onUpdate (field) {
-        const vm = this
-        await vm.writeField(field, vm.item)
-        await vm.renderField(field)
-        vm.$emit('update', field)
-      },
-      /**
-       * 将 item 中的数据根据 field 类型计算数据到 field 的取值
-       * @param field
-       * @returns {Promise<void>}
-       */
-      async renderField (field) {
-        const vm = this
-        let value
-        const type = await vm.finalize(field.type, vm.item)
-        // CHECKLIST: <data-view-types> <edit-view>
-        if (type === 'geo') {
-          // TODO: 尚未实现
-          throw new Error(`尚未实现的表单字段：${type}`)
-        } else if (type === 'link') {
-          // TODO: 尚未实现
-          throw new Error(`尚未实现的表单字段：${type}`)
-        } else {
-          value = await vm.evaluate(vm.item, field.key)
-        }
-        // 填充默认值
-        if (value === void 0 && field.default !== void 0) {
-          value = field.default
-        }
-        // 根据 filter 过滤
-        if (field.filter) {
-          value = await field.filter.apply(vm, [value])
-        }
-        // 根据 mapper 过滤
-        const mapper = await vm.finalize(field.mapper, vm)
-        if (mapper) value = mapper[value]
-        // Update，会直接影响到内层 EmbedForm 的绑定值
-        vm.$set(field, 'value', value)
-        // 主动更新
-        if (field.el) field.el.reload()
-      },
-      async render () {
-        const vm = this
-        await Promise.all(vm.fields.map(field => {
-          vm.$set(field, 'context', { item: vm.item })
-          return vm.renderField(field)
-        }))
+        if (vm.id_) await vm.loadItem()
+        // 首次加载进来是 false，只要跑过一次 reload 就变成 true
         vm.initialized = true
+      },
+      // async setField (key, value) {
+      //   const vm = this
+      //   // TODO: 试下这个 waitFor 是不是多余的
+      //   vm.waitFor(vm.$refs, 'form').then(form => {
+      //     form.setField(key, value)
+      //   })
+      // },
+      async loadItem () {
+        const vm = this
+        vm.loading = true
+        const $form = await vm.waitFor(vm.$refs, 'form')
+        let item
+        item = await vm.hooks.action_load_data_single.apply(vm, [vm.id_])
+        item = await vm.hooks.filter_item_before_render_single.apply(vm, [item])
+        await $form.setItem(item)
+        vm.$emit('loaded')
+        vm.loading = false
       },
       async deleteItem () {
         const vm = this

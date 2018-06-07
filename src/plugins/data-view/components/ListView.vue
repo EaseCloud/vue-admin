@@ -15,7 +15,9 @@
         <i-button @click="closeCurrentPage">关闭</i-button>
       </div>
     </div>
-    <list-view-table v-bind="listViewOptions" ref="table">
+    <list-view-table v-bind="listViewOptions"
+                     @loaded="$emit('loaded', $event)"
+                     ref="table">
       <slot name="footer" slot="footer"></slot>
     </list-view-table>
     <div class="page-footer" v-if="listViewOptions.showPager">
