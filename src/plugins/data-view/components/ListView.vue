@@ -6,7 +6,7 @@
       <div class="controls">
         <i-button v-for="(action, i) in listActions" :key="i"
                   :type="action.buttonType"
-                  @click="action.action">{{action.label}}
+                  @click="action.action.apply(this)">{{action.label}}
         </i-button>
         <i-button v-if="options.can_create===void 0 || options.can_create"
                   @click="redirectCreate" type="success">新建

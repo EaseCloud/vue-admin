@@ -308,6 +308,7 @@
         if (vm.options.show_actions === void 0 || vm.options.show_actions) {
           columns.push({
             title: '操作',
+            width: vm.options.action_column_width,
             render (h, { row, index }) {
               const controls = []
               const item = vm.items[index]

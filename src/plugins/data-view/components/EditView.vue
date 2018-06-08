@@ -49,7 +49,7 @@
         return {
           ...vm.$attrs,
           ...vm.$props,
-          id: Number(vm.$route.params.id)
+          id: Number(vm.$props.id || vm.$route.params.id)
         }
       }
     },

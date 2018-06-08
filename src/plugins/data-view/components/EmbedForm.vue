@@ -136,7 +136,7 @@
       async render () {
         const vm = this
         await Promise.all(vm.fields.map(field => {
-          vm.$set(field, 'context', { item: vm.item })
+          vm.$set(field, 'context', { item: vm.item, $form: vm })
           return vm.renderField(field)
         }))
         vm.initialized = true
@@ -204,7 +204,12 @@
           // 校验
           if (field.validator) {
             const value = await vm.evaluate(vm.item, field.key, field.default)
-            field.validator.apply(vm, [value, field]).then(resolve, reject)
+            try {
+              await field.validator.apply(vm, [value, field])
+            } catch (e) {
+              vm.$Message.warning(e.message)
+              reject(e)
+            }
           }
           resolve()
         })))
