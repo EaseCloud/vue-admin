@@ -26,6 +26,11 @@
                          v-model="field.value"
                          :field="field"
                          @input="updateField(field, $event)"></form-field-select>
+      <!-- type: date -->
+      <form-field-date v-else-if="field.type==='date'"
+                       v-model="field.value"
+                       :field="field"
+                       @input="updateField(field, $event)"></form-field-date>
       <!-- type: radio -->
       <form-field-radio v-else-if="field.type==='radio'"
                         v-model="field.value"

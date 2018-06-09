@@ -9,6 +9,7 @@ export default {
   FormFieldNumber: () => import('./FormFieldNumber.vue'),
   FormFieldSwitch: () => import('./FormFieldSwitch.vue'),
   FormFieldRate: () => import('./FormFieldRate.vue'),
+  FormFieldDate: () => import('./FormFieldDate.vue'),
   FormFieldObject: () => import('./FormFieldObject.vue'),
   FormFieldDistrict: () => import('./FormFieldDistrict.vue'),
   FormFieldListView: () => import('./FormFieldListView.vue'),
