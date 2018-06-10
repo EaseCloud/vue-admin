@@ -51,6 +51,10 @@
           ...vm.$props,
           id: Number(vm.$props.id || vm.$route.params.id)
         }
+      },
+      item () {
+        const vm = this
+        return vm.$refs.form.item
       }
     },
     data () {
@@ -89,6 +93,10 @@
         await vm.$confirm('确认删除？')
         await vm.$refs.form.deleteItem()
         vm.closeCurrentPage()
+      },
+      validate () {
+        const vm = this
+        return vm.$refs.form.validate()
       }
     },
     mounted () {

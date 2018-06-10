@@ -199,7 +199,7 @@
        */
       async validate () {
         const vm = this
-        return Promise.all(vm.fields.map(field => new Promise(async (resolve, reject) => {
+        await Promise.all(vm.fields.map(field => new Promise(async (resolve, reject) => {
           // 先校验 required
           if (field.final.required && !field.value) {
             const msg = `必须填写【${field.label}】字段`
@@ -218,6 +218,7 @@
           }
           resolve()
         })))
+        return vm.item
       },
       getField (key) {
         const vm = this

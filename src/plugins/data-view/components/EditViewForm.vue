@@ -107,6 +107,10 @@
       async erase () {
         const vm = this
         return vm.config.action_data_view_delete_item.apply(vm, [vm.item])
+      },
+      async validate () {
+        const vm = this
+        return vm.$refs.form.validate()
       }
     }
   }

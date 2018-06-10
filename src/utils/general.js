@@ -114,5 +114,10 @@ export default {
       }
       check()
     })
+  },
+  wrapChoices (choices) {
+    const vm = this
+    if (choices instanceof Array || !(choices instanceof Object)) return choices
+    return vm._.map(choices, (value, key) => ({ value: key, text: value }))
   }
 }

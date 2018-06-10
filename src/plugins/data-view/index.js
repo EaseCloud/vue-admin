@@ -114,15 +114,22 @@ export default {
           return new Promise((resolve, reject) => {
             let el
             listViewOptions.options = listViewOptions.options || {}
-            listViewOptions.options.show_pager = true
-            listViewOptions.options.show_actions = true
-            listViewOptions.actions = [{
+            if (listViewOptions.options.show_pager === void 0) {
+              listViewOptions.options.show_pager = true
+            }
+            if (listViewOptions.options.show_actions === void 0) {
+              listViewOptions.options.show_actions = true
+            }
+            if (listViewOptions.actions === void 0) {
+              listViewOptions.actions = []
+            }
+            listViewOptions.actions.push({
               label: '选择',
               action (item) {
                 resolve(item)
                 vm.$Modal.remove()
               }
-            }]
+            })
             vm.$Modal.confirm({
               title,
               width,
