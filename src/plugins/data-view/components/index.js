@@ -3,5 +3,6 @@ export default {
   EditViewForm: () => import('./EditViewForm.vue'),
   EmbedForm: () => import('./EmbedForm.vue'),
   ListView: () => import('./ListView.vue'),
-  ListViewTable: () => import('./ListViewTable.vue')
+  ListViewTable: () => import('./ListViewTable.vue'),
+  EmptyView: () => import('./EmptyView.vue')
 }
