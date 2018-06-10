@@ -11,8 +11,6 @@
   import areaData from 'china-area-data'
   import _ from 'lodash'
 
-  window.areaData = areaData
-
   function getDataNode (value, label) {
     const node = { value, label }
     if (areaData[value]) {
