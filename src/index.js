@@ -7,6 +7,8 @@ import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 
+import '../assets/style/style.less'
+
 import config from './config'
 import router from './router'
 import store from './store'
@@ -16,6 +18,7 @@ import mixinsAuth from './mixins/auth'
 import mixinsApp from './mixins/app'
 
 import pluginImageViewer from './plugins/image-viewer'
+import pluginHtmlViewer from './plugins/html-viewer'
 import pluginApi from './plugins/api'
 import pluginDataView from './plugins/data-view'
 import pluginDialogs from './plugins/dialogs'
@@ -26,6 +29,7 @@ export default {
     Vue.use(iView)
 
     Vue.use(pluginImageViewer)
+    Vue.use(pluginHtmlViewer)
     Vue.use(pluginApi)
     Vue.use(pluginDataView)
     Vue.use(pluginDialogs)
