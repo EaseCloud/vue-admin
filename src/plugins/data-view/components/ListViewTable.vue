@@ -306,7 +306,7 @@
         }))
         // TODO: 初始化勾选列
         if (vm.options.show_actions === void 0 || vm.options.show_actions) {
-          columns.push({
+          const columnActions = {
             title: '操作',
             width: vm.options.action_column_width,
             render (h, { row, index }) {
@@ -318,8 +318,13 @@
                   return
                 }
                 controls.push(h(
-                  'Button', {
-                    props: { size: 'small', type: action.buttonType },
+                  'i-button', {
+                    props: {
+                      size: 'small',
+                      type: action.buttonType,
+                      shape: action.buttonShape,
+                      icon: action.buttonIcon
+                    },
                     on: { click: () => action.action.apply(vm, [item]) }
                   }, action.label
                 ))
@@ -351,7 +356,11 @@
               }
               return h('div', controls)
             }
-          })
+          }
+          if (vm.options.action_column_render_header) {
+            columnActions.renderHeader = vm.options.action_column_render_header
+          }
+          columns.push(columnActions)
         }
         vm.columns = columns
         // vm.columns = [{

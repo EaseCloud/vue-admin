@@ -71,6 +71,11 @@
                          v-model="field.value"
                          :field="field"
                          @input="updateField(field, $event)"></form-field-object>
+      <!-- type: multi-object -->
+      <form-field-multi-object v-else-if="field.type==='multi-object'"
+                               v-model="field.value"
+                               :field="field"
+                               @input="updateField(field, $event)"></form-field-multi-object>
       <!-- type: list-view -->
       <form-field-list-view v-else-if="field.type==='list-view'"
                             v-model="field.value"
@@ -177,7 +182,10 @@
        */
       async writeField (field, item) {
         const vm = this
-        if (field.type === 'label' || field.type === 'link') {
+        if (field.onWriteField) {
+          // Custom write field hook
+          field.onWriteField(field, item)
+        } else if (field.type === 'label' || field.type === 'link') {
           // skip readonly fields
         } else if (field.type === 'image' || field.type === 'gallery') {
           // do nothing
