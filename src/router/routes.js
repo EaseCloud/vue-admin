@@ -1,4 +1,6 @@
-export default [{
+import config from '../config'
+
+export default config.default_routes || [{
   path: '/passport/login',
   name: 'passport_login',
   meta: {
