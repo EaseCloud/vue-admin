@@ -251,7 +251,7 @@
     },
     mounted () {
       const vm = this
-      vm.config.hooks.action_root_mounted.apply(vm).then(() => {
+      vm.config.hooks.action_main_mounted.apply(vm).then(() => {
         const vm = this
         // 从 localStorage 中读取当前登录的用户
         vm.$store.commit('loadCurrentUser')

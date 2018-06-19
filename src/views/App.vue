@@ -12,6 +12,8 @@
       }
     },
     mounted () {
+      const vm = this
+      vm.config.hooks.action_root_mounted.apply(vm)
     },
     beforeDestroy () {
     },
