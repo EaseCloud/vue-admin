@@ -8,6 +8,14 @@ export default {
   async action_root_mounted () {
   },
   /**
+   * 登录后的根组件加载之后执行的任务
+   * @returns {Promise<void>}
+   * 如果返回 resolve，继续执行正常的启动代码
+   * 如果返回 reject，替换正常的启动代码（不执行系统默认启动代码）
+   */
+  async action_main_mounted () {
+  },
+  /**
    * 通过 Promise 返回展示的主界面侧栏菜单
    * @returns {Promise<Array<Object>>}
    */
