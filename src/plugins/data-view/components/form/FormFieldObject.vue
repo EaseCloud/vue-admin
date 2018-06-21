@@ -1,5 +1,5 @@
 <template>
-  <div class="field-item field-item-switch"
+  <div class="field-item field-item-object"
        :style="{width: field.final.width || 'auto'}">
     <template v-if="item">
       <i-button type="text" v-if="item" size="small"
@@ -13,7 +13,7 @@
 
 <script>
   export default {
-    name: 'FormFieldSwitch',
+    name: 'FormFieldObject',
     props: {
       value: {},
       field: {

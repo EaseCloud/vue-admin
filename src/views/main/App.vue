@@ -44,13 +44,20 @@
                   <icon type="arrow-down-b"></icon>
                 </a>
                 <dropdown-menu slot="list">
-                  <dropdown-item name="ownSpace">个人中心</dropdown-item>
-                  <dropdown-item name="loginout" divided>退出登录</dropdown-item>
+                  <dropdown-item v-for="(action, i) in $root.config.main_actions"
+                                 :key="i"
+                                 v-if="finalizeSync(action.display)"
+                                 @click="action.action.apply(this)">
+                    {{action.label}}
+                  </dropdown-item>
+                  <dropdown-item name="logout" :divided="$root.config.main_actions.length > 0">
+                    退出登录
+                  </dropdown-item>
                 </dropdown-menu>
               </dropdown>
-              <!-- TODO: 头像获取尚未实现 -->
               <avatar :src="currentUserAvatarUrl"
-                      style="background: #619fe7; margin-left: 10px;"></avatar>
+                      class="main-avatar"
+                      style="margin-left: 10px;"></avatar>
             </row>
           </div>
         </div>
@@ -505,5 +512,12 @@
       height: 44px;
       width: auto;
     }
+  }
+</style>
+
+<style scoped>
+  .main-avatar {
+    background: white 50% 50% url(../../../assets/images/avatar-default.png) no-repeat;
+    background-size: cover;
   }
 </style>

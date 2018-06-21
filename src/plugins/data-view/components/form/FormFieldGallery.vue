@@ -87,10 +87,13 @@
 </script>
 
 <style lang="less" scoped>
+  @import "../../../../../src/style/defines";
+
   @sz: 75px;
 
-  .field-item {
-    display: block;
+  .field-item-gallery {
+    display: inline-block;
+    .clearfix();
   }
 
   .block-image {

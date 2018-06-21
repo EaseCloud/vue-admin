@@ -103,7 +103,7 @@ export default {
           const vm = this
           return vm.hooks.action_create.apply(vm)
         },
-        async pickObject (listViewOptions, {
+        async pickObject (listViewOptions = {}, {
           title = '选取对象',
           width = 540,
           okText = '确认',
@@ -113,23 +113,21 @@ export default {
           const vm = this
           return new Promise((resolve, reject) => {
             let el
-            listViewOptions.options = listViewOptions.options || {}
-            if (listViewOptions.options.show_pager === void 0) {
-              listViewOptions.options.show_pager = true
+            const modalListViewOptions = {
+              ...listViewOptions,
+              options: {
+                ...(listViewOptions.options || {}),
+                can_edit: false,
+                can_delete: false
+              },
+              actions: [...(listViewOptions.actions || []), {
+                label: '选择',
+                action (item) {
+                  resolve(item)
+                  vm.$Modal.remove()
+                }
+              }]
             }
-            if (listViewOptions.options.show_actions === void 0) {
-              listViewOptions.options.show_actions = true
-            }
-            if (listViewOptions.actions === void 0) {
-              listViewOptions.actions = []
-            }
-            listViewOptions.actions.push({
-              label: '选择',
-              action (item) {
-                resolve(item)
-                vm.$Modal.remove()
-              }
-            })
             vm.$Modal.confirm({
               title,
               width,
@@ -139,7 +137,7 @@ export default {
               render (h) {
                 el = h('list-view-table', {
                   style: { marginTop: '16px' },
-                  props: listViewOptions
+                  props: modalListViewOptions
                 })
                 return el
               },

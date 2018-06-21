@@ -11,6 +11,7 @@ export default {
   FormFieldRate: () => import('./FormFieldRate.vue'),
   FormFieldDate: () => import('./FormFieldDate.vue'),
   FormFieldObject: () => import('./FormFieldObject.vue'),
+  FormFieldMultiObject: () => import('./FormFieldMultiObject.vue'),
   FormFieldDistrict: () => import('./FormFieldDistrict.vue'),
   FormFieldListView: () => import('./FormFieldListView.vue'),
   FormFieldRender: () => import('./FormFieldRender.vue')

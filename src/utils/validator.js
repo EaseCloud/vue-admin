@@ -1,6 +1,8 @@
 export default {
-  mobile (str) {
-    return /^1[3456789]\d{9}$/
+  async mobile (str) {
+    if (!/^1[3456789]\d{9}$/.test(str)) {
+      throw new Error('手机号码格式不正确')
+    }
   },
   id_card (str) {
     const code = str.toString()
