@@ -170,6 +170,7 @@
         return row
       },
       renderHeader (type, column, index, h, field) {
+        if (field.renderHeader) return field.renderHeader(h, field)
         return h(tableComponents.TableHeaderField, { props: { column, field } })
       },
       /**
@@ -393,5 +394,9 @@
     .ivu-page {
       float: right;
     }
+  }
+
+  .list-view-table /deep/ th > .ivu-table-cell {
+    display: block
   }
 </style>

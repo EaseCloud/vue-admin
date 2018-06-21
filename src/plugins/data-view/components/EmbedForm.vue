@@ -216,8 +216,8 @@
           }
           // 校验
           if (field.validator) {
-            const value = await vm.evaluate(vm.item, field.key, field.default)
             try {
+              const value = await vm.evaluate(vm.item, field.key, field.default)
               await field.validator.apply(vm, [value, field])
             } catch (e) {
               vm.$Message.warning(e.message)
