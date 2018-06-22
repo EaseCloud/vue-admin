@@ -10,8 +10,18 @@
           :menu-list="$store.state.app.menus"
           @on-open-change="scrollBarResize">
           <div slot="top" class="logo-con">
-            <img v-show="!shrink" src="../../../assets/images/logo.jpg" key="max-logo"/>
-            <img v-show="shrink" src="../../../assets/images/logo-min.jpg" key="min-logo"/>
+            <template v-if="shrink">
+              <img v-if="$root.config.logo_square"
+                   :src="$root.config.logo_square"/>
+              <img v-else
+                   src="../../../assets/images/logo-min.jpg" key="min-logo"/>
+            </template>
+            <template v-else>
+              <img v-if="$root.config.logo_wide"
+                   :src="$root.config.logo_wide"/>
+              <img v-else
+                   src="../../../assets/images/logo.jpg" key="max-logo"/>
+            </template>
           </div>
         </shrinkable-menu>
       </scroll-bar>
@@ -507,10 +517,14 @@
 
   .logo-con {
     padding: 8px;
+    height: 44px;
+    box-sizing: content-box;
     text-align: center;
     img {
-      height: 44px;
-      width: auto;
+      display: block;
+      margin: auto;
+      max-width: 100%;
+      max-height: 100%;
     }
   }
 </style>

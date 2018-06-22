@@ -3,6 +3,8 @@ import hooks from './hooks'
 export default {
   // Basic
   name: 'Vue Admin Project',
+  logo_square: null,
+  logo_wide: null,
   version: '1.0',
   description: 'You can specify your description text here.',
   // API

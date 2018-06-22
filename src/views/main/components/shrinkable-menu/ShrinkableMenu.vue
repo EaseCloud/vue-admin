@@ -1,5 +1,5 @@
 <template>
-  <div :style="{background: bgColor}" class="ivu-shrinkable-menu">
+  <div :style="{background: bgColor}" class="ivu-shrinkable-menu" :class="{shrink:!!shrink}">
     <slot name="top"></slot>
     <sidebar-menu
       v-show="!shrink"
@@ -73,8 +73,11 @@
 <style lang="less" scoped>
   .ivu-shrinkable-menu {
     height: 100%;
-    width: 100%;
+    &.shrink {
+      width: 60px;
+    }
   }
+
   // 删除那条难看的右边框竖线
   .ivu-shrinkable-menu /deep/ .ivu-menu::after {
     display: none;
