@@ -228,7 +228,7 @@
           this.$router.push({
             name: 'ownspace_index'
           })
-        } else if (name === 'loginout') {
+        } else if (name === 'logout') {
           vm.config.hooks.action_logout.apply(vm).then(() => {
             vm.$store.commit('logout')
             vm.$store.commit('setMenusOpened', [])
