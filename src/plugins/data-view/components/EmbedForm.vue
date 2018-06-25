@@ -256,7 +256,7 @@
         // 支持 finalize 的所有属性名称
         const attrs = [
           'label', 'placeholder', 'htmlType', 'labelWidth',
-          'required', 'display', 'disabled', 'readonly'
+          'required', 'display', 'disabled', 'readonly', 'choices'
         ]
         await Promise.all(attrs.map(async attr => {
           if (field[attr] !== void 0) {
