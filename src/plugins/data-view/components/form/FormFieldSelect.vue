@@ -6,19 +6,20 @@
               :clearable="!!field.clearable"
               :placeholder="field.placeholder"
               :value="value"
+              :default="field.final.default"
               @input="$emit('input', $event)">
       <template v-for="choice in choices">
         <option-group v-if="choice.children"
-                      :key="choice.value||choice.key"
+                      :key="choice.value !== void 0 ? choice.value : choice.key"
                       :label="choice.text||choice.label">
           <i-option v-for="subChoice in choice.children"
-                    :key="subChoice.value||subChoice.key"
+                    :key="subChoice.value !== void 0 ? subChoice.value : subChoice.key"
                     :value="subChoice.value||subChoice.key">{{subChoice.text||subChoice.label}}
           </i-option>
         </option-group>
         <i-option v-else
                   :key="choice.value||choice.key"
-                  :value="choice.value||choice.key">{{choice.text||choice.label}}
+                  :value="choice.value !== void 0 ? choice.value : choice.key">{{choice.text||choice.label}}
         </i-option>
       </template>
     </i-select>

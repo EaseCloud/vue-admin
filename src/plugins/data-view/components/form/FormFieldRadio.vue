@@ -5,7 +5,7 @@
                  :type="field.radio_group_type"
                  :size="field.size"
                  :vertical="!!field.vertical"
-                 @input="$emit('input', choice.value)">
+                 @input="$emit('input', $event)">
       <radio v-for="(choice, i) in choices"
              :key="i"
              :disabled="choice.value!==field.value&&(field.disabled||choice.disabled)"

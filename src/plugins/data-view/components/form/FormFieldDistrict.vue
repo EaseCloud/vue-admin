@@ -2,6 +2,7 @@
   <div class="field-item field-item-district"
        :style="{width: field.final.width || '250px'}">
     <cascader :data="data"
+              :change-on-select="!field.isLeaf"
               :value="[value-value%10000, value-value%100, value]"
               @input="$emit('input', $event[$event.length-1])"></cascader>
   </div>

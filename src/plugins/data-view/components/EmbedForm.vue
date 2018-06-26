@@ -1,7 +1,7 @@
 <template>
   <i-form v-if="initialized" class="embed-form">
     <form-item v-for="(field, i) in fields"
-               v-if="field.final.display === void 0 || field.final.display"
+               v-if="field.final && (field.final.display === void 0 || field.final.display)"
                :key="field.key+'_'+i"
                :label="field.final.label"
                :required="field.final.required"
