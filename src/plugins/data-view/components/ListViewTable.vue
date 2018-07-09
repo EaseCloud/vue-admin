@@ -111,7 +111,6 @@
     methods: {
       async reload () {
         const vm = this
-        console.log('reload')
         vm.loading = true
         const { page, count, results } = await vm.hooks.action_load_data.apply(vm)
         // 整除：https://stackoverflow.com/a/4228528/2544762
@@ -261,7 +260,6 @@
       async doQuery (query) {
         const vm = this
         let updated = false
-        console.log(query, vm.query)
         vm._.forEach(query, (value, key) => {
           // 删除查询条件机制
           if (value === null || value === void 0) {
@@ -282,25 +280,28 @@
         // vm.$nextTick(() => {
         //   vm.reload()
         // })
-        console.log('doQuery', updated, query)
         // 如果全部参数都是一样的情况下，不做刷新
         if (updated) {
-          await vm.reload()
+          // 修改查询条件的话跳回第一页并加载数据
+          await vm.pageTo(1, true)
           vm.$emit('query', query)
         }
       },
-      async pageTo (page) {
+      async pageTo (page, forceReload = false) {
         const vm = this
-        console.log('page to', page)
-        vm.pager.page = page
-        await vm.reload()
-        vm.$emit('page_to', page)
+        if (forceReload || Number(vm.pager.page) !== Number(page)) {
+          vm.pager.page = page
+          await vm.reload()
+          vm.$emit('page_to', page)
+        }
       },
-      async pageSizeTo (pageSize) {
+      async pageSizeTo (pageSize, forceReload = false) {
         const vm = this
-        vm.pager.pageSize = pageSize
-        await vm.reload()
-        vm.$emit('page_size_to', pageSize)
+        if (forceReload || Number(vm.pager.pageSize) !== Number(pageSize)) {
+          vm.pager.pageSize = pageSize
+          await vm.reload()
+          vm.$emit('page_size_to', pageSize)
+        }
       },
       /**
        * 初始化所有的行列配置以适配 iView Table 组件的输入格式
