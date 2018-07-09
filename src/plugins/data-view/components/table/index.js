@@ -3,5 +3,6 @@ export default {
   TableFieldText: () => import('./TableFieldText.vue'),
   TableFieldSwitch: () => import('./TableFieldSwitch.vue'),
   TableFieldImage: () => import('./TableFieldImage.vue'),
-  TableHeaderField: () => import('./TableHeaderField.vue')
+  TableHeaderField: () => import('./TableHeaderField.vue'),
+  FilteringHeader: () => import('./FilteringHeader.vue')
 }

@@ -45,12 +45,13 @@ export default {
           okText = '确认',
           cancelText = '取消',
           defaultValue = '',
+          method = 'confirm', // info/success/warning/error/confirm
           placeholder = ''
         } = {}) {
           const vm = this
           let value = defaultValue
           return new Promise((resolve, reject) => {
-            vm.$Modal.confirm({
+            vm.$Modal[method]({
               title,
               width,
               okText,
@@ -80,12 +81,13 @@ export default {
           width = 540,
           okText = '确认',
           cancelText = '取消',
+          method = 'confirm', // info/success/warning/error/confirm
           scrollable = true
         } = {}) {
           const vm = this
           return new Promise((resolve, reject) => {
             let el
-            vm.$Modal.confirm({
+            vm.$Modal[method]({
               title,
               width,
               okText,

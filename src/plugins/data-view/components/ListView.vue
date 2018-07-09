@@ -17,6 +17,7 @@
     </div>
     <list-view-table v-bind="listViewOptions"
                      @loaded="$emit('loaded', $event)"
+                     @query="onQuery"
                      ref="table">
       <slot name="footer" slot="footer"></slot>
     </list-view-table>
@@ -42,12 +43,16 @@
     computed: {
       listViewOptions () {
         const vm = this
+        const initQuery = { ...vm.$route.query }
+        delete initQuery.page
+        delete initQuery.page_size
         return {
           showPager: true,
-          page: Number(vm.$route.query.page) || 1,
-          pageSize: Number(vm.$route.query.page_size) || 10,
           ...vm.$attrs,
-          ...vm.$props
+          ...vm.$props,
+          page: Number(vm.$route.query.page) || vm.$props.page,
+          pageSize: Number(vm.$route.query.page_size) || vm.$props.pageSize,
+          initQuery
         }
       },
       hooks () {
@@ -60,16 +65,53 @@
         const vm = this
         vm.$refs.table.reload()
       },
-      pageTo (page) {
+      onQuery (queryChange) {
+        console.log('onQuery', queryChange)
+        const vm = this
+        const query = { ...vm.$route.query }
+        vm._.forEach(queryChange, (value, key) => {
+          // 删除查询条件机制
+          if (value === null || value === void 0) {
+            delete query[key]
+          } else {
+            query[key] = value
+          }
+        })
+        vm.$router.replace({ query })
+      },
+      async pageTo (page) {
         const vm = this
         vm.$router.replace({ query: { ...vm.$route.query, page } })
-        vm.$refs.table.pageTo(page)
+        // const $table = await vm.waitFor(vm.$refs, 'table')
+        // $table.pageTo(page)
       },
       async pageSizeTo (pageSize) {
         const vm = this
         vm.$router.replace({ query: { ...vm.$route.query, page_size: pageSize } })
-        const table = await vm.waitFor(vm.$refs, 'table')
-        table.pageSizeTo(pageSize)
+        // const $table = await vm.waitFor(vm.$refs, 'table')
+        // $table.pageSizeTo(pageSize)
+      }
+    },
+    watch: {
+      async $route (routeTo, routeFrom) {
+        const vm = this
+        console.log('>>> route', routeFrom, routeTo)
+        // 本页 query 参数跳转处理，传递参数变化进 ListViewTable
+        if (routeFrom.path === routeTo.path) {
+          const $table = await vm.waitFor(vm.$refs, 'table')
+          // 先剔除 page_size 和 page 的 query 参数
+          if (routeTo.query.page_size && routeTo.query.page_size !== routeFrom.query.page_size) {
+            $table.pageSizeTo(Number(routeTo.query.page_size))
+          }
+          if (routeTo.query.page && routeTo.query.page !== routeFrom.query.page) {
+            $table.pageTo(Number(routeTo.query.page))
+          }
+          // 强制变更查询条件
+          const query = { ...vm.$route.query }
+          delete query.page
+          delete query.page_size
+          $table.doQuery(query)
+        }
       }
     }
   }

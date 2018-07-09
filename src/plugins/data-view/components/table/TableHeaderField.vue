@@ -2,7 +2,9 @@
   <div class="table-header-field"
        :style="field.headerStyle || {}">
     {{column.title}}
-    <icon v-if="field.filtering" type="filter"></icon>
+    <div class="appendix">
+      <slot></slot>
+    </div>
   </div>
 </template>
 
@@ -18,7 +20,20 @@
   }
 </script>
 
-<style type="less" scoped>
+<style lang="less">
   .table-header-field {
+    .appendix {
+      display: inline-block;
+      color: #AAAAAA;
+      padding-left: 4px;
+    }
+    .collapsible {
+      transition-duration: 0.2s;
+      opacity: 0;
+    }
+  }
+
+  thead:hover .collapsible {
+    opacity: 1;
   }
 </style>

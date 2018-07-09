@@ -66,6 +66,7 @@
         default: 1
       },
       filters: { type: Object, default: () => ({}) },
+      initQuery: { type: Object, default: () => ({}) },
       size: {
         default: 'small',
         validator (value) {
@@ -89,7 +90,7 @@
         // 选中的项目列表，主键 pk 的列表
         selectedItems: [],
         // 固化查询条件
-        query: { ...vm.filters },
+        query: { ...vm.filters, ...vm.initQuery },
         // 固化分页条件
         pager: {
           page: vm.page,
@@ -110,6 +111,7 @@
     methods: {
       async reload () {
         const vm = this
+        console.log('reload')
         vm.loading = true
         const { page, count, results } = await vm.hooks.action_load_data.apply(vm)
         // 整除：https://stackoverflow.com/a/4228528/2544762
@@ -171,7 +173,16 @@
       },
       renderHeader (type, column, index, h, field) {
         if (field.renderHeader) return field.renderHeader(h, field)
-        return h(tableComponents.TableHeaderField, { props: { column, field } })
+        const children = []
+        // 插入过滤筛选器
+        if (field.filtering) {
+          children.push(h(tableComponents.FilteringHeader, { props: { field } }))
+        }
+        return h(
+          tableComponents.TableHeaderField,
+          { props: { column, field } },
+          children
+        )
       },
       /**
        * 渲染单个单元格
@@ -249,12 +260,20 @@
        */
       async doQuery (query) {
         const vm = this
+        let updated = false
+        console.log(query, vm.query)
         vm._.forEach(query, (value, key) => {
           // 删除查询条件机制
           if (value === null || value === void 0) {
-            delete vm.query[key]
+            if (key in vm.query) {
+              delete vm.query[key]
+              updated = true
+            }
           } else {
-            vm.query[key] = value
+            if (vm.query[key] !== value) {
+              vm.query[key] = value
+              updated = true
+            }
           }
         })
         // // TODO: 添加文档
@@ -263,11 +282,16 @@
         // vm.$nextTick(() => {
         //   vm.reload()
         // })
-        await vm.reload()
-        vm.$emit('query', vm.query)
+        console.log('doQuery', updated, query)
+        // 如果全部参数都是一样的情况下，不做刷新
+        if (updated) {
+          await vm.reload()
+          vm.$emit('query', query)
+        }
       },
       async pageTo (page) {
         const vm = this
+        console.log('page to', page)
         vm.pager.page = page
         await vm.reload()
         vm.$emit('page_to', page)
