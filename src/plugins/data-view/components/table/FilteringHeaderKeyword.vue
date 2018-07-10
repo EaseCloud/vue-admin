@@ -12,6 +12,7 @@
 
       if (value) {
         return h('tag', {
+          style: { marginLeft: '8px' },
           props: {
             closable: true,
             color: 'blue',
@@ -23,7 +24,8 @@
         }, value)
       } else {
         return h('a', {
-          attrs: { class: 'collapsible' },
+          style: { marginLeft: '8px' },
+          class: { collapsible: true },
           on: {
             async click () {
               await vm.query(value)

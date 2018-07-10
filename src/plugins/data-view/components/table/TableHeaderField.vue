@@ -23,9 +23,9 @@
 <style lang="less">
   .table-header-field {
     .appendix {
+      position: relative;
       display: inline-block;
       color: #AAAAAA;
-      padding-left: 4px;
     }
     .collapsible {
       transition-duration: 0.2s;

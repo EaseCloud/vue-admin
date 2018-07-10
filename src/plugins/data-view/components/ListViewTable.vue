@@ -421,7 +421,13 @@
     }
   }
 
+  .list-view-table /deep/ th,
+  .list-view-table /deep/ .ivu-table-header {
+    overflow: visible;
+  }
+
   .list-view-table /deep/ th > .ivu-table-cell {
-    display: block
+    display: block;
+    overflow: visible;
   }
 </style>
