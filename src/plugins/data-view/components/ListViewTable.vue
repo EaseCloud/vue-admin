@@ -357,7 +357,7 @@
                 // 为避免按钮粘在一起，加一个空格以分开
                 controls.push(vm._v(' '))
               })
-              if (vm.options.can_edit === void 0 || vm.options.can_edit) {
+              if (vm.options.can_edit === void 0 || vm.finalizeSync(vm.options.can_edit, item)) {
                 controls.push(h(
                   'Button', {
                     props: { size: 'small', type: 'ghost' },
@@ -366,7 +366,7 @@
                 ))
                 controls.push(vm._v(' '))
               }
-              if (vm.options.can_delete === void 0 || vm.options.can_delete) {
+              if (vm.options.can_delete === void 0 || vm.finalizeSync(vm.options.can_delete, item)) {
                 controls.push(h('Poptip', {
                   props: {
                     confirm: true,

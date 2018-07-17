@@ -49,7 +49,8 @@
       const vm = this
       return {
         id_: vm.id,
-        loading: false
+        loading: false,
+        initialized: false
       }
     },
     methods: {

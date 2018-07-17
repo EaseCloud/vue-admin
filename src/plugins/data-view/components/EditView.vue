@@ -12,14 +12,14 @@
           </i-button>
           <i :key="'_'+i"><!--避免按钮之间粘在一起--></i>
         </template>
-        <i-button v-if="editViewOptions.options.can_edit===(void 0) || editViewOptions.options.can_edit"
+        <i-button v-if="$refs.form && (options.can_edit === void 0 || finalizeSync(options.can_edit, $refs.form.item))"
                   @click="save">保存并继续编辑
         </i-button>
-        <i-button v-if="editViewOptions.options.can_edit===(void 0) || editViewOptions.options.can_edit"
+        <i-button v-if="$refs.form && (options.can_edit === void 0 || finalizeSync(options.can_edit, $refs.form.item))"
                   type="primary" @click="submit">保存
         </i-button>
-        <i-button v-if="Number($route.params.id) &&
-                        (editViewOptions.options.can_delete===(void 0) || editViewOptions.options.can_delete)"
+        <i-button v-if="Number($route.params.id) && $refs.form &&
+                        (options.can_delete === void 0 || finalizeSync(options.can_delete, $refs.form.item))"
                   type="error" @click="remove">删除
         </i-button>
         <i-button @click="refresh">刷新</i-button>

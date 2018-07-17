@@ -120,7 +120,6 @@
     methods: {
       async reload () {
         const vm = this
-        await vm.finalizeFields()
         await vm.initData()
         vm.initialized = true
       },
@@ -133,12 +132,12 @@
           // 设置默认值
           if (field.key) vm.setProperty(item, field.key, field.default)
         })
-        vm.setItem(item)
+        await vm.setItem(item)
       },
       async setItem (item) {
         const vm = this
         vm.item = item
-        vm.render()
+        await vm.render()
       },
       /**
        * 将所有的 item 字段按属性写入所有字段的 field.value
@@ -149,7 +148,7 @@
           vm.$set(field, 'context', { item: vm.item, $form: vm })
           return vm.renderField(field)
         }))
-        vm.initialized = true
+        await vm.finalizeFields()
       },
       /**
        * 将 item 中的数据根据 field 类型计算数据到 field 的取值
