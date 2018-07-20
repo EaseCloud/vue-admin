@@ -67,6 +67,19 @@ export default {
                   on: {
                     input (val) {
                       value = val
+                    },
+                    'on-keydown' (event) {
+                      if (event.keyCode === 13) {
+                        // Enter
+                        resolve(value)
+                        vm.$Modal.remove()
+                        event.preventDefault()
+                      } else if (event.keyCode === 27) {
+                        // Escape
+                        reject(new Error('用户取消了操作'))
+                        vm.$Modal.remove()
+                        event.preventDefault()
+                      }
                     }
                   }
                 })])])
