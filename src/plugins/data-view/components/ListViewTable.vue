@@ -325,8 +325,9 @@
               return vm.renderHeader(type, column, index, h, field)
             }
           }
-          // 其他动态属性
-          if (field.width) columns[i].width = field.width
+          // 其他动态属性（实际上当页宽很小的时候，使用 maxWidth 效果更好）
+          if (field.width) columns[i].maxWidth = field.width
+          // 指定其他宽度
           if (field.minWidth) columns[i].minWidth = field.minWidth
           if (field.maxWidth) columns[i].maxWidth = field.maxWidth
         }))
