@@ -8,8 +8,8 @@
     render (h) {
       const vm = this
       const [keyGte, keyLte] = vm.options.key
-      const valGte = vm.$route.query[keyGte]
-      const valLte = vm.$route.query[keyLte]
+      const valGte = vm.$route.query[keyGte] === void 0 ? void 0 : Number(vm.$route.query[keyGte])
+      const valLte = vm.$route.query[keyLte] === void 0 ? void 0 : Number(vm.$route.query[keyLte])
 
       if (valGte !== void 0 || valLte !== void 0) {
         return h('tag', {
@@ -49,20 +49,20 @@
             label: '大于',
             type: 'number',
             placeholder: '不限',
-            default: valGte || ''
+            default: valGte === void 0 ? null : valGte
           }, {
             key: 'lte',
             label: '小于',
             type: 'number',
             placeholder: '不限',
-            default: valLte || ''
+            default: valLte === void 0 ? null : valLte
           }]
         }, {
           title: '根据数值范围筛选'
         })
         const query = {}
-        if (gte !== '') query[keyGte] = Number(gte)
-        if (lte !== '') query[keyLte] = Number(lte)
+        if (gte !== null) query[keyGte] = Number(gte)
+        if (lte !== null) query[keyLte] = Number(lte)
         // ListViewTable 执行查询
         vm.field.$view.doQuery(query)
       },
