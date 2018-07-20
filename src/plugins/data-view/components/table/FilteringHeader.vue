@@ -1,12 +1,14 @@
 <script>
   import FilteringHeaderKeyword from './FilteringHeaderKeyword.vue'
   import FilteringHeaderSelect from './FilteringHeaderSelect.vue'
+  import FilteringHeaderRange from './FilteringHeaderRange.vue'
 
   export default {
     name: 'FilteringHeader',
     components: {
       FilteringHeaderKeyword,
-      FilteringHeaderSelect
+      FilteringHeaderSelect,
+      FilteringHeaderRange
     },
     props: {
       field: {
@@ -26,6 +28,11 @@
       } else if (options.type === 'select') {
         // 选项类型
         return h(FilteringHeaderSelect, {
+          props: { field: vm.field, options }
+        })
+      } else if (options.type === 'range') {
+        // 数字范围类型
+        return h(FilteringHeaderRange, {
           props: { field: vm.field, options }
         })
       } else {

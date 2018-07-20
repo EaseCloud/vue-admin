@@ -10,7 +10,7 @@
 
 <script>
   export default {
-    name: 'TableFieldHtml',
+    name: 'TableHeaderField',
     props: {
       column: {},
       field: {
