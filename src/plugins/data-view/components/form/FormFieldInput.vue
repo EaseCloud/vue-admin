@@ -1,8 +1,8 @@
 <template>
   <div class="field-item field-item-input"
-       :style="{width: field.width || '250px'}" >
+       :style="{width: field.width || '250px'}">
     <i-input class="form-field-input"
-             :value="value"
+             :value="field.value"
              @input="$emit('input', $event)"
              :type="field.final.htmlType || 'text'"
              :rows="field.rows || 5"
@@ -16,7 +16,6 @@
   export default {
     name: 'FormFieldInput',
     props: {
-      value: {},
       field: {
         type: Object,
         default: () => {

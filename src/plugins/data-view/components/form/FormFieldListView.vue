@@ -10,7 +10,6 @@
   export default {
     name: 'FormFieldListView',
     props: {
-      value: {},
       field: {
         type: Object,
         default: () => {

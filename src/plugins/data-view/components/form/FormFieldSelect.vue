@@ -5,7 +5,7 @@
               class="form-field-select"
               :clearable="!!field.clearable"
               :placeholder="field.placeholder"
-              :value="value"
+              :value="field.value"
               :default="field.final.default"
               @input="$emit('input', $event)">
       <template v-for="choice in choices">
@@ -30,7 +30,6 @@
   export default {
     name: 'FormFieldSelect',
     props: {
-      value: {},
       field: {
         type: Object,
         default: () => {

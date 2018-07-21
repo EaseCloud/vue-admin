@@ -15,7 +15,6 @@
   export default {
     name: 'FormFieldStar',
     props: {
-      value: {},
       field: {
         type: Object,
         default: () => {

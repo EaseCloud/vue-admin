@@ -29,7 +29,6 @@
   export default {
     name: 'FormFieldDate',
     props: {
-      value: {},
       field: {
         type: Object,
         default: () => {

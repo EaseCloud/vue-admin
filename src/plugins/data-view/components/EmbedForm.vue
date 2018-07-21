@@ -8,82 +8,66 @@
                label-position="left">
       <!-- type: input -->
       <form-field-input v-if="(field.type||'input')==='input'"
-                        v-model="field.value"
                         :field="field"
                         @input="updateField(field, $event)"></form-field-input>
       <!-- type: number -->
       <form-field-number v-else-if="field.type==='number'"
-                         v-model="field.value"
                          :field="field"
                          @input="updateField(field, $event)"></form-field-number>
       <!-- type: label -->
       <form-field-label v-else-if="field.type==='label'"
-                        v-model="field.value"
                         :field="field"
                         @input="updateField(field, $event)"></form-field-label>
       <!-- type: select -->
       <form-field-select v-else-if="field.type==='select'"
-                         v-model="field.value"
                          :field="field"
                          @input="updateField(field, $event)"></form-field-select>
       <!-- type: date -->
       <form-field-date v-else-if="field.type==='date'"
-                       v-model="field.value"
                        :field="field"
                        @input="updateField(field, $event)"></form-field-date>
       <!-- type: radio -->
       <form-field-radio v-else-if="field.type==='radio'"
-                        v-model="field.value"
                         :field="field"
                         @input="updateField(field, $event)"></form-field-radio>
       <!-- type: rate -->
       <form-field-rate v-else-if="field.type==='rate'"
-                       v-model="field.value"
                        :field="field"
                        @input="updateField(field, $event)"></form-field-rate>
       <!-- type: image -->
       <form-field-image v-else-if="field.type==='image'"
-                        v-model="field.value"
                         :field="field"
                         @input="updateField(field, $event)"></form-field-image>
       <!-- type: gallery -->
       <form-field-gallery v-else-if="field.type==='gallery'"
-                          v-model="field.value"
                           :field="field"
                           @input="updateField(field, $event)"></form-field-gallery>
       <!-- type: switch -->
       <form-field-switch v-else-if="field.type==='switch'"
-                         v-model="field.value"
                          :field="field"
                          @input="updateField(field, $event)"></form-field-switch>
       <!-- type: district -->
       <form-field-district v-else-if="field.type==='district'"
-                           v-model="field.value"
                            :field="field"
                            @input="updateField(field, $event)"></form-field-district>
       <!-- type: editor -->
       <form-field-editor v-else-if="field.type==='editor'"
-                         v-model="field.value"
                          :field="field"
                          @input="updateField(field, $event)"></form-field-editor>
       <!-- type: object -->
       <form-field-object v-else-if="field.type==='object'"
-                         v-model="field.value"
                          :field="field"
                          @input="updateField(field, $event)"></form-field-object>
       <!-- type: multi-object -->
       <form-field-multi-object v-else-if="field.type==='multi-object'"
-                               v-model="field.value"
                                :field="field"
                                @input="updateField(field, $event)"></form-field-multi-object>
       <!-- type: list-view -->
       <form-field-list-view v-else-if="field.type==='list-view'"
-                            v-model="field.value"
                             :field="field"
                             @input="updateField(field, $event)"></form-field-list-view>
       <!-- type: render -->
       <form-field-render v-else-if="field.type==='render'"
-                         v-model="field.value"
                          :field="field"
                          @input="updateField(field, $event)"></form-field-render>
       <!-- type: undefined -->
@@ -241,6 +225,7 @@
       // },
       async updateField (field, data) {
         const vm = this
+        field.value = data
         if (field.onUpdate) await field.onUpdate.apply(vm, [field, data])
         await vm.writeField(field, vm.item)
         await vm.renderField(field)

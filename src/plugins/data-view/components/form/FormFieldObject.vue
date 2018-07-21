@@ -15,7 +15,6 @@
   export default {
     name: 'FormFieldObject',
     props: {
-      value: {},
       field: {
         type: Object,
         default: () => {

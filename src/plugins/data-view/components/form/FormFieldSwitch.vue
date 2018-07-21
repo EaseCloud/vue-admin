@@ -1,7 +1,7 @@
 <template>
   <div class="field-item field-item-switch"
        :style="{width: field.final.width || '250px'}">
-    <i-switch :value="value"
+    <i-switch :value="field.value"
               :disabled="field.final.disabled || field.final.readonly"
               @input="$emit('input', $event)">
       <template slot="open">{{field.textOpen}}</template>
@@ -14,7 +14,6 @@
   export default {
     name: 'FormFieldSwitch',
     props: {
-      value: {},
       field: {
         type: Object,
         default: () => {

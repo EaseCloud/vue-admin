@@ -19,7 +19,6 @@
   export default {
     name: 'FormFieldRadio',
     props: {
-      value: {},
       field: {
         type: Object,
         default: () => {

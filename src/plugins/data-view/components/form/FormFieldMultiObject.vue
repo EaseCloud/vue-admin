@@ -16,7 +16,6 @@
   export default {
     name: 'FormFieldMultiObject',
     props: {
-      value: {},
       field: {
         type: Object,
         default: () => {

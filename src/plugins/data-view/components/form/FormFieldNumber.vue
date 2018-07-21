@@ -1,7 +1,7 @@
 <template>
   <div class="field-item field-item-switch"
        :style="{width: field.final.width || '250px'}">
-    <input-number :value="value"
+    <input-number :value="field.value"
                   @input="$emit('input', $event)"
                   :id="field.id"
                   :max="field.max"
@@ -22,7 +22,6 @@
   export default {
     name: 'FormFieldNumber',
     props: {
-      value: {},
       field: {
         type: Object,
         default: () => {

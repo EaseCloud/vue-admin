@@ -2,7 +2,6 @@
   export default {
     name: 'FormFieldRender',
     props: {
-      value: {},
       field: {
         type: Object,
         default: () => {
