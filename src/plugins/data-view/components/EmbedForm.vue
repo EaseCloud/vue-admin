@@ -88,6 +88,12 @@
     name: 'EmbedForm',
     components: { ...formComponents },
     props: {
+      noInit: {
+        // 默认情况下，noInit=false，EmbedForm 自动根据字段设置初始化 item 然后渲染
+        // 如果设置 noInit=true，EmbedForm 将挂起渲染行为，直到外部显式调用 setItem 输入对象
+        type: Boolean,
+        default: false
+      },
       fields: {
         type: Array,
         default: () => []
@@ -99,16 +105,15 @@
         item: null
       }
     },
-    mounted () {
-    },
     methods: {
       async reload () {
         const vm = this
         await vm.initData()
-        vm.initialized = true
       },
       async initData () {
         const vm = this
+        // 如果指定了 noInit 属性，初始化将跳过设定默认值这一步
+        if (vm.noInit) return
         // 为了避免在没有任何动作之前点击保存提交的表单会有字段 undefined 的情况
         // 所有指定的 default 值的字段都会先手动设置进去
         const item = {}
@@ -122,6 +127,9 @@
         const vm = this
         vm.item = item
         await vm.render()
+        // 无论何种形式初始化（initData 或者 noInit + 外部 setItem）
+        // 都从这里确认初始化成功，才触发渲染
+        vm.initialized = true
       },
       /**
        * 将所有的 item 字段按属性写入所有字段的 field.value
@@ -144,9 +152,7 @@
         // 获取初始值
         let value = await vm.evaluate(vm.item, field.key, field.default)
         // 根据 filter 过滤
-        if (field.filter) {
-          value = await field.filter.apply(vm, [value])
-        }
+        if (field.filter) value = await field.filter.apply(vm, [value])
         // 根据 mapper 过滤
         const mapper = await vm.finalize(field.mapper, vm)
         if (mapper) {
@@ -155,7 +161,7 @@
         // Update，会直接影响到内层 EmbedForm 的绑定值
         vm.$set(field, 'value', value)
         // 主动更新控件
-        if (field.$el && field.$el.reload) field.$el.reload()
+        if (field.$el && field.$el.reload) await field.$el.reload()
       },
       /**
        * 如果 field 发生了变动（从 EmbedForm 中传递出来）

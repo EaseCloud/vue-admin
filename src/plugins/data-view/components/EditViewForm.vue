@@ -1,5 +1,7 @@
 <template>
+  <!-- 如果是新建的话需要 EmbedForm 自动 init 对象，否则设置 noInit 等待数据载入 -->
   <embed-form :fields="fields"
+              :noInit="!!id"
               @update="$emit('update', $event)"
               ref="form"></embed-form>
 </template>
@@ -57,7 +59,6 @@
       async reload () {
         const vm = this
         const $form = await vm.waitFor(vm.$refs, 'form')
-        await vm.waitFor($form, 'initialized')
         // 手动调用（非 mounted 首次加载）时，手动触发 $form 的 reload
         if (vm.initialized) await $form.reload()
         // 获取主体信息，如果 id_ 为 0 即为新增，不获取数据
