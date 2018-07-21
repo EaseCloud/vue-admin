@@ -423,6 +423,7 @@
   }
 
   .list-view-table /deep/ th,
+  .list-view-table /deep/ .ivu-table,
   .list-view-table /deep/ .ivu-table-header {
     overflow: visible;
   }

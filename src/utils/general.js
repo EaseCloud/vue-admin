@@ -1,4 +1,5 @@
 // import config from '../config'
+import _ from 'lodash'
 import dayjs from 'dayjs'
 
 export default {
@@ -116,8 +117,7 @@ export default {
     })
   },
   wrapChoices (choices) {
-    const vm = this
     if (choices instanceof Array || !(choices instanceof Object)) return choices
-    return vm._.map(choices, (value, key) => ({ value: key, text: value }))
+    return _.map(choices, (value, key) => ({ value: key, text: value }))
   }
 }
