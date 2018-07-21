@@ -14,6 +14,10 @@
         default: () => {
         }
       }
+    },
+    mounted () {
+      const vm = this
+      vm.field.$el = this
     }
   }
 </script>

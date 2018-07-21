@@ -44,6 +44,7 @@
     async mounted () {
       const vm = this
       vm.choices = vm.wrapChoices(await vm.finalize(vm.field.choices))
+      vm.field.$el = this
     }
   }
 </script>

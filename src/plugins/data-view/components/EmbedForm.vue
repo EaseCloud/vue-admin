@@ -155,7 +155,7 @@
         // Update，会直接影响到内层 EmbedForm 的绑定值
         vm.$set(field, 'value', value)
         // 主动更新控件
-        if (field.$el) field.$el.reload()
+        if (field.$el && field.$el.reload) field.$el.reload()
       },
       /**
        * 如果 field 发生了变动（从 EmbedForm 中传递出来）
@@ -225,7 +225,8 @@
       // },
       async updateField (field, data) {
         const vm = this
-        field.value = data
+        // 如果指定 noSync，则不自动写回 field.value，而由托管的 onUpdate 处理所有更新事务
+        if (!field.noSync) field.value = data
         if (field.onUpdate) await field.onUpdate.apply(vm, [field, data])
         await vm.writeField(field, vm.item)
         await vm.renderField(field)

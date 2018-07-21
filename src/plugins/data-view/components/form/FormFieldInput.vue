@@ -2,7 +2,8 @@
   <div class="field-item field-item-input"
        :style="{width: field.width || '250px'}">
     <i-input class="form-field-input"
-             :value="field.value"
+             ref="input"
+             v-model="field.value"
              @input="$emit('input', $event)"
              :type="field.final.htmlType || 'text'"
              :rows="field.rows || 5"
@@ -21,6 +22,10 @@
         default: () => {
         }
       }
+    },
+    mounted () {
+      const vm = this
+      vm.field.$el = this
     }
   }
 </script>

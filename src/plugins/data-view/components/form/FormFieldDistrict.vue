@@ -31,6 +31,10 @@
     },
     data () {
       return { data: getDataNode(86, '').children }
+    },
+    mounted () {
+      const vm = this
+      vm.field.$el = this
     }
   }
 </script>
