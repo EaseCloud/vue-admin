@@ -74,7 +74,7 @@
         vm.$emit('loaded', items)
       },
       onQuery (queryChange) {
-        console.log('onQuery', queryChange)
+        // console.log('onQuery', queryChange)
         const vm = this
         const query = { ...vm.$route.query }
         vm._.forEach(queryChange, (value, key) => {

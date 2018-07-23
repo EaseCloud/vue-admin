@@ -34,7 +34,6 @@
         props: vm.calendarProps,
         on: {
           async 'on-change' (data) {
-            console.log('calendar on-change', data)
             valGte = data[0]
             valLte = data[1]
           },
