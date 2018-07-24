@@ -12,6 +12,7 @@
             :total="pager.count"
             :current="pager.page"
             :page-size="pager.pageSize"
+            :page-size-opts="pageSizeOpts"
             size="small"
             show-sizer
             show-total
@@ -106,6 +107,13 @@
       hooks () {
         const vm = this
         return { ...defaults.hooks, ...(vm.$attrs.hooks || {}) }
+      },
+      pageSizeOpts () {
+        const vm = this
+        const opts = [10, 20, 30, 40]
+        if (opts.indexOf(Number(vm.pageSize)) === -1) opts.push(vm.pageSize)
+        opts.sort((a, b) => a - b)
+        return opts
       }
     },
     methods: {
