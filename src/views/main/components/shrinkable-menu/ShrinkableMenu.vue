@@ -6,15 +6,13 @@
       :menu-theme="theme"
       :menu-list="menuList"
       @on-open-change="$emit('on-open-change', $event)"
-      @on-select="handleChange"
-    ></sidebar-menu>
+      @on-select="handleChange"></sidebar-menu>
     <sidebar-menu-shrink
       v-show="shrink"
       :menu-theme="theme"
       :menu-list="menuList"
       :icon-color="shrinkIconColor"
-      @on-select="handleChange"
-    ></sidebar-menu-shrink>
+      @on-select="handleChange"></sidebar-menu-shrink>
   </div>
 </template>
 
@@ -49,10 +47,10 @@
     },
     computed: {
       bgColor () {
-        return this.theme === 'dark' ? '#495060' : '#ffffff'
+        return this.theme === 'dark' ? '#515A6E' : '#ffffff'
       },
       shrinkIconColor () {
-        return this.theme === 'dark' ? '#ffffff' : '#495060'
+        return this.theme === 'dark' ? '#ffffff' : '#515A6E'
       }
     },
     methods: {

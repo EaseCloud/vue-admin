@@ -40,10 +40,13 @@
           </div>
         </div>
         <div class="header-avatar-con">
+          <!-- TODO: 升级 iView3.0 之后出现了很多不兼容问题，先隐藏 -->
+          <!--
           <full-screen v-model="isFullScreen"></full-screen>
           <lock-screen></lock-screen>
           <message-tip v-model="$store.state.app.messageCount"></message-tip>
           <theme-switch></theme-switch>
+          -->
 
           <div class="user-dropdown-menu-con">
             <row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
@@ -333,7 +336,7 @@
       transition: width .3s;
       background: white;
       &.dark {
-        background: rgb(73, 80, 96)
+        background: #515A6E
       }
     }
     .layout-text {

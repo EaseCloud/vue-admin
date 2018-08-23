@@ -376,7 +376,7 @@
               if (vm.options.can_edit === void 0 || vm.finalizeSync(vm.options.can_edit, item)) {
                 controls.push(h(
                   'Button', {
-                    props: { size: 'small', type: 'ghost' },
+                    props: { size: 'small' },
                     on: { click: () => vm.actionEdit(item) }
                   }, '编辑'
                 ))
