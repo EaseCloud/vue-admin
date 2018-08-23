@@ -123,12 +123,16 @@ export default {
               actions: [...(listViewOptions.actions || []), {
                 label: '选择',
                 action (item) {
+                  dialog.close()
                   resolve(item)
-                  vm.$Modal.remove()
                 }
               }]
             }
-            vm.$Modal.confirm({
+            // 默认情况下要显示分页
+            if (vm.evaluate(modalListViewOptions, 'options.show_pager') === void 0) {
+              vm.setProperty(modalListViewOptions, 'options.show_pager', true)
+            }
+            const dialog = vm.openDialog({
               title,
               width,
               okText,

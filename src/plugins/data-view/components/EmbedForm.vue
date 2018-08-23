@@ -183,7 +183,11 @@
           // vm.setProperty(item, field.key && field.key.lng || 'geo_lng', field.value.lng)
           // vm.setProperty(item, field.key && field.key.label || 'geo_label', field.value.label)
         } else {
-          vm.setProperty(item, field.key, field.value)
+          if (field.key) {
+            vm.setProperty(item, field.key, field.value)
+          } else {
+            console.error('字段的 key 不存在，无法执行自动写入')
+          }
         }
       },
       /**

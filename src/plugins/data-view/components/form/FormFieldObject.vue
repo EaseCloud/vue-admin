@@ -49,8 +49,7 @@
           vm.field.navigate(item)
         } else {
           const model = vm.field.listViewOptions.model
-          const route = await vm.config.hooks.action_get_model_edit_route.apply(
-            vm, [model, item.id])
+          const route = await vm.config.hooks.action_get_model_edit_route.apply(vm, [model, item.id])
           vm.$router.push(route)
         }
       }

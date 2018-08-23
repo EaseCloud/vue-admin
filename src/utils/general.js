@@ -55,7 +55,7 @@ export default {
     key.split('.').forEach(k => {
       if (!k) return
       try {
-        if (value === void 0) value = null
+        if (value === void 0) value = void 0
         value = value && value[k]
       } catch (e) {
         console.error('evaluate 求值错误', e)

@@ -1,8 +1,16 @@
+import Dialog from './Dialog.vue'
+
 export default {
   install (Vue) {
     Vue.mixin({
       computed: {},
       methods: {
+        openDialog (options = {}) {
+          const el = document.createElement('div')
+          document.body.appendChild(el)
+          const ModalComponent = Vue.extend(Dialog)
+          return new ModalComponent({ el, propsData: { options } })
+        },
         /**
          * Promise 形式实现，类似于原声 confirm 方法
          * @param message
@@ -26,7 +34,7 @@ export default {
         } = {}) {
           const vm = this
           return new Promise((resolve, reject) => {
-            vm.$Modal[method]({
+            vm.openDialog({
               title,
               content: message,
               width,
@@ -37,6 +45,17 @@ export default {
               onOk: resolve,
               onCancel: reject
             })
+            // vm.$Modal[method]({
+            //   title,
+            //   content: message,
+            //   width,
+            //   okText,
+            //   cancelText,
+            //   scrollable,
+            //   render,
+            //   onOk: resolve,
+            //   onCancel: reject
+            // })
           })
         },
         async $prompt (message = '', {
@@ -45,13 +64,12 @@ export default {
           okText = '确认',
           cancelText = '取消',
           defaultValue = '',
-          method = 'confirm', // info/success/warning/error/confirm
           placeholder = ''
         } = {}) {
           const vm = this
           let value = defaultValue
           return new Promise((resolve, reject) => {
-            vm.$Modal[method]({
+            const dialog = vm.openDialog({
               title,
               width,
               okText,
@@ -72,12 +90,12 @@ export default {
                       if (event.keyCode === 13) {
                         // Enter
                         resolve(value)
-                        vm.$Modal.remove()
+                        dialog.close()
                         event.preventDefault()
                       } else if (event.keyCode === 27) {
                         // Escape
                         reject(new Error('用户取消了操作'))
-                        vm.$Modal.remove()
+                        dialog.close()
                         event.preventDefault()
                       }
                     }
@@ -100,7 +118,7 @@ export default {
           const vm = this
           return new Promise((resolve, reject) => {
             let el
-            vm.$Modal[method]({
+            const dialog = vm.openDialog({
               title,
               width,
               okText,
@@ -118,8 +136,8 @@ export default {
                 const $Modal = this
                 const form = el.componentInstance
                 await form.save().then(() => {
-                  vm.$Modal.remove()
                   resolve()
+                  dialog.close()
                 }, err => {
                   $Modal.buttonLoading = false
                   reject(err)
@@ -139,7 +157,7 @@ export default {
           const vm = this
           return new Promise((resolve, reject) => {
             let el
-            vm.$Modal.confirm({
+            const dialog = vm.openDialog({
               title,
               width,
               okText,
@@ -158,7 +176,7 @@ export default {
                 const $form = el.componentInstance
                 try {
                   await $form.validate()
-                  vm.$Modal.remove()
+                  dialog.close()
                   resolve(JSON.parse(JSON.stringify($form.item)))
                 } catch (err) {
                   $Modal.buttonLoading = false
