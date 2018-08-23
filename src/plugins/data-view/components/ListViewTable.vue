@@ -1,6 +1,7 @@
 <template>
   <div class="list-view-table">
-    <i-table v-if="initialized"
+    <i-table ref="table"
+             v-if="initialized"
              :columns="columns"
              :loading="loading"
              :size="size"
@@ -292,6 +293,12 @@
         if (updated) {
           // 修改查询条件的话跳回第一页并加载数据
           await vm.pageTo(1, true)
+          // 所有 FilteringHeader 需要刷新渲染（Ugly implementation）
+          vm.initialized = false
+          vm.$nextTick(() => {
+            vm.initialized = true
+          })
+          // 通知父组件
           vm.$emit('query', query)
         }
       },
