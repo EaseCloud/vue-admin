@@ -8,8 +8,8 @@
     render (h) {
       const vm = this
       const [keyGte, keyLte] = vm.options.key
-      const valGte = vm.$route.query[keyGte] === void 0 ? void 0 : Number(vm.$route.query[keyGte])
-      const valLte = vm.$route.query[keyLte] === void 0 ? void 0 : Number(vm.$route.query[keyLte])
+      const valGte = vm.field.$view.query[keyGte] === void 0 ? void 0 : Number(vm.field.$view.query[keyGte])
+      const valLte = vm.field.$view.query[keyLte] === void 0 ? void 0 : Number(vm.field.$view.query[keyLte])
 
       if (valGte !== void 0 || valLte !== void 0) {
         return h('tag', {

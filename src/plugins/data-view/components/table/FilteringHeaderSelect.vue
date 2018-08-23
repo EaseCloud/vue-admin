@@ -9,7 +9,7 @@
       const vm = this
       const key = vm.options.key
       const choices = vm.options.choices
-      const value = vm.$route.query[key] || ''
+      const value = vm.field.$view.query[key] || ''
 
       if (value) {
         return h('tag', {

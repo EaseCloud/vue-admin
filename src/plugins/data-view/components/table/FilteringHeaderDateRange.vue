@@ -24,8 +24,8 @@
     render (h) {
       const vm = this
       const [keyGte, keyLte] = vm.options.key
-      let valGte = vm.$route.query[keyGte]
-      let valLte = vm.$route.query[keyLte]
+      let valGte = vm.field.$view.query[keyGte]
+      let valLte = vm.field.$view.query[keyLte]
 
       const hasQuery = valGte !== void 0 || valLte !== void 0
       return h('date-picker', {

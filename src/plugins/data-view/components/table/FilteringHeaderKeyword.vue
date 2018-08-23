@@ -8,7 +8,7 @@
     render (h) {
       const vm = this
       const key = vm.options.key
-      const value = vm.$route.query[key] || ''
+      const value = vm.field.$view.query[key] || ''
 
       if (value) {
         return h('tag', {
