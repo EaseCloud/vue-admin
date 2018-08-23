@@ -29,6 +29,7 @@
     <slot name="before"></slot>
     <edit-view-form v-bind="editViewOptions"
                     @loaded="$emit('loaded', $event)"
+                    @update="$emit('update', $event)"
                     ref="form">
     </edit-view-form>
     <slot></slot>
