@@ -12,11 +12,12 @@
       const value = vm.field.$view.query[key] || ''
 
       if (value) {
+        console.log(vm.renderText(value))
         return h('tag', {
           style: { marginLeft: '4px' },
           props: {
             closable: true,
-            color: 'blue',
+            color: '#CCCCCC',
             fade: false
           },
           on: {
@@ -29,12 +30,11 @@
           props: { trigger: 'click' },
           on: {
             'on-click': async value => {
-              console.log('>> on click', value)
               await vm.query(value)
             }
           }
         }, [
-          h('a', { class: { collapsible: true } }, [h('icon', { props: { type: 'more' } })]),
+          h('a', { class: { collapsible: true } }, [h('icon', { props: { type: 'ios-more' } })]),
           h('dropdown-menu', { slot: 'list' }, choices.map(choice => h(
             'dropdown-item',
             { props: { name: choice.value } },
@@ -61,7 +61,8 @@
         const vm = this
         const choices = vm.options.choices
         if (vm.options.render_text) return vm.options.render_text(value)
-        return vm._.find(choices, { value }).text
+        console.log(choices, value, vm._.find(choices, { value }))
+        return vm._.find(choices, x => x.value.toString() === value.toString()).text
       }
     }
   }

@@ -30,6 +30,10 @@
       <form-field-radio v-else-if="field.type==='radio'"
                         :field="field"
                         @input="updateField(field, $event)"></form-field-radio>
+      <!-- type: checkbox -->
+      <form-field-checkbox v-else-if="field.type==='checkbox'"
+                        :field="field"
+                        @input="updateField(field, $event)"></form-field-checkbox>
       <!-- type: rate -->
       <form-field-rate v-else-if="field.type==='rate'"
                        :field="field"
@@ -83,10 +87,12 @@
 
 <script>
   import formComponents from '../components/form'
+  import fieldSetMixins from './fieldSetMixins'
 
   export default {
     name: 'EmbedForm',
     components: { ...formComponents },
+    mixins: [fieldSetMixins],
     props: {
       noInit: {
         // 默认情况下，noInit=false，EmbedForm 自动根据字段设置初始化 item 然后渲染
@@ -243,34 +249,6 @@
         if (write) await vm.writeField(field, vm.item)
         await vm.renderField(field)
         vm.$emit('update', field)
-      },
-      /**
-       * 固化计算单个字段
-       */
-      async finalizeField (field) {
-        const vm = this
-        const final = {}
-        // 支持 finalize 的所有属性名称
-        const attrs = [
-          'label', 'placeholder', 'htmlType', 'labelWidth',
-          'required', 'display', 'disabled', 'readonly', 'choices'
-        ]
-        await Promise.all(attrs.map(async attr => {
-          if (field[attr] !== void 0) {
-            final[attr] = await vm.finalize(field[attr], field)
-          }
-        }))
-        vm.$set(field, 'final', final)
-      },
-      /**
-       * 固化计算所有字段，将所有配置项例如 label 等固化到 field.final 对象中
-       * @returns {Promise<void>}
-       */
-      async finalizeFields () {
-        const vm = this
-        return Promise.all(vm.fields.map(field => {
-          vm.finalizeField(field)
-        }))
       }
     }
   }

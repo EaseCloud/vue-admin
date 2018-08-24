@@ -54,7 +54,7 @@
                 <a href="javascript:void(0)">
                   <!-- TODO: 用户名获取尚未实现 -->
                   <span class="main-user-name">{{ currentUserName }}</span>
-                  <icon type="arrow-down-b"></icon>
+                  <icon type="md-arrow-dropdown"></icon>
                 </a>
                 <dropdown-menu slot="list">
                   <dropdown-item v-for="(action, i) in $root.config.main_actions"

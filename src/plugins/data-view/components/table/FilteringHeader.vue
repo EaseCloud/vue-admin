@@ -19,8 +19,8 @@
     render (h) {
       const vm = this
       // 获取 filtering 选项参数，如果指定为字符串，自动撸成 keyword 类型
-      const options = (typeof vm.field.filtering === 'string')
-        ? { key: vm.field.filtering } : vm.field.filtering
+      const options = (typeof vm.field.final.filtering === 'string')
+        ? { key: vm.field.final.filtering } : vm.field.final.filtering
       // 如果 filtering 为数组，则认为提供了连续多个筛选器，递归渲染
       if (options instanceof Array) {
         return h('div', {

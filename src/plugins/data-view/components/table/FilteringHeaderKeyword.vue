@@ -15,7 +15,7 @@
           style: { marginLeft: '8px' },
           props: {
             closable: true,
-            color: 'blue',
+            color: '#CCCCCC',
             fade: false
           },
           on: {
@@ -33,7 +33,7 @@
           }
         }, [
           h('icon', {
-            props: { type: 'funnel' }
+            props: { type: 'ios-funnel' }
           })
         ])
       }

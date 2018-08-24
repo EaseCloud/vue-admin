@@ -54,7 +54,7 @@
             }
           }
         }, [h('icon', {
-          props: { type: 'calendar' }
+          props: { type: 'ios-calendar' }
         })])
         // 取消按钮
         // h('a', {

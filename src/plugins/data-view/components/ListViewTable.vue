@@ -35,10 +35,12 @@
   import defaults from '../defaults'
 
   import tableComponents from '../components/table'
+  import fieldSetMixins from './fieldSetMixins'
 
   export default {
     name: 'ListViewTable',
     components: { ...tableComponents },
+    mixins: [fieldSetMixins],
     props: {
       model: { type: String, required: true },
       title: { type: String, default: '列表视图' },
@@ -183,7 +185,8 @@
         if (field.renderHeader) return field.renderHeader(h, field)
         const children = []
         // 插入过滤筛选器
-        if (field.filtering) {
+        if (field.final.filtering) {
+          // TODO: 为何这里会搞成平方复杂度？性能有问题，需要调试优化
           children.push(h(tableComponents.FilteringHeader, { props: { field } }))
         }
         return h(
@@ -327,17 +330,19 @@
         const columns = []
         await Promise.all(vm.fields.map(async function (field, i) {
           vm.setListViewFieldDefault(field)
+          // 计算所有字段选项值
           const key = `__column${i}__`
-          const label = await vm.finalize(field.label, vm)
-          const type = await vm.finalize(field.type, vm)
+          await vm.finalizeFields(field)
+          // const label = await vm.finalize(field.label, vm)
+          // const type = await vm.finalize(field.type, vm)
           columns[i] = {
-            title: label,
+            title: field.final.label,
             render (h, { row, index }) {
-              return vm.renderCell(type, row[key], index, h, field)
+              return vm.renderCell(field.final.type, row[key], index, h, field)
             },
             // 渲染列头
             renderHeader (h, { column, index }) {
-              return vm.renderHeader(type, column, index, h, field)
+              return vm.renderHeader(field.final.type, column, index, h, field)
             }
           }
           // 其他动态属性（实际上当页宽很小的时候，使用 maxWidth 效果更好）

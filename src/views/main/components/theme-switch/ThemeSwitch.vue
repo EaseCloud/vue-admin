@@ -4,7 +4,7 @@
       <a href="javascript:void(0)">
         <icon :style="{marginTop: '-2px', verticalAlign: 'middle'}" color="#515A6E" :size="18"
               type="paintbucket"></icon>
-        <icon type="arrow-down-b"></icon>
+        <icon type="md-arrowdropdown"></icon>
       </a>
       <dropdown-menu slot="list">
         <dropdown-item v-for="(item, index) in themeList" :key="index" :name="item.name">

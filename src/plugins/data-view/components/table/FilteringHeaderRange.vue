@@ -34,7 +34,7 @@
           }
         }, [
           h('icon', {
-            props: { type: 'code' }
+            props: { type: 'ios-code' }
           })
         ])
       }
