@@ -26,8 +26,8 @@
       const vm = this
       return {
         displayListActions: [{
-          buttonIcon: 'minus',
-          buttonShape: 'circle',
+          label: '删除',
+          buttonType: 'dashed',
           action (item) {
             const index = vm.field.value.indexOf(item.id)
             vm.field.value.splice(index, 1)
@@ -35,9 +35,8 @@
             vm.$refs.table.reload()
           }
         }, {
-          buttonIcon: 'chevron-up',
-          buttonShape: 'circle',
           display: x => vm.field.value.indexOf(x.id) > 0,
+          label: '↑',
           action (item) {
             const index = vm.field.value.indexOf(item.id)
             vm.field.value[index] = vm.field.value[index - 1]
@@ -46,9 +45,8 @@
             vm.$refs.table.reload()
           }
         }, {
-          buttonIcon: 'chevron-down',
-          buttonShape: 'circle',
           display: x => vm.field.value.indexOf(x.id) < vm.field.value.length - 1,
+          label: '↓',
           action (item) {
             const index = vm.field.value.indexOf(item.id)
             vm.field.value[index] = vm.field.value[index + 1]
@@ -92,9 +90,7 @@
           return h('i-button', {
             props: {
               size: 'small',
-              type: 'info',
-              shape: 'circle',
-              icon: 'plus'
+              type: 'info'
             },
             on: {
               async click () {
@@ -105,7 +101,7 @@
                 vm.$refs.table.reload()
               }
             }
-          })
+          }, '添加')
         }
         return options
       },
