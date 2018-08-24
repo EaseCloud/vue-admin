@@ -26,16 +26,6 @@
       const vm = this
       return {
         displayListActions: [{
-          label: '删除',
-          buttonType: 'dashed',
-          action (item) {
-            // TODO: 如果 id 号有重复的情况下上下移动按钮会出BUG
-            const index = vm.field.value.indexOf(item.id)
-            vm.field.value.splice(index, 1)
-            vm.$emit('input', vm.field.value)
-            vm.$refs.table.reload()
-          }
-        }, {
           // TODO: 如果 id 号有重复的情况下上下移动按钮会出BUG
           display: x => vm.field.value.indexOf(x.id) > 0,
           label: '↑',
@@ -54,6 +44,16 @@
             const index = vm.field.value.indexOf(item.id)
             vm.field.value[index] = vm.field.value[index + 1]
             vm.field.value[index + 1] = item.id
+            vm.$emit('input', vm.field.value)
+            vm.$refs.table.reload()
+          }
+        }, {
+          label: '×',
+          buttonType: 'dashed',
+          action (item) {
+            // TODO: 如果 id 号有重复的情况下上下移动按钮会出BUG
+            const index = vm.field.value.indexOf(item.id)
+            vm.field.value.splice(index, 1)
             vm.$emit('input', vm.field.value)
             vm.$refs.table.reload()
           }
@@ -87,8 +87,9 @@
       displayListOptions () {
         const vm = this
         const options = { ...(vm.field.listViewOptions.options || {}) }
-        options.can_edit = false
+        // options.can_edit = false
         options.can_delete = false
+        options.action_column_width = 180
         options.action_column_render_header = (h) => {
           return h('i-button', {
             props: {
