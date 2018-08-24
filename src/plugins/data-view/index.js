@@ -105,7 +105,7 @@ export default {
         },
         async pickObject (listViewOptions = {}, {
           title = '选取对象',
-          width = 540,
+          width = 800,
           okText = '确认',
           cancelText = '取消',
           scrollable = true
@@ -118,7 +118,8 @@ export default {
               options: {
                 ...(listViewOptions.options || {}),
                 can_edit: false,
-                can_delete: false
+                can_delete: false,
+                action_column_width: 80
               },
               actions: [...(listViewOptions.actions || []), {
                 label: '选择',

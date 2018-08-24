@@ -4,8 +4,8 @@
     <div class="block-image" v-for="(url, i) in value" :key="url">
       <img :src="url">
       <div class="block-image-cover">
-        <icon type="eye" @click.native="previewImages(value, i)"></icon>
-        <icon type="trash-a" @click.native="removeImage(i)"
+        <icon type="ios-eye" @click.native="previewImages(value, i)"></icon>
+        <icon type="ios-trash" @click.native="removeImage(i)"
               v-if="!field.readonly && !field.disabled"></icon>
       </div>
     </div>
@@ -30,7 +30,7 @@
             :style="{width: '75px', height: '75px', boxSizing: 'content-box'}"
             class="block-upload">
       <div class="block-upload-cover">
-        <icon type="camera" size="20"></icon>
+        <icon type="ios-camera" size="20"></icon>
       </div>
     </upload>
     <div v-if="(field.readonly || field.disabled) && !field.value.length">（无）</div>

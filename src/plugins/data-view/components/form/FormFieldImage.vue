@@ -4,8 +4,8 @@
     <div class="block-image" v-if="value">
       <img :src="value">
       <div class="block-image-cover">
-        <icon type="eye" @click.native="previewImages([value])"></icon>
-        <icon type="trash-a" @click.native="update(null)"
+        <icon type="ios-eye" @click.native="previewImages([value])"></icon>
+        <icon type="ios-trash" @click.native="update(null)"
               v-if="!field.readonly && !field.disabled"></icon>
       </div>
     </div>
@@ -29,7 +29,7 @@
             :style="{width: '75px', height: '75px', boxSizing: 'content-box'}"
             class="block-upload">
       <div class="block-upload-cover">
-        <icon type="camera" size="20"></icon>
+        <icon type="ios-camera" size="20"></icon>
       </div>
     </upload>
     <div v-else>（无）</div>

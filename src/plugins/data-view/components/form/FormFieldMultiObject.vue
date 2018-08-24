@@ -29,12 +29,14 @@
           label: '删除',
           buttonType: 'dashed',
           action (item) {
+            // TODO: 如果 id 号有重复的情况下上下移动按钮会出BUG
             const index = vm.field.value.indexOf(item.id)
             vm.field.value.splice(index, 1)
             vm.$emit('input', vm.field.value)
             vm.$refs.table.reload()
           }
         }, {
+          // TODO: 如果 id 号有重复的情况下上下移动按钮会出BUG
           display: x => vm.field.value.indexOf(x.id) > 0,
           label: '↑',
           action (item) {
@@ -45,6 +47,7 @@
             vm.$refs.table.reload()
           }
         }, {
+          // TODO: 如果 id 号有重复的情况下上下移动按钮会出BUG
           display: x => vm.field.value.indexOf(x.id) < vm.field.value.length - 1,
           label: '↓',
           action (item) {
