@@ -8,15 +8,17 @@
     render (h) {
       const vm = this
       const [keyGte, keyLte] = vm.options.key
-      const valGte = vm.field.$view.query[keyGte] === void 0 ? void 0 : Number(vm.field.$view.query[keyGte])
-      const valLte = vm.field.$view.query[keyLte] === void 0 ? void 0 : Number(vm.field.$view.query[keyLte])
+      const valGte = vm.field.$view.query[keyGte] === void 0
+        ? void 0 : Number(vm.field.$view.query[keyGte])
+      const valLte = vm.field.$view.query[keyLte] === void 0
+        ? void 0 : Number(vm.field.$view.query[keyLte])
 
       if (valGte !== void 0 || valLte !== void 0) {
         return h('tag', {
           style: { marginLeft: '8px' },
           props: {
             closable: true,
-            color: 'blue',
+            color: '#CCCCCC',
             fade: false
           },
           on: {

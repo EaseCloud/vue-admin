@@ -12,7 +12,6 @@
       const value = vm.field.$view.query[key] || ''
 
       if (value) {
-        console.log(vm.renderText(value))
         return h('tag', {
           style: { marginLeft: '4px' },
           props: {
@@ -61,7 +60,6 @@
         const vm = this
         const choices = vm.options.choices
         if (vm.options.render_text) return vm.options.render_text(value)
-        console.log(choices, value, vm._.find(choices, { value }))
         return vm._.find(choices, x => x.value.toString() === value.toString()).text
       }
     }

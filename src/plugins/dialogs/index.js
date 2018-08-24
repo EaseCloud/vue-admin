@@ -176,8 +176,9 @@ export default {
                 const $form = el.componentInstance
                 try {
                   await $form.validate()
+                  const result = JSON.parse(JSON.stringify($form.item))
+                  resolve(result)
                   dialog.close()
-                  resolve(JSON.parse(JSON.stringify($form.item)))
                 } catch (err) {
                   $Modal.buttonLoading = false
                 }
