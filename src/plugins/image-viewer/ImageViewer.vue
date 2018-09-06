@@ -10,30 +10,30 @@
         <a href="javascript:"
            :class="{disabled:index==0}"
            @click="index=index-1>=0?(rotate=0,index-1):index">
-          <icon type="chevron-left"></icon>
+          <icon type="ios-arrow-back"></icon>
         </a>
       </li>
       <li>
         <a href="javascript:"
            @click="rotate+=90">
-          <icon type="refresh"></icon>
+          <icon type="md-refresh"></icon>
         </a>
       </li>
       <li>
         <a href="javascript:"
            :class="{disabled:index+1==images.length}"
            @click="index=index+1<images.length?(rotate=0,index+1):index">
-          <icon type="chevron-right"></icon>
+          <icon type="ios-arrow-forward"></icon>
         </a>
       </li>
       <li>
         <a target="_blank" :href="image_url">
-          <icon type="share"></icon>
+          <icon type="md-share"></icon>
         </a>
       </li>
       <li>
         <a href="javascript:" @click="close()">
-          <icon type="close"></icon>
+          <icon type="md-close"></icon>
         </a>
       </li>
     </ul>

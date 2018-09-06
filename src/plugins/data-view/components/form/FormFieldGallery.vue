@@ -1,51 +1,32 @@
 <template>
   <div class="field-item field-item-gallery"
        :style="{width: !!field.final.width && field.final.width}">
-    <div class="block-image" v-for="(url, i) in value" :key="url">
-      <img :src="url">
-      <div class="block-image-cover">
-        <icon type="ios-eye" @click.native="previewImages(value, i)"></icon>
-        <icon type="ios-trash" @click.native="removeImage(i)"
-              v-if="!field.readonly && !field.disabled"></icon>
-      </div>
-    </div>
-    <!-- TODO: 不重要：上传进度效果未实现 -->
-    <!--<template v-else>-->
-    <!--<progress v-if="field.showProgress" :percent="percentage" hide-info></progress>-->
-    <!--</template>-->
-    <!--:on-success="handleSuccess"-->
-    <!--:on-format-error="handleFormatError"-->
-    <!--:on-exceeded-size="handleMaxSize"-->
-    <!--action="//jsonplaceholder.typicode.com/posts/"-->
-    <!--:default-file-list="defaultList"-->
-    <div class="block-upload"
-         v-if="!field.readonly && !field.disabled && !field.max || value.length < field.max">
-      <upload
-        ref="upload"
-        :show-upload-list="false"
-        :format="['jpg','jpeg','png']"
-        :max-size="2048"
-        :before-upload="handleUpload"
-        :action="field.action || ''"
-        multiple
-        :style="{width: '75px', height: '75px', boxSizing: 'content-box'}">
-      </upload>
-      <div class="block-upload-cover">
-        <icon type="ios-camera" size="20"
-              v-if="field.supportUpload === void 0 || field.supportUpload"
-              @click="triggerUpload()"></icon>
-        <icon type="ios-link" size="20"
-              v-if="field.supportLink === void 0 || field.supportLink"
-              @click="addImageLink()"></icon>
-      </div>
-    </div>
+    <!-- 图片浏览块 -->
+    <item-image-view
+      v-for="(url, i) in value" :key="url"
+      :urls="value" :index="i"
+      @input="handleInput"
+      :readonly="field.readonly"
+      :disabled="field.disabled"></item-image-view>
+    <!-- 上传块 -->
+    <item-image-uploader
+      v-if="!field.readonly && !field.disabled && !field.max || value.length < field.max"
+      :action="field.action || ''"
+      :supportUpload="field.supportUpload === void 0 || field.supportUpload"
+      :supportLink="field.supportLink === void 0 || field.supportLink"
+      @input="$emit('input', $event)"></item-image-uploader>
+    <!-- 禁用修改时 -->
     <div v-if="(field.readonly || field.disabled) && !field.value.length">（无）</div>
   </div>
 </template>
 
 <script>
+  import ItemImageUploader from './components/ItemImageUploader.vue'
+  import ItemImageView from './components/ItemImageView.vue'
+
   export default {
     name: 'FormFieldGallery',
+    components: { ItemImageView, ItemImageUploader },
     props: {
       field: {
         type: Object,
@@ -69,134 +50,10 @@
         const vm = this
         vm.value = vm.field.value
       },
-      triggerUpload () {
+      handleInput (data) {
         const vm = this
-        vm.$refs.upload.$el.getElementsByTagName('input')[0].click()
-      },
-      async addImageLink () {
-        const vm = this
-        vm.$emit('input', {
-          action: 'add',
-          url: await vm.$prompt('请输入图片链接')
-        })
-      },
-      addImage (value) {
-        const vm = this
-        vm.$emit('input', {
-          action: 'add',
-          file: value
-        })
-      },
-      removeImage (index) {
-        const vm = this
-        vm.$emit('input', {
-          action: 'remove',
-          index
-        })
-      },
-      handleUpload (file) {
-        const vm = this
-        vm.addImage(file)
-        return false
+        vm.$emit('input', data)
       }
     }
   }
 </script>
-
-<style lang="less" scoped>
-  @import "../../../../../src/style/defines";
-
-  @sz: 75px;
-
-  .field-item-gallery {
-    display: inline-block;
-    .clearfix();
-  }
-
-  .block-image {
-    display: block;
-    float: left;
-    width: @sz;
-    height: @sz;
-    text-align: center;
-    line-height: @sz;
-    border: 1px solid #eeeeee;
-    border-radius: 4px;
-    overflow: hidden;
-    position: relative;
-    margin-right: 10px;
-    // TODO: 多图产生换行的时候间距没有了，有空的时候再改
-    /*margin-top: 10px;*/
-    padding: 4px;
-    background: white;
-    box-sizing: border-box;
-    img {
-      width: -10px+@sz;
-      height: -10px+@sz;
-      display: block;
-      object-fit: cover;
-    }
-    &:hover .block-image-cover {
-      display: block;
-    }
-  }
-
-  .block-image-cover {
-    display: none;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, .4);
-    i {
-      color: #fff;
-      display: inline-block;
-      vertical-align: middle;
-      font-size: 24px;
-      width: 24px;
-      height: 24px;
-      cursor: pointer;
-    }
-  }
-
-  .block-upload {
-    display: block;
-    float: left;
-    width: @sz;
-    height: @sz;
-    text-align: center;
-    border: 1px solid #eeeeee;
-    border-radius: 4px;
-    overflow: hidden;
-    background: #fff;
-    position: relative;
-    /*margin-top: 10px;*/
-    .block-upload-cover {
-      display: block;
-      background: none;
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: (-26px+75px)*0.5 0;
-      i {
-        display: inline-block;
-        vertical-align: top;
-        font-size: 24px;
-        width: 24px;
-        height: 24px;
-        cursor: pointer;
-      }
-    }
-  }
-
-  .block-upload /deep/ .ivu-upload {
-    width: @sz;
-    height: @sz;
-    line-height: @sz;
-    border: 0;
-  }
-
-</style>
