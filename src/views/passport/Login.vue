@@ -10,12 +10,12 @@
           <i-form ref="loginForm" :model="form" :rules="rules">
             <form-item prop="userName">
               <i-input v-model="form.userName" placeholder="请输入用户名">
-                <span slot="prepend"><icon :size="16" type="person"></icon></span>
+                <span slot="prepend"><icon :size="16" type="md-person"></icon></span>
               </i-input>
             </form-item>
             <form-item prop="password">
               <i-input type="password" v-model="form.password" placeholder="请输入密码">
-                <span slot="prepend"><icon :size="14" type="locked"></icon></span>
+                <span slot="prepend"><icon :size="14" type="md-lock"></icon></span>
               </i-input>
             </form-item>
             <form-item>

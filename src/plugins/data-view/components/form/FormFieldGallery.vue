@@ -18,21 +18,27 @@
     <!--:on-exceeded-size="handleMaxSize"-->
     <!--action="//jsonplaceholder.typicode.com/posts/"-->
     <!--:default-file-list="defaultList"-->
-    <upload v-if="!field.readonly && !field.disabled && !field.max || value.length < field.max"
-            ref="upload"
-            :show-upload-list="false"
-            :format="['jpg','jpeg','png']"
-            :max-size="2048"
-            :before-upload="handleUpload"
-            :action="field.action || ''"
-            multiple
-            type="drag"
-            :style="{width: '75px', height: '75px', boxSizing: 'content-box'}"
-            class="block-upload">
+    <div class="block-upload"
+         v-if="!field.readonly && !field.disabled && !field.max || value.length < field.max">
+      <upload
+        ref="upload"
+        :show-upload-list="false"
+        :format="['jpg','jpeg','png']"
+        :max-size="2048"
+        :before-upload="handleUpload"
+        :action="field.action || ''"
+        multiple
+        :style="{width: '75px', height: '75px', boxSizing: 'content-box'}">
+      </upload>
       <div class="block-upload-cover">
-        <icon type="ios-camera" size="20"></icon>
+        <icon type="ios-camera" size="20"
+              v-if="field.supportUpload === void 0 || field.supportUpload"
+              @click="triggerUpload()"></icon>
+        <icon type="ios-link" size="20"
+              v-if="field.supportLink === void 0 || field.supportLink"
+              @click="addImageLink()"></icon>
       </div>
-    </upload>
+    </div>
     <div v-if="(field.readonly || field.disabled) && !field.value.length">（无）</div>
   </div>
 </template>
@@ -62,6 +68,17 @@
       reload () {
         const vm = this
         vm.value = vm.field.value
+      },
+      triggerUpload () {
+        const vm = this
+        vm.$refs.upload.$el.getElementsByTagName('input')[0].click()
+      },
+      async addImageLink () {
+        const vm = this
+        vm.$emit('input', {
+          action: 'add',
+          url: await vm.$prompt('请输入图片链接')
+        })
       },
       addImage (value) {
         const vm = this
@@ -107,9 +124,6 @@
     border-radius: 4px;
     overflow: hidden;
     position: relative;
-    &:hover {
-      box-shadow: 1px 1px 2px rgba(0, 0, 0, .1);
-    }
     margin-right: 10px;
     // TODO: 多图产生换行的时候间距没有了，有空的时候再改
     /*margin-top: 10px;*/
@@ -152,31 +166,37 @@
     width: @sz;
     height: @sz;
     text-align: center;
-    border: none;
+    border: 1px solid #eeeeee;
     border-radius: 4px;
     overflow: hidden;
     background: #fff;
     position: relative;
     /*margin-top: 10px;*/
-    &:hover {
-      box-shadow: 1px 1px 2px rgba(0, 0, 0, .1);
+    .block-upload-cover {
+      display: block;
+      background: none;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: (-26px+75px)*0.5 0;
+      i {
+        display: inline-block;
+        vertical-align: top;
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+      }
     }
   }
 
-  .block-upload /deep/ .ivu-upload-drag {
+  .block-upload /deep/ .ivu-upload {
     width: @sz;
     height: @sz;
     line-height: @sz;
+    border: 0;
   }
 
-  .block-upload-cover {
-    i {
-      display: inline-block;
-      vertical-align: middle;
-      font-size: 24px;
-      width: 24px;
-      height: 24px;
-      cursor: pointer;
-    }
-  }
 </style>
