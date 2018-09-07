@@ -22,11 +22,11 @@
       multiple
       :style="{width: '75px', height: '75px', boxSizing: 'content-box'}">
     </upload>
-    <div class="block-upload-cover">
-      <icon type="ios-camera" size="20" v-if="supportUpload"
-            @click="triggerUpload()"></icon>
-      <icon type="ios-link" size="20" v-if="supportLink"
-            @click="addImageLink()"></icon>
+    <div class="block-upload-cover" style="margin-top: -12px">
+      <x-icon name="fa fa-camera" :width="24" :height="24" v-if="supportUpload"
+              @click="triggerUpload()"></x-icon>
+      <x-icon name="fa fa-link" :width="24" :height="24" v-if="supportLink"
+              @click="addImageLink()"></x-icon>
     </div>
   </div>
 
@@ -101,18 +101,16 @@
       display: block;
       background: none;
       position: absolute;
-      top: 0;
+      top: 50%;
       bottom: 0;
       left: 0;
       right: 0;
-      padding: (-26px+75px)*0.5 0;
-      i {
-        display: inline-block;
-        vertical-align: top;
-        font-size: 24px;
-        width: 24px;
-        height: 24px;
+      .x-icon {
         cursor: pointer;
+        font-size: 14px;
+        &:hover {
+          opacity: 0.8;
+        }
       }
     }
   }

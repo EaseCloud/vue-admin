@@ -27,11 +27,11 @@
     <div class="main-header-con" :style="{paddingLeft: shrink?'60px':'200px'}">
       <div class="main-header">
         <div class="navicon-con">
-          <icon type="ios-menu" size="32"
+          <x-icon name="fa fa-bars" size="24" width="32" height="32"
                 style="cursor: pointer;"
                 :style="{transform: 'rotateZ(' + (this.shrink ? '-90' : '0') + 'deg)'}"
                 @click="toggleClick"
-          ></icon>
+          ></x-icon>
         </div>
         <div class="header-middle-con">
           <div class="main-breadcrumb">
@@ -40,19 +40,16 @@
         </div>
         <div class="header-avatar-con">
           <!-- TODO: 升级 iView3.0 之后出现了很多不兼容问题，先隐藏 -->
-          <!--
-          <full-screen v-model="isFullScreen"></full-screen>
-          <lock-screen></lock-screen>
-          <message-tip v-model="$store.state.app.messageCount"></message-tip>
-          <theme-switch></theme-switch>
-          -->
+          <!--<full-screen v-model="isFullScreen"></full-screen>-->
+          <!--<lock-screen></lock-screen>-->
+          <!--<message-tip v-model="$store.state.app.messageCount"></message-tip>-->
+          <!--<theme-switch></theme-switch>-->
 
           <div class="user-dropdown-menu-con">
             <dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
               <a href="javascript:void(0)">
-                <!-- TODO: 用户名获取尚未实现 -->
                 <span class="main-user-name">{{ currentUserName }}</span>
-                <icon type="md-arrow-dropdown"></icon>
+                <x-icon name="fa fa-caret-down" style="vertical-align: middle"></x-icon>
               </a>
               <dropdown-menu slot="list">
                 <dropdown-item v-for="(action, i) in $root.config.main_actions"

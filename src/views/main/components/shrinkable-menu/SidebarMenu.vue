@@ -27,10 +27,6 @@
         </template>
       </submenu>
       <menu-item v-else :name="item.name" :key="i">
-        <!--<icon :custom="item.icon"-->
-        <!--style="margin-right: 6px"-->
-        <!--:size="iconSize"-->
-        <!--:key="'menuicon' + item.name"></icon>-->
         <x-icon :name="item.icon"
                 style="margin-right: 6px"
                 :width="22"></x-icon>

@@ -2,9 +2,10 @@
   <div style="display:inline-block;padding:0 6px;">
     <dropdown trigger="click" @on-click="setTheme">
       <a href="javascript:void(0)">
-        <icon :style="{marginTop: '-2px', verticalAlign: 'middle'}" color="#515A6E" :size="18"
-              type="paintbucket"></icon>
-        <icon type="md-arrowdropdown"></icon>
+        <!-- TODO: 自 iView3.0 废弃，花哨的功能 -->
+        <x-icon :style="{marginTop: '-2px', verticalAlign: 'middle'}" color="#515A6E" :size="18"
+              type="paintbucket"></x-icon>
+        <x-icon type="md-arrowdropdown"></x-icon>
       </a>
       <dropdown-menu slot="list">
         <dropdown-item v-for="(item, index) in themeList" :key="index" :name="item.name">

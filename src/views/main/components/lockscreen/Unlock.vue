@@ -4,7 +4,7 @@
       <div @click="handleClickAvatar" class="unlock-avatar-con" :style="{marginLeft: avatarLeft}">
         <img class="unlock-avatar-img" :src="avatarPath">
         <div class="unlock-avatar-cover">
-          <span><icon type="unlocked" :size="30"></icon></span>
+          <span><x-icon name="fa fa-unlock" :size="30"></x-icon></span>
           <p>解锁</p>
         </div>
       </div>
@@ -15,7 +15,7 @@
             <input ref="inputEle" v-model="password" class="unlock-input" type="password" placeholder="密码同登录密码"/>
             <button ref="unlockBtn" @mousedown="unlockMousedown" @mouseup="unlockMouseup" @click="handleUnlock"
                     class="unlock-btn">
-              <icon color="white" type="key"></icon>
+              <x-icon color="white" name="fa fa-key"></x-icon>
             </button>
           </div>
         </div>

@@ -10,30 +10,30 @@
         <a href="javascript:"
            :class="{disabled:index==0}"
            @click="index=index-1>=0?(rotate=0,index-1):index">
-          <icon type="ios-arrow-back"></icon>
+          <x-icon name="fa fa-chevron-left"></x-icon>
         </a>
       </li>
       <li>
         <a href="javascript:"
            @click="rotate+=90">
-          <icon type="md-refresh"></icon>
+          <x-icon name="fa fa-redo"></x-icon>
         </a>
       </li>
       <li>
         <a href="javascript:"
            :class="{disabled:index+1==images.length}"
            @click="index=index+1<images.length?(rotate=0,index+1):index">
-          <icon type="ios-arrow-forward"></icon>
+          <x-icon name="fa fa-chevron-right"></x-icon>
         </a>
       </li>
       <li>
         <a target="_blank" :href="image_url">
-          <icon type="md-share"></icon>
+          <x-icon name="fa fa-share-alt"></x-icon>
         </a>
       </li>
       <li>
         <a href="javascript:" @click="close()">
-          <icon type="md-close"></icon>
+          <x-icon name="fa fa-times"></x-icon>
         </a>
       </li>
     </ul>

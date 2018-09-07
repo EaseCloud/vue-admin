@@ -1,8 +1,10 @@
 <template>
   <div class="field-item field-item-gallery"
+       style="margin-bottom: -8px;"
        :style="{width: !!field.final.width && field.final.width}">
     <!-- 图片浏览块 -->
     <item-image-view
+      style="margin-bottom: 8px;"
       v-for="(url, i) in value" :key="url"
       :urls="value" :index="i"
       @input="handleInput"
@@ -10,6 +12,7 @@
       :disabled="field.disabled"></item-image-view>
     <!-- 上传块 -->
     <item-image-uploader
+      style="margin-bottom: 8px;"
       v-if="!field.readonly && !field.disabled && !field.max || value.length < field.max"
       :action="field.action || ''"
       :supportUpload="field.supportUpload === void 0 || field.supportUpload"

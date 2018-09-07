@@ -1,7 +1,7 @@
 <template>
   <div @click="lockScreen" class="lock-screen-btn-con">
     <tooltip content="锁屏" placement="bottom">
-      <icon type="locked" :size="20"></icon>
+      <x-icon type="fa fa-lock-alt" :size="20"></x-icon>
     </tooltip>
   </div>
 </template>

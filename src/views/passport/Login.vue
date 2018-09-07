@@ -3,19 +3,19 @@
     <div class="login-con">
       <card :bordered="false">
         <p slot="title">
-          <icon type="log-in"></icon>
+          <x-icon name="fab fa-vuejs" style="vertical-align: middle;"></x-icon>
           欢迎登录
         </p>
         <div class="form-con">
           <i-form ref="loginForm" :model="form" :rules="rules">
             <form-item prop="userName">
               <i-input v-model="form.userName" placeholder="请输入用户名">
-                <span slot="prepend"><icon :size="16" type="md-person"></icon></span>
+                <span slot="prepend"><x-icon :size="14" name="fa fa-user"></x-icon></span>
               </i-input>
             </form-item>
             <form-item prop="password">
               <i-input type="password" v-model="form.password" placeholder="请输入密码">
-                <span slot="prepend"><icon :size="14" type="md-lock"></icon></span>
+                <span slot="prepend"><x-icon :size="14" name="fa fa-unlock-alt"></x-icon></span>
               </i-input>
             </form-item>
             <form-item>

@@ -8,17 +8,17 @@
       <li>
         <a href="javascript:"
            @click="refresh()">
-          <icon type="refresh"></icon>
+          <x-icon name="fa fa-sync"></x-icon>
         </a>
       </li>
       <li>
         <a target="_blank" :href="url">
-          <icon type="share"></icon>
+          <x-icon name="fa fa-share-alt"></x-icon>
         </a>
       </li>
       <li>
         <a href="javascript:" @click="close()">
-          <icon type="close"></icon>
+          <x-icon name="fa fa-times"></x-icon>
         </a>
       </li>
     </ul>

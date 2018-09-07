@@ -1,20 +1,24 @@
 <template>
   <div class="block-image-wrapper">
     <div class="move move-left" v-if="index>0 && !readonly && !disabled">
-      <icon type="ios-arrow-back"
-            @click="move(index-1)"></icon>
+      <x-icon name="fa fa-chevron-left"
+              :size="12" :height="75"
+              @click="move(index-1)"></x-icon>
     </div>
     <div class="block-image">
       <img :src="urls[index]">
       <div class="block-image-cover">
-        <icon type="ios-eye" @click.native="previewImages(urls, index)"></icon>
-        <icon type="ios-trash" @click.native="removeImage(index)"
-              v-if="!readonly && !disabled"></icon>
+        <div class="actions">
+          <x-icon name="fa fa-eye" :width="24" :height="24" @click.native="previewImages(urls, index)"></x-icon>
+          <x-icon name="fa fa-trash" :width="24" :height="24" @click.native="removeImage(index)"
+                  v-if="!readonly && !disabled"></x-icon>
+        </div>
       </div>
     </div>
     <div class="move move-right" v-if="index<urls.length-1 && !readonly && !disabled">
-      <icon type="ios-arrow-forward"
-            @click="move(index)"></icon>
+      <x-icon name="fa fa-chevron-right"
+              :size="12" :height="75"
+              @click="move(index)"></x-icon>
     </div>
   </div>
 </template>
@@ -73,10 +77,8 @@
       overflow: hidden;
       height: @sz;
       float: left;
-      i.ivu-icon {
+      .x-icon {
         cursor: pointer;
-        float: left;
-        line-height: @sz;
       }
     }
     &:hover .move {
@@ -90,7 +92,6 @@
     width: @sz;
     height: @sz;
     text-align: center;
-    line-height: @sz;
     border: 1px solid #eeeeee;
     border-radius: 4px;
     overflow: hidden;
@@ -119,14 +120,17 @@
     left: 0;
     right: 0;
     background: rgba(0, 0, 0, .4);
-    i {
+    .actions {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
       color: #fff;
-      display: inline-block;
-      vertical-align: middle;
-      font-size: 24px;
-      width: 24px;
-      height: 24px;
-      cursor: pointer;
+      margin-top: -12px;
+      .x-icon {
+        font-size: 14px;
+        cursor: pointer;
+      }
     }
   }
 </style>
