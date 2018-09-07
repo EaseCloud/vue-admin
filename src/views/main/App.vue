@@ -48,29 +48,27 @@
           -->
 
           <div class="user-dropdown-menu-con">
-            <row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
-              <dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
-                <a href="javascript:void(0)">
-                  <!-- TODO: 用户名获取尚未实现 -->
-                  <span class="main-user-name">{{ currentUserName }}</span>
-                  <icon type="md-arrow-dropdown"></icon>
-                </a>
-                <dropdown-menu slot="list">
-                  <dropdown-item v-for="(action, i) in $root.config.main_actions"
-                                 :key="i"
-                                 v-if="finalizeSync(action.display)"
-                                 @click="action.action.apply(this)">
-                    {{action.label}}
-                  </dropdown-item>
-                  <dropdown-item name="logout" :divided="$root.config.main_actions.length > 0">
-                    退出登录
-                  </dropdown-item>
-                </dropdown-menu>
-              </dropdown>
-              <avatar :src="currentUserAvatarUrl"
-                      class="main-avatar"
-                      style="margin-left: 10px;"></avatar>
-            </row>
+            <dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
+              <a href="javascript:void(0)">
+                <!-- TODO: 用户名获取尚未实现 -->
+                <span class="main-user-name">{{ currentUserName }}</span>
+                <icon type="md-arrow-dropdown"></icon>
+              </a>
+              <dropdown-menu slot="list">
+                <dropdown-item v-for="(action, i) in $root.config.main_actions"
+                               :key="i"
+                               v-if="finalizeSync(action.display)"
+                               @click="action.action.apply(this)">
+                  {{action.label}}
+                </dropdown-item>
+                <dropdown-item name="logout" :divided="$root.config.main_actions.length > 0">
+                  退出登录
+                </dropdown-item>
+              </dropdown-menu>
+            </dropdown>
+            <avatar :src="currentUserAvatarUrl"
+                    class="main-avatar"
+                    style="margin-left: 10px;"></avatar>
           </div>
         </div>
       </div>
@@ -424,7 +422,7 @@
         right: 0;
         top: 0;
         height: 100%;
-        width: 300px;
+        width: auto;
         .switch-theme-con {
           display: inline-block;
           width: 40px;
@@ -450,14 +448,10 @@
         }
         .user-dropdown {
           &-menu-con {
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: 150px;
-            height: 100%;
+            height: 32px;
+            margin: 14px 10px;
             .main-user-name {
               display: inline-block;
-              width: 80px;
               word-break: keep-all;
               white-space: nowrap;
               vertical-align: middle;

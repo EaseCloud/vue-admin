@@ -17,16 +17,17 @@
     </div>
     <div ref="scrollBody" class="tags-inner-scroll-body" :style="{left: tagBodyLeft + 'px'}">
       <transition-group name="taglist-moving-animation">
-        <tag type="dot"
-             v-for="(page, i) in $store.state.app.pagesOpened"
-             ref="tagsPageOpened"
-             :key="page.name || i"
-             :name="page.name"
-             @on-close="closePage(i)"
-             @click.native="$router.push(page.route)"
-             :closable="!(page.meta && page.meta.locked)"
-             :color="i===$store.state.app.currentPageIndex?'blue':'default'"
-        >{{ itemTitle(page) }}
+        <tag
+          type="dot"
+          v-for="(page, i) in $store.state.app.pagesOpened"
+          ref="tagsPageOpened"
+          :key="page.name || i"
+          :name="page.name"
+          @on-close="closePage(i)"
+          @click.native="$router.push(page.route)"
+          :closable="!(page.meta && page.meta.locked)"
+          :color="i===$store.state.app.currentPageIndex?'primary':'default'">
+          {{ itemTitle(page) }}
         </tag>
       </transition-group>
     </div>
