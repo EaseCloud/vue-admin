@@ -15,7 +15,9 @@
         <i-button @click="closeCurrentPage">关闭</i-button>
       </div>
     </div>
-    <slot></slot>
+    <div class="page-body">
+      <slot></slot>
+    </div>
   </card>
 </template>
 
@@ -28,14 +30,11 @@
       // 操作按钮
       actions: { type: Array, default: () => [] }
     },
-    computed: {
-    },
+    computed: {},
     data () {
-      return {
-      }
+      return {}
     },
-    methods: {
-    }
+    methods: {}
   }
 </script>
 
@@ -66,9 +65,18 @@
         float: right;
       }
     }
+    .page-body {
+      position: absolute;
+      top: 62px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 15px;
+      overflow-y: auto;
+    }
   }
 
-  .empty-view /deep/ .ivu-card-body {
+  .empty-view /deep/ .page-content > .ivu-card-body {
     position: absolute;
     top: 62px;
     left: 0;
@@ -76,4 +84,5 @@
     right: 0;
     overflow: auto;
   }
+
 </style>
