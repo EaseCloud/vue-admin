@@ -2,6 +2,8 @@ import App from './views/App.vue'
 import iView from 'iview'
 import VueQuillEditor from 'vue-quill-editor'
 
+import '@fortawesome/fontawesome-free/js/all'
+
 import 'iview/dist/styles/iview.css'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
