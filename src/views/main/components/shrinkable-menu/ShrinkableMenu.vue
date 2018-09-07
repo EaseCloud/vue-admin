@@ -1,18 +1,20 @@
 <template>
   <div :style="{background: bgColor}" class="ivu-shrinkable-menu" :class="{shrink:!!shrink}">
     <slot name="top"></slot>
-    <sidebar-menu
-      v-show="!shrink"
-      :menu-theme="theme"
-      :menu-list="menuList"
-      @on-open-change="$emit('on-open-change', $event)"
-      @on-select="handleChange"></sidebar-menu>
-    <sidebar-menu-shrink
-      v-show="shrink"
-      :menu-theme="theme"
-      :menu-list="menuList"
-      :icon-color="shrinkIconColor"
-      @on-select="handleChange"></sidebar-menu-shrink>
+    <div class="menu-container">
+      <sidebar-menu
+        v-show="!shrink"
+        :menu-theme="theme"
+        :menu-list="menuList"
+        @on-open-change="$emit('on-open-change', $event)"
+        @on-select="handleChange"></sidebar-menu>
+      <sidebar-menu-shrink
+        v-show="shrink"
+        :menu-theme="theme"
+        :menu-list="menuList"
+        :icon-color="shrinkIconColor"
+        @on-select="handleChange"></sidebar-menu-shrink>
+    </div>
   </div>
 </template>
 
@@ -71,6 +73,7 @@
 <style lang="less" scoped>
   .ivu-shrinkable-menu {
     height: 100%;
+    position: relative;
     &.shrink {
       width: 60px;
     }
@@ -79,5 +82,15 @@
   // 删除那条难看的右边框竖线
   .ivu-shrinkable-menu /deep/ .ivu-menu::after {
     display: none;
+  }
+
+  .menu-container {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 </style>

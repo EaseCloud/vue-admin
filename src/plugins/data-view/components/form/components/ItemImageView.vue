@@ -1,10 +1,20 @@
 <template>
-  <div class="block-image">
-    <img :src="urls[index]">
-    <div class="block-image-cover">
-      <icon type="ios-eye" @click.native="previewImages(urls, index)"></icon>
-      <icon type="ios-trash" @click.native="removeImage(index)"
-            v-if="!readonly && !disabled"></icon>
+  <div class="block-image-wrapper">
+    <div class="move move-left" v-if="index>0 && !readonly && !disabled">
+      <icon type="ios-arrow-back"
+            @click="move(index-1)"></icon>
+    </div>
+    <div class="block-image">
+      <img :src="urls[index]">
+      <div class="block-image-cover">
+        <icon type="ios-eye" @click.native="previewImages(urls, index)"></icon>
+        <icon type="ios-trash" @click.native="removeImage(index)"
+              v-if="!readonly && !disabled"></icon>
+      </div>
+    </div>
+    <div class="move move-right" v-if="index<urls.length-1 && !readonly && !disabled">
+      <icon type="ios-arrow-forward"
+            @click="move(index)"></icon>
     </div>
   </div>
 </template>
@@ -24,10 +34,25 @@
           action: 'remove',
           index
         })
+      },
+      move (index) {
+        const vm = this
+        vm.$emit('input', {
+          action: 'move',
+          index
+        })
       }
     }
   }
 </script>
+
+<style lang="less">
+  @import "../../../../../../src/style/defines";
+
+  .block-image-wrapper .move {
+    .transition(all 0.2s ease-in-out);
+  }
+</style>
 
 <style lang="less" scoped>
   @import "../../../../../../src/style/defines";
@@ -39,8 +64,28 @@
     .clearfix();
   }
 
+  .block-image-wrapper {
+    float: left;
+    margin-right: 10px;
+    .move {
+      width: 0;
+      .transition(all 0.2s ease-in-out);
+      overflow: hidden;
+      height: @sz;
+      float: left;
+      i.ivu-icon {
+        cursor: pointer;
+        float: left;
+        line-height: @sz;
+      }
+    }
+    &:hover .move {
+      .transition(all 0.2s ease-in-out);
+      width: auto;
+    }
+  }
+
   .block-image {
-    display: block;
     float: left;
     width: @sz;
     height: @sz;
@@ -50,7 +95,6 @@
     border-radius: 4px;
     overflow: hidden;
     position: relative;
-    margin-right: 10px;
     // TODO: 多图产生换行的时候间距没有了，有空的时候再改
     /*margin-top: 10px;*/
     padding: 4px;

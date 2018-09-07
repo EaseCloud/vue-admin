@@ -2,37 +2,36 @@
   <div class="main" :class="{'main-hide-text': shrink}" v-if="me">
     <div class="sidebar-menu-con"
          :class="{dark: $store.state.app.menuTheme==='dark'}"
-         :style="{width: shrink?'60px':'200px', overflow: shrink ? 'visible' : 'auto'}">
-      <scroll-bar ref="scrollBar">
-        <shrinkable-menu
-          :shrink="shrink"
-          :theme="$store.state.app.menuTheme"
-          :menu-list="$store.state.app.menus"
-          @on-open-change="scrollBarResize">
-          <div slot="top" class="logo-con">
-            <template v-if="shrink">
-              <img v-if="$root.config.logo_square"
-                   :src="$root.config.logo_square"/>
-              <img v-else
-                   src="../../../assets/images/logo-min.jpg" key="min-logo"/>
-            </template>
-            <template v-else>
-              <img v-if="$root.config.logo_wide"
-                   :src="$root.config.logo_wide"/>
-              <img v-else
-                   src="../../../assets/images/logo.jpg" key="max-logo"/>
-            </template>
-          </div>
-        </shrinkable-menu>
-      </scroll-bar>
+         :style="{width: shrink?'60px':'200px'}">
+      <shrinkable-menu
+        :shrink="shrink"
+        :theme="$store.state.app.menuTheme"
+        :menu-list="$store.state.app.menus"
+        @on-open-change="scrollBarResize">
+        <div slot="top" class="logo-con">
+          <template v-if="shrink">
+            <img v-if="$root.config.logo_square"
+                 :src="$root.config.logo_square"/>
+            <img v-else
+                 src="../../../assets/images/logo-min.jpg" key="min-logo"/>
+          </template>
+          <template v-else>
+            <img v-if="$root.config.logo_wide"
+                 :src="$root.config.logo_wide"/>
+            <img v-else
+                 src="../../../assets/images/logo.jpg" key="max-logo"/>
+          </template>
+        </div>
+      </shrinkable-menu>
     </div>
     <div class="main-header-con" :style="{paddingLeft: shrink?'60px':'200px'}">
       <div class="main-header">
         <div class="navicon-con">
-          <i-button :style="{transform: 'rotateZ(' + (this.shrink ? '-90' : '0') + 'deg)'}" type="text"
-                    @click="toggleClick">
-            <icon type="navicon" size="32"></icon>
-          </i-button>
+          <icon type="ios-menu" size="32"
+                style="cursor: pointer;"
+                :style="{transform: 'rotateZ(' + (this.shrink ? '-90' : '0') + 'deg)'}"
+                @click="toggleClick"
+          ></icon>
         </div>
         <div class="header-middle-con">
           <div class="main-breadcrumb">
@@ -408,7 +407,7 @@
       position: relative;
       z-index: 11;
       .navicon-con {
-        margin: 6px;
+        margin: 14px;
         display: inline-block;
       }
       .header-middle-con {
