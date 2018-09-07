@@ -33,7 +33,7 @@
             }
           }
         }, [
-          h('a', { class: { collapsible: true } }, [h('icon', { props: { type: 'ios-more' } })]),
+          h('a', { class: { collapsible: true } }, [h('x-icon', { props: { name: 'fa fa-ellipsis-h' } })]),
           h('dropdown-menu', { slot: 'list' }, choices.map(choice => h(
             'dropdown-item',
             { props: { name: choice.value } },

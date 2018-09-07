@@ -32,8 +32,8 @@
             }
           }
         }, [
-          h('icon', {
-            props: { type: 'ios-funnel' }
+          h('x-icon', {
+            props: { name: 'fa fa-filter' }
           })
         ])
       }

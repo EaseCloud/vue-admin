@@ -32,6 +32,7 @@
 <style type="less" scoped>
   .x-icon {
     display: inline-block;
+    vertical-align: middle;
     text-align: center;
   }
 </style>

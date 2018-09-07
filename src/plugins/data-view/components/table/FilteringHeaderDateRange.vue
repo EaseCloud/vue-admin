@@ -53,8 +53,8 @@
               vm.calendarProps.open = !vm.calendarProps.open
             }
           }
-        }, [h('icon', {
-          props: { type: 'ios-calendar' }
+        }, [h('x-icon', {
+          props: { name: 'fa fa-calendar' }
         })])
         // 取消按钮
         // h('a', {

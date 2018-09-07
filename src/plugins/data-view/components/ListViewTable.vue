@@ -27,7 +27,7 @@
   // TODO: selectable 可选中/批量操作
   // TODO: 动态表头处理
   // TODO: 字段类型(text/label/expand)
-  // TODO: actions/listActions 与 batchActions
+  // TODO: 与 batchActions
 
   // TODO: export 导出
 

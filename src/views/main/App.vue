@@ -27,7 +27,7 @@
     <div class="main-header-con" :style="{paddingLeft: shrink?'60px':'200px'}">
       <div class="main-header">
         <div class="navicon-con">
-          <x-icon name="fa fa-bars" size="24" width="32" height="32"
+          <x-icon name="fa fa-bars" :size="24" :width="32" :height="32"
                 style="cursor: pointer;"
                 :style="{transform: 'rotateZ(' + (this.shrink ? '-90' : '0') + 'deg)'}"
                 @click="toggleClick"

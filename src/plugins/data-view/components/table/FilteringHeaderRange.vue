@@ -35,8 +35,8 @@
             }
           }
         }, [
-          h('icon', {
-            props: { type: 'ios-code' }
+          h('x-icon', {
+            props: { name: 'fa fa-exchange-alt' }
           })
         ])
       }
