@@ -2,8 +2,6 @@ import App from './views/App.vue'
 import iView from 'iview'
 import VueQuillEditor from 'vue-quill-editor'
 
-import '@fortawesome/fontawesome-free/js/all'
-
 import 'iview/dist/styles/iview.css'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
@@ -19,6 +17,7 @@ import mixins from './mixins'
 import mixinsAuth from './mixins/auth'
 import mixinsApp from './mixins/app'
 
+import pluginXIcon from './plugins/x-icon'
 import pluginImageViewer from './plugins/image-viewer'
 import pluginHtmlViewer from './plugins/html-viewer'
 import pluginApi from './plugins/api'
@@ -29,6 +28,7 @@ export default {
   install (Vue, options = {}) {
     Vue.use(VueQuillEditor)
     Vue.use(iView)
+    Vue.use(pluginXIcon)
 
     Vue.use(pluginImageViewer)
     Vue.use(pluginHtmlViewer)

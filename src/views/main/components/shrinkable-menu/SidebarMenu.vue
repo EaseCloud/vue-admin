@@ -6,34 +6,35 @@
           width="auto"
           @on-open-change="$store.commit('setMenusOpened', $event); $emit('on-open-change', $event)"
           @on-select="$emit('on-select', $event)">
-    <template v-for="item in menuList">
+    <template v-for="(item, i) in menuList">
       <submenu v-if="item.children && item.children.length"
                :name="item.name"
-               :key="item.name">
+               :key="i">
         <template slot="title">
-          <icon :type="item.icon"
-                :size="iconSize"></icon>
+          <x-icon :name="item.icon"
+                  style="margin-right: 6px"
+                  :width="22"></x-icon>
           <span class="layout-text">{{ utils.html.i18nText(item.title) }}</span>
         </template>
         <template v-for="child in item.children">
           <menu-item :name="child.name"
                      :key="'menuitem' + child.name">
-            <icon :type="child.icon"
-                  :size="iconSize"
-                  :key="'icon' + child.name"></icon>
-            <span class="layout-text"
-                  :key="'title' + child.name">{{ utils.html.i18nText(child.title) }}</span>
+            <x-icon :name="child.icon"
+                    style="margin-right: 6px"
+                    :width="22"></x-icon>
+            <span class="layout-text">{{ utils.html.i18nText(child.title) }}</span>
           </menu-item>
         </template>
       </submenu>
-      <menu-item v-else
-                 :name="item.name"
-                 :key="'menuitem' + item.name">
-        <icon :type="item.icon"
-              :size="iconSize"
-              :key="'menuicon' + item.name"></icon>
-        <span class="layout-text"
-              :key="'title' + item.name">{{ utils.html.i18nText(item.title) }}</span>
+      <menu-item v-else :name="item.name" :key="i">
+        <!--<icon :custom="item.icon"-->
+        <!--style="margin-right: 6px"-->
+        <!--:size="iconSize"-->
+        <!--:key="'menuicon' + item.name"></icon>-->
+        <x-icon :name="item.icon"
+                style="margin-right: 6px"
+                :width="22"></x-icon>
+        <span class="layout-text">{{ utils.html.i18nText(item.title) }}</span>
       </menu-item>
     </template>
   </i-menu>
@@ -44,7 +45,6 @@
     name: 'sidebarMenu',
     props: {
       menuList: Array,
-      iconSize: Number,
       menuTheme: {
         type: String,
         default: 'dark'
