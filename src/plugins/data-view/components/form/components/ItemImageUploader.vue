@@ -108,6 +108,7 @@
       .x-icon {
         cursor: pointer;
         font-size: 14px;
+        vertical-align: top;
         &:hover {
           opacity: 0.8;
         }

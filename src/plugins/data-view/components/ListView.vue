@@ -11,7 +11,7 @@
         <i-button v-if="options.can_create===void 0 || options.can_create"
                   @click="redirectCreate" type="success">新建
         </i-button>
-        <i-button @click="refresh" type="ghost">刷新</i-button>
+        <i-button @click="refresh">刷新</i-button>
         <i-button @click="closeCurrentPage">关闭</i-button>
       </div>
     </div>

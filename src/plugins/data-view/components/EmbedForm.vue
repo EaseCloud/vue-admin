@@ -241,6 +241,7 @@
       // },
       async updateField (field, data) {
         const vm = this
+        // console.log('updateField', field.key, field.)
         // 如果指定 noSync，则不自动写回 field.value，而由托管的 onUpdate 处理所有更新事务
         if (!field.noSync) field.value = data
         // onUpdate 的返回值可以控制是否执行 writeField，如果返回 === false 将跳过 writeField
