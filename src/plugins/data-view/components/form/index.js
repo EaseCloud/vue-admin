@@ -2,6 +2,7 @@ export default {
   FormFieldLabel: () => import('./FormFieldLabel.vue'),
   FormFieldInput: () => import('./FormFieldInput.vue'),
   FormFieldSelect: () => import('./FormFieldSelect.vue'),
+  FormFieldCascade: () => import('./FormFieldCascade.vue'),
   FormFieldRadio: () => import('./FormFieldRadio.vue'),
   FormFieldCheckbox: () => import('./FormFieldCheckbox.vue'),
   FormFieldImage: () => import('./FormFieldImage.vue'),

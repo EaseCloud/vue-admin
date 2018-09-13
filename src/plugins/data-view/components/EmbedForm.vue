@@ -22,6 +22,10 @@
       <form-field-select v-else-if="field.type==='select'"
                          :field="field"
                          @input="updateField(field, $event)"></form-field-select>
+      <!-- type: cascade -->
+      <form-field-cascade v-else-if="field.type==='cascade'"
+                          :field="field"
+                          @input="updateField(field, $event)"></form-field-cascade>
       <!-- type: date -->
       <form-field-date v-else-if="field.type==='date'"
                        :field="field"
@@ -32,8 +36,8 @@
                         @input="updateField(field, $event)"></form-field-radio>
       <!-- type: checkbox -->
       <form-field-checkbox v-else-if="field.type==='checkbox'"
-                        :field="field"
-                        @input="updateField(field, $event)"></form-field-checkbox>
+                           :field="field"
+                           @input="updateField(field, $event)"></form-field-checkbox>
       <!-- type: rate -->
       <form-field-rate v-else-if="field.type==='rate'"
                        :field="field"

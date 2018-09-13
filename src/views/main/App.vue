@@ -6,8 +6,7 @@
       <shrinkable-menu
         :shrink="shrink"
         :theme="$store.state.app.menuTheme"
-        :menu-list="$store.state.app.menus"
-        @on-open-change="scrollBarResize">
+        :menu-list="$store.state.app.menus">
         <div slot="top" class="logo-con">
           <template v-if="shrink">
             <img v-if="$root.config.logo_square"
@@ -28,9 +27,9 @@
       <div class="main-header">
         <div class="navicon-con">
           <x-icon name="fa fa-bars" :size="24" :width="32" :height="32"
-                style="cursor: pointer;"
-                :style="{transform: 'rotateZ(' + (this.shrink ? '-90' : '0') + 'deg)'}"
-                @click="toggleClick"
+                  style="cursor: pointer;"
+                  :style="{transform: 'rotateZ(' + (this.shrink ? '-90' : '0') + 'deg)'}"
+                  @click="toggleClick"
           ></x-icon>
         </div>
         <div class="header-middle-con">
@@ -232,19 +231,14 @@
             vm.config.hooks.action_goto_login.apply(vm)
           })
         }
-      },
-      // recoverClosedTag () {
-      //   const vm = this
-      //   let isTagClosed = !vm.$store.state.app.pagesOpened.some(item => item.name === name)
-      //   // 解决关闭当前标签后再点击回退按钮会退到当前页时没有标签的问题
-      //   if (isTagClosed) {
-      //     vm.openNewPage(name, this.$route.params || {}, this.$route.query || {})
-      //   }
-      // },
-      async scrollBarResize () {
-        const vm = this
-        const scrollBar = await vm.waitFor(vm.$refs, 'scrollBar')
-        scrollBar.resize()
+        // recoverClosedTag () {
+        //   const vm = this
+        //   let isTagClosed = !vm.$store.state.app.pagesOpened.some(item => item.name === name)
+        //   // 解决关闭当前标签后再点击回退按钮会退到当前页时没有标签的问题
+        //   if (isTagClosed) {
+        //     vm.openNewPage(name, this.$route.params || {}, this.$route.query || {})
+        //   }
+        // },
       }
     },
     watch: {
@@ -289,10 +283,6 @@
       // }
       // vm.recoverClosedTag()
       // vm.$store.commit('setMessageCount', 3)
-      window.addEventListener('resize', this.scrollBarResize)
-    },
-    dispatch () {
-      window.removeEventListener('resize', this.scrollBarResize)
     }
   }
 </script>
