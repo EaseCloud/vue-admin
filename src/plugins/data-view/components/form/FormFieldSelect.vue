@@ -7,7 +7,7 @@
               :placeholder="field.placeholder"
               :value="field.value"
               :default="field.final.default"
-              @input="$emit('input', $event)">
+              @input="$emit('input', $event===void 0 ? null : $event)">
       <template v-for="choice in choices">
         <option-group v-if="choice.children"
                       :key="choice.value !== void 0 ? choice.value : choice.key"
