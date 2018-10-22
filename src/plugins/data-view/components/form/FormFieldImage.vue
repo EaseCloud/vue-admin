@@ -44,6 +44,8 @@
     mounted () {
       const vm = this
       vm.field.$el = this
+      // 默认不进行回写
+      if (vm.field.onWriteField === void 0) vm.field.onWriteField = () => null
     },
     methods: {
       reload () {

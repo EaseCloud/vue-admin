@@ -42,6 +42,10 @@
       <form-field-rate v-else-if="field.type==='rate'"
                        :field="field"
                        @input="updateField(field, $event)"></form-field-rate>
+      <!-- type: upload -->
+      <form-field-upload v-else-if="field.type==='upload'"
+                         :field="field"
+                         @input="updateField(field, $event)"></form-field-upload>
       <!-- type: image -->
       <form-field-image v-else-if="field.type==='image'"
                         :field="field"
@@ -184,10 +188,6 @@
         if (field.onWriteField) {
           // Custom write field hook
           field.onWriteField(field, item)
-        } else if (field.type === 'label' || field.type === 'link') {
-          // skip readonly fields
-        } else if (field.type === 'image' || field.type === 'gallery') {
-          // do nothing
         } else if (field.type === 'geo') {
           // vm.setProperty(item, field.key && field.key.lat || 'geo_lat', field.value.lat)
           // vm.setProperty(item, field.key && field.key.lng || 'geo_lng', field.value.lng)
@@ -250,7 +250,7 @@
         if (!field.noSync) field.value = data
         // onUpdate 的返回值可以控制是否执行 writeField，如果返回 === false 将跳过 writeField
         let write = true
-        if (field.onUpdate) write = (await field.onUpdate.apply(vm, [field, data])) !== false
+        if (field.onUpdate) write = await field.onUpdate.apply(vm, [field, data]) !== false
         if (write) await vm.writeField(field, vm.item)
         await vm.renderField(field)
         vm.$emit('update', field)

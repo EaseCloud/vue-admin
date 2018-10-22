@@ -6,6 +6,7 @@ export default {
   FormFieldRadio: () => import('./FormFieldRadio.vue'),
   FormFieldCheckbox: () => import('./FormFieldCheckbox.vue'),
   FormFieldImage: () => import('./FormFieldImage.vue'),
+  FormFieldUpload: () => import('./FormFieldUpload.vue'),
   FormFieldEditor: () => import('./FormFieldEditor.vue'),
   FormFieldGallery: () => import('./FormFieldGallery.vue'),
   FormFieldNumber: () => import('./FormFieldNumber.vue'),
