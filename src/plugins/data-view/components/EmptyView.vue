@@ -67,7 +67,7 @@
     }
     .page-body {
       position: absolute;
-      top: 62px;
+      top: 61px;
       left: 0;
       right: 0;
       bottom: 0;

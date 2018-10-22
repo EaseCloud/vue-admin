@@ -3,8 +3,8 @@ import hooks from './hooks'
 export default {
   // Basic
   name: 'Vue Admin Project',
-  logo_square: null,
-  logo_wide: null,
+  logo_square: '/static/apps/core/images/logo.png',
+  logo_wide: '/static/apps/core/images/logo-wide.png',
   version: '1.0',
   description: 'You can specify your description text here.',
   // API
