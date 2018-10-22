@@ -19,6 +19,7 @@
     <list-view-table v-bind="listViewOptions"
                      @loaded="onLoaded"
                      @query="onQuery"
+                     @select="$emit('select', $event)"
                      @page_to="pageTo"
                      @page_size_to="pageSizeTo"
                      ref="table">
