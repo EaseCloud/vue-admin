@@ -24,7 +24,6 @@
 </template>
 
 <script>
-  // TODO: selectable 可选中/批量操作
   // TODO: 动态表头处理
   // TODO: 字段类型(text/label/expand)
   // TODO: 与 batchActions
@@ -54,11 +53,13 @@
       options: {
         type: Object,
         default: () => ({
+          can_select: false,
           can_create: true,
           can_delete: true,
           can_edit: true,
           show_actions: true,
-          show_pager: false
+          show_pager: false,
+          selector_column_width: 40
         })
       },
       pageSize: {
@@ -92,7 +93,7 @@
         // 原始获得的原始数据
         items: [],
         // 选中的项目列表，主键 pk 的列表
-        selectedItems: [],
+        selectedIndices: [],
         // 固化查询条件
         query: { ...vm.filters, ...vm.initQuery },
         // 固化分页条件
@@ -117,6 +118,10 @@
         if (opts.indexOf(Number(vm.pageSize)) === -1) opts.push(vm.pageSize)
         opts.sort((a, b) => a - b)
         return opts
+      },
+      selectedItems () {
+        const vm = this
+        return vm.selectedIndices.map(i => vm.items[i])
       }
     },
     methods: {
@@ -351,7 +356,6 @@
           if (field.minWidth) columns[i].minWidth = field.minWidth
           if (field.maxWidth) columns[i].maxWidth = field.maxWidth
         }))
-        // TODO: 初始化勾选列
         if (vm.options.show_actions === void 0 || vm.options.show_actions) {
           const columnActions = {
             title: '操作',
@@ -408,6 +412,43 @@
             columnActions.renderHeader = vm.options.action_column_render_header
           }
           columns.push(columnActions)
+        }
+        // 初始化勾选列
+        if (vm.options.can_select) {
+          columns.unshift({
+            key: '__selector__',
+            width: vm.options.selector_column_width || 40,
+            renderHeader (h, { column, index }) {
+              return h('checkbox', {
+                props: {
+                  value: vm.selectedIndices.length > 0 &&
+                  vm.selectedIndices.length === vm.items.length
+                },
+                on: {
+                  input (value) {
+                    vm.selectedIndices = value ? vm._.range(vm.items.length) : []
+                    vm.$emit('select', vm.selectedIndices)
+                  }
+                }
+              })
+            },
+            render (h, { column, index, row }) {
+              return h('checkbox', {
+                props: {
+                  value: vm.selectedIndices.indexOf(index) > -1
+                },
+                on: {
+                  input (value) {
+                    vm.selectedIndices = (value
+                        ? vm._.union(vm.selectedIndices, [index])
+                        : vm._.without(vm.selectedIndices, index)
+                    ).sort((a, b) => a - b)
+                    vm.$emit('select')
+                  }
+                }
+              })
+            }
+          })
         }
         vm.columns = columns
         // vm.columns = [{
