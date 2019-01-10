@@ -1,5 +1,6 @@
 <template>
   <div class="field-item field-item-switch"
+       v-if="display"
        :style="{width: field.final.width || '250px'}">
     <input-number :value="field.value"
                   @input="$emit('input', $event)"
@@ -14,6 +15,7 @@
                   :disabled="field.disabled"
                   :readonly="field.readonly"
                   :edittable="field.editable"
+                  ref="input"
     ></input-number>
   </div>
 </template>
@@ -21,6 +23,11 @@
 <script>
   export default {
     name: 'FormFieldNumber',
+    data () {
+      return {
+        display: true
+      }
+    },
     props: {
       field: {
         type: Object,
@@ -31,6 +38,13 @@
     mounted () {
       const vm = this
       vm.field.$el = this
+    },
+    methods: {
+      reload () {
+        const vm = this
+        vm.display = false
+        vm.$nextTick(() => { vm.display = true })
+      }
     }
   }
 </script>
