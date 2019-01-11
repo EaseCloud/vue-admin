@@ -15,6 +15,7 @@ Vue.use(VueRouter)
 const router = new VueRouter({
   ...config.router_options,
   routes: [
+    ...config.extra_routes,
     {
       path: '',
       component: MainApp,
@@ -25,8 +26,7 @@ const router = new VueRouter({
         ...config.main_routes
       ]
     },
-    ...routes,
-    ...config.extra_routes
+    ...routes
   ]
 })
 
