@@ -2,6 +2,7 @@
   <div class="field-item field-item-list-view"
        :style="{width: field.final.width || 'auto'}">
     <list-view-table v-if="initialized"
+                     ref="view"
                      @input="$emit('input', $event)"
                      v-bind="field.listViewOptions"></list-view-table>
   </div>
@@ -30,6 +31,12 @@
         vm.setProperty(vm.field.listViewOptions, 'options.show_pager', true)
       }
       vm.initialized = true
+    },
+    methods: {
+      refresh () {
+        const vm = this
+        vm.$refs.view.reload()
+      }
     }
   }
 </script>
