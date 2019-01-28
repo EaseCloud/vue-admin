@@ -42,7 +42,7 @@
       update (value) {
         const vm = this
         const onUpdate = vm.field.onUpdate || async function (field, value, item) {
-          await vm.vmTable.api().patch({ id: item[vm.vmTable.pk] }, { is_active: value })
+          await vm.vmTable.api().patch({id: item[vm.vmTable.pk]}, { [field.key]: value })
           vm.vmTable.reload()
         }
         onUpdate.apply(vm.vmTable, [vm.field, value, vm.item])
