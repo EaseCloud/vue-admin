@@ -26,6 +26,8 @@
     mounted () {
       const vm = this
       vm.field.$el = this
+      // 将刷新方法绑定到字段上
+      vm.field.refresh = this.refresh()
       // 默认情况下要显示分页器
       if (vm.evaluate(vm.field.listViewOptions, 'options.show_pager') === void 0) {
         vm.setProperty(vm.field.listViewOptions, 'options.show_pager', true)
@@ -33,9 +35,10 @@
       vm.initialized = true
     },
     methods: {
-      refresh () {
+      async refresh () {
         const vm = this
-        vm.$refs.view.reload()
+        const $view = await vm.waitFor(vm.$refs, 'view')
+        $view.reload()
       }
     }
   }
