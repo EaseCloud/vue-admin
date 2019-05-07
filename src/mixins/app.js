@@ -4,11 +4,10 @@ export default {
      * 根据策略获取并刷新菜单列表
      * 默认情况下从 config.menus 抓取
      */
-    reloadMenus () {
+    async reloadMenus () {
       const vm = this
-      vm.config.hooks.action_get_menus.apply(vm).then(menus => {
-        vm.$store.commit('updateMenus', menus)
-      })
+      const menus = await vm.config.hooks.action_get_menus.apply(vm)
+      vm.$store.commit('updateMenus', menus)
     },
     /**
      * TODO: 有些引用的地方可能从这里找会不全，因为有些没出现在 menus 里面的路由

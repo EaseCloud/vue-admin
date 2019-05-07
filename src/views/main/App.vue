@@ -257,25 +257,24 @@
       //   setCurrentPath(this, this.$route.name) // 在切换语言时用于刷新面包屑
       // },
     },
-    mounted () {
+    async mounted () {
       const vm = this
-      vm.config.hooks.action_main_mounted.apply(vm).then(() => {
-        const vm = this
-        // 从 localStorage 中读取当前登录的用户
-        vm.$store.commit('loadCurrentUser')
-        // 初始化菜单
-        vm.reloadMenus()
-        // 显示打开的页面的列表
-        vm.$store.commit('loadPagesOpened')
-        // 激活当前标签
-        vm.openPage(vm.$route)
+      await vm.config.hooks.action_main_mounted.apply(vm)
+      // 从 localStorage 中读取当前登录的用户
+      vm.$store.commit('loadCurrentUser')
+      // 初始化菜单
+      await vm.reloadMenus()
+      // 显示打开的页面的列表
+      vm.$store.commit('loadPagesOpened')
+      // 激活当前标签
+      vm.openPage(vm.$route)
 
-        // vm.currentPageName = this.$route.name
-        // vm.$store.commit('initPageList')
-        // vm.$store.commit('initCachepage')
-        // TODO: 检测 Vue-admin 框架升级提示
-        // util.checkUpdate(this)
-      })
+      // vm.currentPageName = this.$route.name
+      // vm.$store.commit('initPageList')
+      // vm.$store.commit('initCachepage')
+      // TODO: 检测 Vue-admin 框架升级提示
+      // util.checkUpdate(this)
+
       // ---- 已修复分割线 ----
       // let pathArr = setCurrentPath(this, this.$route.name)
       // if (pathArr.length >= 2) {
