@@ -103,7 +103,7 @@ export default {
                 })])])
               },
               onOk: () => resolve(value),
-              onCancel: reject
+              onCancel: () => reject()
             })
           })
         },

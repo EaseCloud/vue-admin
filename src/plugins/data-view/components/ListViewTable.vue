@@ -376,7 +376,12 @@
                       shape: action.buttonShape,
                       icon: action.buttonIcon
                     },
-                    on: { click: () => action.action.apply(vm, [item]) }
+                    on: {
+                      click: () => {
+                        const result = action.action.apply(vm, [item])
+                        result.catch && result.catch(_ => _)
+                      }
+                    }
                   }, action.label
                 ))
                 // 为避免按钮粘在一起，加一个空格以分开
