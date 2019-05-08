@@ -68,7 +68,6 @@
       async setItem (item) {
         const vm = this
         vm.item = item
-        console.log(vm.item)
         vm.setProperty(vm.field, 'context._object', item)
       }
     }
