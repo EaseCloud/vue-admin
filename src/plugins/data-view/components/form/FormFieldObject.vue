@@ -5,9 +5,13 @@
       <i-button type="text" v-if="item" size="small"
                 @click="navigate(item)">{{item[field.displayName||'name']}}
       </i-button>
-      <i-button type="dashed" @click="reset()" size="small">置空</i-button>
+      <i-button type="dashed" @click="reset()" size="small"
+                v-if="!field.final.readonly && !field.final.disabled">置空
+      </i-button>
     </template>
-    <i-button @click="pick" size="small">选择</i-button>
+    <i-button @click="pick" size="small"
+              v-if="!field.final.readonly && !field.final.disabled">选择
+    </i-button>
   </div>
 </template>
 
@@ -43,7 +47,7 @@
         const vm = this
         const item = await vm.pickObject(vm.field.listViewOptions, vm.field.modalOptions || {})
         vm.setItem(item)
-        vm.$emit('input', vm.item.id)
+        vm.$emit('input', vm.item[vm.field.listViewOptions.pk || 'id'])
       },
       async navigate (item) {
         const vm = this
@@ -51,7 +55,8 @@
           vm.field.navigate(item)
         } else {
           const model = vm.field.listViewOptions.model
-          const route = await vm.config.hooks.action_get_model_edit_route.apply(vm, [model, item.id])
+          const route = await vm.config.hooks.action_get_model_edit_route.apply(
+            vm, [model, item[vm.field.listViewOptions.pk || 'id']])
           vm.$router.push(route)
         }
       },
@@ -63,6 +68,7 @@
       async setItem (item) {
         const vm = this
         vm.item = item
+        console.log(vm.item)
         vm.setProperty(vm.field, 'context._object', item)
       }
     }
