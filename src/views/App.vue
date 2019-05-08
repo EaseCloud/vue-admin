@@ -1,5 +1,5 @@
 <template>
-  <div id="main" class="app-main">
+  <div id="main" class="app-main" v-if="ready">
     <router-view></router-view>
   </div>
 </template>
@@ -9,11 +9,13 @@
     data () {
       return {
         // theme: this.$store.state.app.themeColor
+        ready: false
       }
     },
-    mounted () {
+    async mounted () {
       const vm = this
-      vm.config.hooks.action_root_mounted.apply(vm)
+      await vm.config.hooks.action_root_mounted.apply(vm)
+      vm.ready = true
     },
     beforeDestroy () {
     },
