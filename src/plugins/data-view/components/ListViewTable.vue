@@ -400,7 +400,8 @@
                 controls.push(h('Poptip', {
                   props: {
                     confirm: true,
-                    title: '确认删除这项数据？'
+                    title: '确认删除这项数据？',
+                    placement: 'left'
                   },
                   on: { 'on-ok': () => vm.actionDelete(item).then(() => vm.reload()) }
                 }, [h(
@@ -489,6 +490,7 @@
   }
 
   .list-view-table /deep/ th,
+  .list-view-table /deep/ .ivu-table-wrapper,
   .list-view-table /deep/ .ivu-table,
   .list-view-table /deep/ .ivu-table-header {
     overflow: visible;
