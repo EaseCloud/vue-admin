@@ -379,7 +379,7 @@
                     on: {
                       click: () => {
                         const result = action.action.apply(vm, [item])
-                        result.catch && result.catch(_ => _)
+                        // result.catch && result.catch(_ => _)
                       }
                     }
                   }, action.label

@@ -27,7 +27,9 @@
           can_create: true,
           can_delete: true,
           can_edit: true,
-          show_actions: true
+          can_close: true,
+          can_refresh: true,
+          show_actions: true,
         })
       },
       size: {
@@ -58,6 +60,8 @@
     methods: {
       async reload () {
         const vm = this
+        // 要支持外部更新 id 之后重载内容
+        vm.id_ = vm.id
         const $form = await vm.waitFor(vm.$refs, 'form')
         // 手动调用（非 mounted 首次加载）时，手动触发 $form 的 reload
         if (vm.initialized) await $form.reload()

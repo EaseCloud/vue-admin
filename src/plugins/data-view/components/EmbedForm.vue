@@ -163,6 +163,10 @@
        */
       async renderField (field) {
         const vm = this
+        // 前置钩子
+        if (field.preRender) {
+          await field.preRender.apply(vm, [field])
+        }
         // 获取初始值
         let value = await vm.evaluate(vm.item, field.key, field.default)
         // 根据 filter 过滤
@@ -174,6 +178,10 @@
         }
         // Update，会直接影响到内层 EmbedForm 的绑定值
         vm.$set(field, 'value', value)
+        // 后置钩子
+        if (field.postRender) {
+          await field.postRender.apply(vm, [field])
+        }
         // 主动更新控件
         if (field.$el && field.$el.reload) await field.$el.reload()
       },

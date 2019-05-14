@@ -12,7 +12,9 @@
           </i-button>
           <i :key="'_'+i"><!--避免按钮之间粘在一起--></i>
         </template>
-        <i-button @click="closeCurrentPage">关闭</i-button>
+        <i-button v-if="options.can_close===void 0 || options.can_close"
+                  @click="closeCurrentPage">关闭
+        </i-button>
       </div>
     </div>
     <div class="page-body">
@@ -28,7 +30,18 @@
       title: { type: [String, Function], default: '新的页面' },
       subtitle: { type: [String, Function], default: '' },
       // 操作按钮
-      actions: { type: Array, default: () => [] }
+      actions: { type: Array, default: () => [] },
+      options: {
+        type: Object,
+        default: () => ({
+          can_create: true,
+          can_delete: true,
+          can_edit: true,
+          can_close: true,
+          can_refresh: true,
+          show_actions: true,
+        })
+      },
     },
     computed: {},
     data () {

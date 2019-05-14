@@ -11,8 +11,12 @@
         <i-button v-if="options.can_create===void 0 || options.can_create"
                   @click="redirectCreate" type="success">新建
         </i-button>
-        <i-button @click="refresh">刷新</i-button>
-        <i-button @click="closeCurrentPage">关闭</i-button>
+        <i-button v-if="options.can_refresh===void 0 || options.can_refresh"
+                  @click="refresh">刷新
+        </i-button>
+        <i-button v-if="options.can_close===void 0 || options.can_close"
+                  @click="closeCurrentPage">关闭
+        </i-button>
       </div>
     </div>
     <!-- TODO: 从内部 emit 出来的 page_to 同样要在 url 上处理 -->

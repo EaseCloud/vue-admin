@@ -22,8 +22,12 @@
                         (options.can_delete === void 0 || finalizeSync(options.can_delete, $refs.form.item))"
                   type="error" @click="remove">删除
         </i-button>
-        <i-button @click="refresh">刷新</i-button>
-        <i-button @click="closeCurrentPage">关闭</i-button>
+        <i-button v-if="options.can_refresh===void 0 || options.can_refresh"
+                  @click="refresh">刷新
+        </i-button>
+        <i-button v-if="options.can_close===void 0 || options.can_close"
+                  @click="closeCurrentPage">关闭
+        </i-button>
       </div>
     </div>
     <slot name="before"></slot>
