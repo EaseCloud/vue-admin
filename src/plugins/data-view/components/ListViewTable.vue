@@ -274,7 +274,7 @@
       /**
        * 修改当前查询集的查询条件并且刷新数据
        */
-      async doQuery (query) {
+      async doQuery (query, forceReload = false, reloadHeader = true) {
         const vm = this
         let updated = false
         vm._.forEach(query, (value, key) => {
@@ -298,14 +298,16 @@
         //   vm.reload()
         // })
         // 如果全部参数都是一样的情况下，不做刷新
-        if (updated) {
+        if (forceReload || updated) {
           // 修改查询条件的话跳回第一页并加载数据
           await vm.pageTo(1, true)
           // 所有 FilteringHeader 需要刷新渲染（Ugly implementation）
-          vm.initialized = false
-          vm.$nextTick(() => {
-            vm.initialized = true
-          })
+          if (reloadHeader) {
+            vm.initialized = false
+            vm.$nextTick(() => {
+              vm.initialized = true
+            })
+          }
           // 通知父组件
           vm.$emit('query', query)
         }

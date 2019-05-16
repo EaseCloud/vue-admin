@@ -3,9 +3,25 @@
     <form-item v-for="(field, i) in fields"
                v-if="field.final && (field.final.display === void 0 || field.final.display)"
                :key="field.key+'_'+i"
-               :label="field.final.label"
+               :label="field.fullWidth?'':field.final.label"
                :required="field.final.required"
+               :label-width="field.fullWidth?0:180"
+               :style="field.formItemStyle"
                label-position="left">
+      <div v-if="field.fullWidth" class="field-title-full">
+        <h3 class="field-label">{{field.final.label}}</h3>
+        <div class="field-actions">
+          <template v-for="(action, i) in field.actions"
+                    v-if="action.display===void 0||finalizeSync(action.display, field.context.item)">
+            <i-button :key="i"
+                      size="small"
+                      :type="action.buttonType"
+                      @click="action.action.apply(this, field.context.item)">{{action.label}}
+            </i-button>
+            <i :key="'_'+i"><!--避免按钮之间粘在一起--></i>
+          </template>
+        </div>
+      </div>
       <!-- type: input -->
       <form-field-input v-if="(field.type||'input')==='input'"
                         :field="field"
@@ -281,5 +297,15 @@
 
   .field-item {
     display: inline-block;
+  }
+
+  .field-title-full {
+    h3.field-label {
+      display: inline-block;
+    }
+    .field-actions {
+      display: inline-block;
+      float: right;
+    }
   }
 </style>
