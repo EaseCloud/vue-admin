@@ -16,7 +16,7 @@
             <i-button :key="i"
                       size="small"
                       :type="action.buttonType"
-                      @click="action.action.apply(this, field.context.item)">{{action.label}}
+                      @click="doFieldAction(action, field)">{{action.label}}
             </i-button>
             <i :key="'_'+i"><!--避免按钮之间粘在一起--></i>
           </template>
@@ -280,6 +280,10 @@
         if (write) await vm.writeField(field, vm.item)
         await vm.renderField(field)
         vm.$emit('update', field)
+      },
+      async doFieldAction (action, field) {
+        const vm = this
+        await action.action.apply(vm, [field])
       }
     }
   }
