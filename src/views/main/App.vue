@@ -29,8 +29,7 @@
           <x-icon name="fa fa-bars" :size="24" :width="32" :height="32"
                   style="cursor: pointer;"
                   :style="{transform: 'rotateZ(' + (this.shrink ? '-90' : '0') + 'deg)'}"
-                  @click="toggleClick"
-          ></x-icon>
+                  @click="toggleClick"></x-icon>
         </div>
         <div class="header-middle-con">
           <div class="main-breadcrumb">
@@ -54,7 +53,7 @@
                 <dropdown-item v-for="(action, i) in $root.config.main_actions"
                                :key="i"
                                v-if="finalizeSync(action.display)"
-                               @click="action.action.apply(this)">
+                               :name="'action_'+i">
                   {{action.label}}
                 </dropdown-item>
                 <dropdown-item name="logout" :divided="$root.config.main_actions.length > 0">
@@ -221,9 +220,13 @@
         if (name === 'ownSpace') {
           // TODO: 个人中心路由不能写死
           vm.openNewPage('ownspace_index')
-          this.$router.push({
+          vm.$router.push({
             name: 'ownspace_index'
           })
+        } else if (/^action_\d+$/.test(name)) {
+          const index = Number(name.substr('action_'.length))
+          const action = vm.$root.config.main_actions[index]
+          action.action.apply([vm])
         } else if (name === 'logout') {
           vm.config.hooks.action_logout.apply(vm).then(() => {
             vm.$store.commit('logout')

@@ -45,9 +45,9 @@
         const text = await vm.$prompt('请输入关键词', {
           title: '根据关键词过滤',
           defaultValue: value
-        })
+        }).catch(() => 0)
         // ListViewTable 执行查询
-        vm.field.$view.doQuery({ [key]: text })
+        if (text) vm.field.$view.doQuery({ [key]: text })
       },
       async reset () {
         const vm = this

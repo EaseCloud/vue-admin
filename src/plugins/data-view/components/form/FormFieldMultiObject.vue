@@ -24,26 +24,27 @@
     },
     data () {
       const vm = this
+      const pk = vm.field.listViewOptions.pk || 'id'
       return {
         displayListActions: [{
           // TODO: 如果 id 号有重复的情况下上下移动按钮会出BUG
-          display: x => vm.field.value.indexOf(x.id) > 0,
+          display: x => x && vm.field.value.indexOf(x[pk]) > 0,
           label: '↑',
           action (item) {
-            const index = vm.field.value.indexOf(item.id)
+            const index = vm.field.value.indexOf(item[pk])
             vm.field.value[index] = vm.field.value[index - 1]
-            vm.field.value[index - 1] = item.id
+            vm.field.value[index - 1] = item[pk]
             vm.$emit('input', vm.field.value)
             vm.$refs.table.reload()
           }
         }, {
           // TODO: 如果 id 号有重复的情况下上下移动按钮会出BUG
-          display: x => vm.field.value.indexOf(x.id) < vm.field.value.length - 1,
+          display: x => x && vm.field.value.indexOf(x[pk]) < vm.field.value.length - 1,
           label: '↓',
           action (item) {
-            const index = vm.field.value.indexOf(item.id)
+            const index = vm.field.value.indexOf(item[pk])
             vm.field.value[index] = vm.field.value[index + 1]
-            vm.field.value[index + 1] = item.id
+            vm.field.value[index + 1] = item[pk]
             vm.$emit('input', vm.field.value)
             vm.$refs.table.reload()
           }
@@ -52,7 +53,7 @@
           buttonType: 'dashed',
           action (item) {
             // TODO: 如果 id 号有重复的情况下上下移动按钮会出BUG
-            const index = vm.field.value.indexOf(item.id)
+            const index = vm.field.value.indexOf(item[pk])
             vm.field.value.splice(index, 1)
             vm.$emit('input', vm.field.value)
             vm.$refs.table.reload()
@@ -99,7 +100,10 @@
             on: {
               async click () {
                 const value = vm.field.value || []
-                vm.item = await vm.pickObject(vm.modalListViewOptions(), vm.field.modalOptions || {})
+                vm.item = await vm.pickObject(
+                  vm.modalListViewOptions(), vm.field.modalOptions || {}
+                ).catch(() => 0)
+                if (!vm.item) return
                 value.push(vm.item[vm.field.listViewOptions.pk || 'id'])
                 vm.$emit('input', value)
                 vm.$refs.table.reload()
@@ -111,10 +115,18 @@
       },
       modalListViewOptions () {
         const vm = this
-        const options = { ...(vm.field.listViewOptions.options || {}) }
-        options.can_edit = false
-        options.can_delete = false
-        return { ...vm.field.listViewOptions, options }
+        const options = {
+          ...vm.field.listViewOptions,
+          options: {
+            ...(vm.field.listViewOptions.options || {}),
+            can_edit: false,
+            can_delete: false
+          }
+        }
+        // 选的时候还要排除重复项
+        options.filters = options.filters || {}
+        options.filters['!pk__in'] = (vm.field.value || []).map(x => x.toString()).join(',')
+        return options
       }
     }
   }

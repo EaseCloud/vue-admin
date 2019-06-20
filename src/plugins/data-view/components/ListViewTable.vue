@@ -4,6 +4,7 @@
              v-if="initialized"
              :columns="columns"
              :loading="loading"
+             :row-class-name="rowClassName"
              :size="size"
              :data="data">
       <slot name="footer" slot="footer"></slot>
@@ -72,6 +73,7 @@
       },
       filters: { type: Object, default: () => ({}) },
       initQuery: { type: Object, default: () => ({}) },
+      rowClassName: { type: Function },
       size: {
         default: 'small',
         validator (value) {
@@ -215,8 +217,9 @@
           // TODO: 尚未实现
           return h('div', `TODO:${type}`)
         } else if (type === 'link') {
-          // TODO: 尚未实现
-          return h('div', `TODO:${type}`)
+          const text = field.text(value)
+          const route = field.route(value)
+          return h('router-link', { props: { to: route } }, text)
         } else if (type === 'image') {
           return h(tableComponents.TableFieldImage, { props: { value, field } })
           // } else if (type === 'image-text') {
