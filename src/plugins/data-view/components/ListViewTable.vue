@@ -4,7 +4,7 @@
              v-if="initialized"
              :columns="columns"
              :loading="loading"
-             :row-class-name="rowClassName"
+             :row-class-name="rowClassNameRaw"
              :size="size"
              :data="data">
       <slot name="footer" slot="footer"></slot>
@@ -127,6 +127,10 @@
       }
     },
     methods: {
+      rowClassNameRaw (row, index) {
+        const vm = this
+        return vm.rowClassName ? vm.rowClassName(vm.items[index], index) : ''
+      },
       async reload () {
         const vm = this
         vm.loading = true
@@ -348,7 +352,12 @@
           columns[i] = {
             title: field.final.label,
             render (h, { row, index }) {
-              return vm.renderCell(field.final.type, row[key], index, h, field)
+              // 如果 key 为 '@index' 的话，渲染
+              let value = row[key]
+              if (field.key === '@index') {
+                value = index + 1 + vm.pager.pageSize * ((vm.pager.page || 1) - 1)
+              }
+              return vm.renderCell(field.final.type, value, index, h, field)
             },
             // 渲染列头
             renderHeader (h, { column, index }) {
