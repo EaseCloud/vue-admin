@@ -1,5 +1,5 @@
 <template>
-  <div class="field-item field-item-switch"
+  <div class="field-item field-item-number"
        v-if="display"
        :style="{width: field.final.width || '250px'}">
     <input-number :value="field.value"

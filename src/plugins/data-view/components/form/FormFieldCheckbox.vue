@@ -1,5 +1,5 @@
 <template>
-  <div class="field-item field-item-radio"
+  <div class="field-item field-item-checkbox"
        :style="{width: field.final.width || 'auto'}">
     <checkbox-group :value="field.value"
                     :type="field.radio_group_type"

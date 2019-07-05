@@ -1,5 +1,5 @@
 <template>
-  <div class="field-item field-item-star"
+  <div class="field-item field-item-rate"
        :style="{width: field.final.width || 'auto'}">
     <rate :value="field.value"
           :allow-half="field.allow_half"

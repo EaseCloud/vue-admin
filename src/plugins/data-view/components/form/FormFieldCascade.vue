@@ -1,5 +1,5 @@
 <template>
-  <div class="field-item field-item-select"
+  <div class="field-item field-item-cascade"
        :style="{width: field.final.width || '250px'}">
     <cascader :data="field.final.choices"
               class="form-field-cascade"

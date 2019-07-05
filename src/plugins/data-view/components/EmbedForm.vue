@@ -58,6 +58,10 @@
       <form-field-rate v-else-if="field.type==='rate'"
                        :field="field"
                        @input="updateField(field, $event)"></form-field-rate>
+      <!-- type: color -->
+      <form-field-color v-else-if="field.type==='color'"
+                        :field="field"
+                        @input="updateField(field, $event)"></form-field-color>
       <!-- type: upload -->
       <form-field-upload v-else-if="field.type==='upload'"
                          :field="field"
