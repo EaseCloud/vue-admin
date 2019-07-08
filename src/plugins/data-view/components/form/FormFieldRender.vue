@@ -10,12 +10,17 @@
     },
     data () {
       return {
+        component: null,
         data: []
       }
     },
     render (h) {
       const vm = this
-      return vm.field.render(h, vm.field, vm.field.context.item, vm.data)
+      const component = vm.field.render(h, vm.field, vm.field.context.item, vm.data)
+      vm.waitFor(component, 'componentInstance').then(componentInstance => {
+        vm.field.component = componentInstance
+      })
+      return component
     },
     mounted () {
       const vm = this
