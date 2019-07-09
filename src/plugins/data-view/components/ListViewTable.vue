@@ -183,6 +183,8 @@
             row[key] = await vm.getFieldValue(field, item)
           } else if (type === 'switch') {
             row[key] = await vm.getFieldValue(field, item)
+          } else if (type === 'link') {
+            row[key] = await vm.getFieldValue(field, item)
           } else if (type === 'render') {
             row[key] = item
           } else {
