@@ -129,6 +129,7 @@
     methods: {
       rowClassNameRaw (row, index) {
         const vm = this
+        if (!vm.items[index]) return ''
         return vm.rowClassName ? vm.rowClassName(vm.items[index], index) : ''
       },
       async reload () {
@@ -137,7 +138,7 @@
         const { page, count, results } = await vm.hooks.action_load_data.apply(vm)
         // 整除：https://stackoverflow.com/a/4228528/2544762
         vm.pager.pageCount = ~~((count - 1) / vm.pager.pageSize) + 1
-        vm.pager.page = page
+        vm.pager.page = page || vm.pager.page
         vm.pager.count = count
         // 预处理所有数据
         const items = []
@@ -379,6 +380,9 @@
             render (h, { row, index }) {
               const controls = []
               const item = vm.items[index]
+              // 补丁
+              // 很奇怪有时候会出现 item 为空的情况（原因未明），这个时候不渲染按钮
+              if (!item) return h('div')
               vm.actions.forEach(action => {
                 if ((action.display instanceof Function && !action.display.apply(vm, [item])) ||
                   (!action.display && action.display !== void 0)) {
