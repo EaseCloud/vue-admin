@@ -162,7 +162,6 @@ export default {
               width,
               okText,
               cancelText,
-              loading: true,
               scrollable,
               render (h) {
                 el = h('embed-form', {
@@ -172,16 +171,10 @@ export default {
                 return el
               },
               async onOk () {
-                const $Modal = this
                 const $form = el.componentInstance
-                try {
-                  await $form.validate()
-                  const result = JSON.parse(JSON.stringify($form.item))
-                  resolve(result)
-                  dialog.close()
-                } catch (err) {
-                  $Modal.buttonLoading = false
-                }
+                await $form.validate()
+                const result = JSON.parse(JSON.stringify($form.item))
+                resolve(result)
               },
               onCancel: reject
             })

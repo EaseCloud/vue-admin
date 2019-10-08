@@ -8,7 +8,7 @@
                   v-if="$refs.form && (action.display===void 0||finalizeSync(action.display, $refs.form.item))">
           <i-button :key="i"
                     :type="action.buttonType"
-                    @click="action.action.apply(this, [$refs.form.item])">{{action.label}}
+                    @click="doAction(action.action, [$refs.form.item])">{{action.label}}
           </i-button>
           <i :key="'_'+i"><!--避免按钮之间粘在一起--></i>
         </template>
@@ -77,6 +77,7 @@
         // TODO: 提交之前应该实现 validate 验证方法，以校验 required 等字段的情况
         const vm = this
         const isCreate = !vm.$refs.form.id_
+        await vm.validate()
         await vm.$refs.form.save()
         // 保存之后
         if (isCreate) {
@@ -98,7 +99,7 @@
         await vm.$refs.form.deleteItem()
         vm.closeCurrentPage()
       },
-      validate () {
+      async validate () {
         const vm = this
         return vm.$refs.form.validate()
       }

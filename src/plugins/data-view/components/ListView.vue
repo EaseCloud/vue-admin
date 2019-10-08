@@ -7,7 +7,7 @@
         <template v-for="(action, i) in listActions">
           <i-button :key="i"
                     :type="action.buttonType"
-                    @click="action.action.apply(this)">{{action.label}}
+                    @click="doAction(action.action)">{{action.label}}
           </i-button>
           <i :key="'_'+i"><!--避免按钮之间粘在一起--></i>
         </template>
