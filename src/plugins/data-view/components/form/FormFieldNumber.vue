@@ -3,7 +3,7 @@
        v-if="display"
        :style="{width: field.final.width || '250px'}">
     <input-number :value="field.value"
-                  @input="$emit('input', $event)"
+                  @on-change="$emit('input', $event)"
                   :id="field.id"
                   :max="field.max"
                   :min="field.min"
@@ -21,30 +21,32 @@
 </template>
 
 <script>
-  export default {
-    name: 'FormFieldNumber',
-    data () {
-      return {
-        display: true
-      }
-    },
-    props: {
-      field: {
-        type: Object,
-        default: () => {
-        }
-      }
-    },
-    mounted () {
-      const vm = this
-      vm.field.$el = this
-    },
-    methods: {
-      reload () {
-        const vm = this
-        vm.display = false
-        vm.$nextTick(() => { vm.display = true })
+export default {
+  name: 'FormFieldNumber',
+  data () {
+    return {
+      display: true
+    }
+  },
+  props: {
+    field: {
+      type: Object,
+      default: () => {
       }
     }
+  },
+  mounted () {
+    const vm = this
+    vm.field.$el = this
+  },
+  methods: {
+    reload () {
+      const vm = this
+      vm.display = false
+      vm.$nextTick(() => {
+        vm.display = true
+      })
+    }
   }
+}
 </script>
