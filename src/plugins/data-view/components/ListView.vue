@@ -6,6 +6,9 @@
       <div class="controls">
         <template v-for="(action, i) in listActions">
           <i-button :key="i"
+                    v-if=" action.display === void 0 ||
+                          typeof(action.display) === 'function' && action.display(this) ||
+                          typeof(action.display) !== 'function' && !!action.display"
                     :type="action.buttonType"
                     @click="doAction(action.action)">{{action.label}}
           </i-button>

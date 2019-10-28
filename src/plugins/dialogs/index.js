@@ -179,6 +179,23 @@ export default {
               onCancel: reject
             })
           })
+        },
+        async pickFile (multi = false) {
+          return new Promise((resolve, reject) => {
+            const elFile = document.getElementById('_vue_admin_file_picker')
+              || document.createElement('input')
+            elFile.id = '_vue_admin_file_picker'
+            elFile.setAttribute('type', 'file')
+            elFile.setAttribute('style', 'opacity:0;position:absolute;z-index:0;left:0;top:0')
+            elFile.value = null
+            if (multi) elFile.setAttribute('multi', true)
+            document.body.appendChild(elFile)
+            elFile.onchange = event => {
+              if (!event.target.files.length) reject()
+              resolve(multi ? event.target.files : event.target.files[0])
+            }
+            elFile.click()
+          })
         }
       }
     })

@@ -241,8 +241,8 @@
       async validate () {
         const vm = this
         await Promise.all(vm.fields.map(field => new Promise(async (resolve, reject) => {
-          // 先校验 required
-          if (field.final.required && !field.value) {
+          // 先校验 required（0 被看做是有数值的）
+          if (field.final.required && !field.value && field.value !== 0) {
             const msg = `必须填写【${field.label}】字段`
             vm.$Message.warning(msg)
             reject(new Error(msg))
