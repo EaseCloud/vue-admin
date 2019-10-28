@@ -18,5 +18,6 @@ export default {
   FormFieldMultiObject: () => import('./FormFieldMultiObject.vue'),
   FormFieldDistrict: () => import('./FormFieldDistrict.vue'),
   FormFieldListView: () => import('./FormFieldListView.vue'),
-  FormFieldRender: () => import('./FormFieldRender.vue')
+  FormFieldRender: () => import('./FormFieldRender.vue'),
+  FormFieldMap: () => import('./FormFieldMap.vue')
 }

@@ -1,6 +1,7 @@
 import App from './views/App.vue'
 import iView from 'iview'
 import VueQuillEditor from 'vue-quill-editor'
+import VueAMap from 'vue-amap'
 
 import 'iview/dist/styles/iview.css'
 import 'quill/dist/quill.core.css'
@@ -27,6 +28,7 @@ import pluginDialogs from './plugins/dialogs'
 export default {
   install (Vue, options = {}) {
     Vue.use(VueQuillEditor)
+    Vue.use(VueAMap)
     Vue.use(iView)
     Vue.use(pluginXIcon)
 
@@ -42,6 +44,20 @@ export default {
 
     // Custom mixins
     Vue.mixin(config.mixins)
+
+    // 初始化vue-amap
+    VueAMap.initAMapApiLoader({
+      // 高德的key
+      key: 'ef2eab681308c797896f023a49889e2c',
+      // 插件集合
+      plugin: [
+        'AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView',
+        'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor',
+        'AMap.Geolocation', 'AMap.Geocoder'
+      ],
+      // 高德 sdk 版本，默认为 1.4.4
+      v: '1.4.4'
+    });
 
     const AppConstructor = Vue.extend(App)
 
