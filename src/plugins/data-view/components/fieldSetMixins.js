@@ -8,8 +8,9 @@ export default {
       const final = {}
       // 支持 finalize 的所有属性名称
       const attrs = [
-        'label', 'placeholder', 'htmlType', 'labelWidth', 'type',
-        'required', 'display', 'disabled', 'readonly', 'choices', 'filtering'
+        'label', 'placeholder', 'htmlType', 'width', 'labelWidth', 'type',
+        'required', 'display', 'disabled', 'readonly', 'choices', 'filtering',
+        'editable', 'size',
       ]
       await Promise.all(attrs.map(async attr => {
         if (field[attr] !== void 0) {
