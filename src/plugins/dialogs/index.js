@@ -152,7 +152,8 @@ export default {
           width = 540,
           okText = '确认',
           cancelText = '取消',
-          scrollable = true
+          scrollable = true,
+          item = null
         } = {}) {
           const vm = this
           return new Promise((resolve, reject) => {
@@ -166,8 +167,15 @@ export default {
               render (h) {
                 el = h('embed-form', {
                   style: { marginTop: '16px' },
-                  props: formOptions
+                  props: formOptions,
+                  noInit: !!item
                 })
+                if (item) {
+                  vm.$nextTick(function () {
+                    const $form = el.componentInstance
+                    $form.setItem(item)
+                  })
+                }
                 return el
               },
               async onOk () {
