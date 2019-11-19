@@ -58,9 +58,12 @@ export default {
         can_create: true,
         can_delete: true,
         can_edit: true,
+        edit_inline: false,
+        embed_list_actions: false,
         show_actions: true,
         show_pager: false,
-        selector_column_width: 40
+        selector_column_width: 40,
+        action_column_render_header: null, // 自定义操作列头渲染
       })
     },
     pageSize: {
@@ -71,6 +74,8 @@ export default {
       type: Number,
       default: 1
     },
+    // 当 edit_inline = true 时，根据这个选项进行弹窗编辑
+    editViewOptions: { type: Object, default: null },
     filters: { type: Object, default: () => ({}) },
     initQuery: { type: Object, default: () => ({}) },
     rowClassName: { type: Function },
@@ -419,7 +424,12 @@ export default {
               controls.push(h(
                 'Button', {
                   props: { size: 'small' },
-                  on: { click: () => vm.actionEdit(item) }
+                  on: {
+                    async click () {
+                      await (vm.options.edit_inline ? vm.actionInlineEdit(item) : vm.actionEdit(item))
+                      vm.reload()
+                    }
+                  }
                 }, '编辑'
               ))
               controls.push(vm._v(' '))
@@ -442,8 +452,49 @@ export default {
             return h('div', controls)
           }
         }
+        // 特殊的操作列渲染声明
         if (vm.options.action_column_render_header) {
           columnActions.renderHeader = vm.options.action_column_render_header
+        } else if (vm.options.embed_list_actions) {
+          columnActions.renderHeader = function render (h) {
+            const result = ['操作']
+            if (vm.options.can_create) {
+              result.push(' ')
+              result.push(h('i-button', {
+                props: {
+                  size: 'small',
+                  type: 'success',
+                },
+                on: {
+                  async click () {
+                    await (vm.options.edit_inline ? vm.inlineCreate() : vm.redirectCreate())
+                    vm.reload()
+                  }
+                }
+              }, '添加'))
+            }
+            if (vm.listActions) {
+              vm.listActions.forEach(action => {
+                if (action.display !== void 0 && !action.display ||
+                  typeof(action.display) === 'function' && !action.display.apply(vm, [vm])) {
+                  return
+                }
+                result.push(' ')
+                result.push(h('i-button', {
+                  props: {
+                    size: 'small',
+                    type: action.buttonType,
+                    on: {
+                      click () {
+                        action.action.apply(vm)
+                      }
+                    }
+                  }
+                }, action.label))
+              })
+            }
+            return result
+          }
         }
         columns.push(columnActions)
       }

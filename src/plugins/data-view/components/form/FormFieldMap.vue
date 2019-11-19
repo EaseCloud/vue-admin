@@ -120,7 +120,6 @@ export default {
       const vm = this
       vm.data.lng = lng
       vm.data.lat = lat
-      window.mmp = vm.$refs.map
       const oldCenter = vm.map.getCenter()
       // 如果中心点不在这里，移动过去
       if (lng !== oldCenter.lng || lat !== oldCenter.lat) vm.map.setCenter([lng, lat])

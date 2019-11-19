@@ -79,6 +79,15 @@ export default {
           return vm.hooks.action_edit.apply(vm, [item])
         },
         /**
+         * 弹窗行级编辑动作
+         * @param item
+         * @returns {Promise<void>}
+         */
+        async actionInlineEdit (item) {
+          const vm = this
+          return vm.hooks.action_inline_edit.apply(vm, [item])
+        },
+        /**
          * 行级删除动作
          * @param item
          * @returns {Promise<void>}
@@ -102,6 +111,14 @@ export default {
         async redirectCreate () {
           const vm = this
           return vm.hooks.action_create.apply(vm)
+        },
+        /**
+         * 在本页面弹窗创建
+         * @returns {Promise<void>}
+         */
+        async inlineCreate () {
+          const vm = this
+          return vm.hooks.action_inline_create.apply(vm)
         },
         async pickObject (listViewOptions = {}, {
           title = '选取对象',

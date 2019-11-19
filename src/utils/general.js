@@ -120,7 +120,7 @@ export default {
     if (choices instanceof Array || !(choices instanceof Object)) return choices
     return _.map(choices, (value, key) => ({ value: key, text: value }))
   },
-  doAction (action, args) {
-    action.apply(this, args)
+  async doAction (action, args) {
+    return action.apply(this, args)
   }
 }

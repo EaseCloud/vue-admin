@@ -16,10 +16,14 @@ import areaData from 'china-area-data'
 import _ from 'lodash'
 
 function getDataNode (value, label) {
+  // if (window['__formFieldDataNodeCache']) {
+  //   return window['__formFieldDataNodeCache']
+  // }
   const node = { value, label }
   if (areaData[value]) {
     node.children = _.map(areaData[value], (name, code) => getDataNode(parseInt(code), name))
   }
+  // window['__formFieldDataNodeCache'] = node
   return node
 }
 
