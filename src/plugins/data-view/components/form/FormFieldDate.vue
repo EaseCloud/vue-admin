@@ -1,6 +1,7 @@
 <template>
   <div class="field-item field-item-date"
        :style="{width: field.final.width || 'auto'}">
+    <!-- dateType: date/daterange/datetime/datetimerange/year/month -->
     <date-picker :value="field.value"
                  :type="field.dateType || 'date'"
                  :format="field.format"

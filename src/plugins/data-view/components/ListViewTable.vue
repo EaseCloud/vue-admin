@@ -481,15 +481,8 @@ export default {
                 }
                 result.push(' ')
                 result.push(h('i-button', {
-                  props: {
-                    size: 'small',
-                    type: action.buttonType,
-                    on: {
-                      click () {
-                        action.action.apply(vm)
-                      }
-                    }
-                  }
+                  props: { size: 'small', type: action.buttonType },
+                  on: { click: () => action.action.apply(vm) }
                 }, action.label))
               })
             }
