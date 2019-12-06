@@ -122,5 +122,12 @@ export default {
   },
   async doAction (action, args) {
     return action.apply(this, args)
+  },
+  /**
+   * 刷新当前的组件，重新替换默认的 data
+   */
+  reinit () {
+    const vm = this
+    Object.assign(vm.$data, vm.$options.data.apply(vm))
   }
 }

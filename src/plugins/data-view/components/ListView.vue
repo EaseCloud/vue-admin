@@ -10,7 +10,7 @@
                           typeof(action.display) === 'function' && action.display(this) ||
                           typeof(action.display) !== 'function' && !!action.display"
                     :type="action.buttonType"
-                    @click="doAction(action.action)">{{action.label}}
+                    @click="doAction(action.action, $refs.table)">{{action.label}}
           </i-button>
           <i :key="'_'+i"><!--避免按钮之间粘在一起--></i>
         </template>
