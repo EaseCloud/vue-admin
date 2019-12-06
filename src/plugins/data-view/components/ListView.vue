@@ -35,7 +35,7 @@
                      ref="table">
       <slot name="footer" slot="footer"></slot>
     </list-view-table>
-    <div class="page-footer" v-if="listViewOptions.showPager&&$refs.table&&$refs.table.pager">
+    <div class="page-footer" v-if="listViewOptions.showPager&&!!$refs.table&&$refs.table.pager">
       <page ref="pager"
             :total="$refs.table.pager.count"
             :current="$refs.table.pager.page"

@@ -109,6 +109,7 @@
         vm.id_ = itemAfterSave[await vm.finalize(vm.pk)]
         await vm.config.hooks.action_edit_view_post_save.apply(vm, [itemAfterSave])
         vm.$emit('post_save', itemAfterSave)
+        return itemAfterSave
       },
       async erase () {
         const vm = this
