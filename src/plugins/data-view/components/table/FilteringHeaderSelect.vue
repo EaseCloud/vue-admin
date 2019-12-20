@@ -26,7 +26,7 @@
       } else {
         return h('dropdown', {
           style: { marginLeft: '4px' },
-          props: { trigger: 'click' },
+          props: { trigger: 'click', transfer: true },
           on: {
             'on-click': async value => {
               await vm.query(value)
