@@ -19,5 +19,6 @@ export default {
   FormFieldDistrict: () => import('./FormFieldDistrict.vue'),
   FormFieldListView: () => import('./FormFieldListView.vue'),
   FormFieldRender: () => import('./FormFieldRender.vue'),
-  FormFieldMap: () => import('./FormFieldMap.vue')
+  FormFieldMap: () => import('./FormFieldMap.vue'),
+  FormFieldUpload: () => import('./FormFieldUpload.vue')
 }
