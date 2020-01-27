@@ -14,18 +14,18 @@
 </template>
 
 <script>
-  export default {
-    name: 'FormFieldInput',
-    props: {
-      field: {
-        type: Object,
-        default: () => {
-        }
+export default {
+  name: 'FormFieldInput',
+  props: {
+    field: {
+      type: Object,
+      default: () => {
       }
-    },
-    mounted () {
-      const vm = this
-      vm.field.$el = this
     }
+  },
+  mounted () {
+    const vm = this
+    vm.field.$el = this
   }
+}
 </script>

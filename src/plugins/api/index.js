@@ -7,6 +7,10 @@ import urljoin from 'url-join'
 import template from 'url-template'
 import axios from 'axios'
 import config from '../../config'
+import Loading from './Loading'
+import Vue from 'vue'
+
+let loadingCount = 0
 
 // All http methods: https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
 const httpMethodsSafe = ['get', 'head', 'connect', 'options', 'trace']
@@ -27,8 +31,7 @@ const httpMethods = [...httpMethodsSafe, ...httpMethodsUnsafe]
 /**
  * 从 vue-resource 迁移，当 Resource 方法调用 http 方法的时候，传入参数的归一化
  * 调用的 http 方法
- * @param method
- * @param args 传入的参数数组，即 api(model).get(...args) 或者 api(model).post(...args) 的参数数组
+ * @param method @param args 传入的参数数组，即 api(model).get(...args) 或者 api(model).post(...args) 的参数数组
  * @returns {{method: *, params: {}, query: {}}}
  */
 function parseArgs (method, args) {
@@ -96,6 +99,9 @@ class RestResource {
   async request (method = 'GET', ...args) {
     let { params, data, query } = parseArgs(method, args)
     data = await config.hooks.filter_data_before_api_request.apply(this.vm, [data])
+    loadingCount += 1
+    // console.log('>>> loadingCount', loadingCount)
+    if (loadingCount) showLoading()
     return api.request({
       method,
       url: urljoin(this.root, this.model, this.urlTemplate.expand(params)),
@@ -110,11 +116,18 @@ let api = axios.create(config.axios_options)
 
 function notifyResponseMessage (response) {
   if (!window.app) return
-  if (response.data.msg) {
+  const vm = window.app
+  vm.loading_count = Math.max(0, vm.loading_count - 1)
+  loadingCount = Math.max(0, loadingCount - 1)
+  // console.log('<<< loadingCount', loadingCount)
+  if (!loadingCount) hideLoading()
+  if (!response) {
+    vm.$Message.error('请求失败：服务器没有响应')
+  } else if (response.data.msg) {
     if (response.data.silent) return
-    window.app.$Message[response.data.ok ? 'success' : 'warning'](response.data.msg)
+    vm.$Message[response.data.ok ? 'success' : 'warning'](response.data.msg)
   } else if (response.status >= 400) {
-    window.app.$Message.error(JSON.stringify(response.data))
+    vm.$Message.error(JSON.stringify(response.data))
   }
 }
 
@@ -126,6 +139,24 @@ api.interceptors.response.use(response => {
   notifyResponseMessage(error.response)
   return Promise.reject(error)
 })
+
+function showLoading () {
+  if (document.getElementById('api_loading')) return
+  const el = document.createElement('div')
+  el.id = 'api_loading'
+  document.body.appendChild(el)
+  const ModalComponent = Vue.extend(Loading)
+  const div = document.createElement('div')
+  el.appendChild(div)
+  return new ModalComponent({ el: div })
+}
+
+function hideLoading () {
+  const el = document.getElementById('api_loading')
+  if (el) {
+    document.body.removeChild(el)
+  }
+}
 
 export default {
   install (Vue, options = {}) {
@@ -143,7 +174,7 @@ export default {
           // 保留 vm 的引用
           resource.vm = vm
           return resource
-        }
+        },
       }
     })
   }
