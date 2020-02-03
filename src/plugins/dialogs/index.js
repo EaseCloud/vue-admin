@@ -133,15 +133,10 @@ export default {
                 return el
               },
               async onOk () {
-                const $Modal = this
-                const form = el.componentInstance
-                await form.save().then(() => {
-                  resolve()
-                  dialog.close()
-                }, err => {
-                  $Modal.buttonLoading = false
-                  reject(err)
-                })
+                const $form = el.componentInstance
+                await $form.validate()
+                const item = await $form.save()
+                resolve(item)
               },
               onCancel: reject
             })
@@ -153,6 +148,7 @@ export default {
           okText = '确认',
           cancelText = '取消',
           scrollable = true,
+          loading = false,
           item = null
         } = {}) {
           const vm = this
@@ -164,6 +160,7 @@ export default {
               okText,
               cancelText,
               scrollable,
+              loading,
               render (h) {
                 el = h('embed-form', {
                   style: { marginTop: '16px' },

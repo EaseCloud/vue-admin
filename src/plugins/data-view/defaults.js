@@ -25,15 +25,20 @@ export default {
       const vm = this
       const pk = await vm.finalize(vm.pk, item)
       const id = item ? await vm.evaluate(item, pk) : 0
-      const editViewOptions = vm.editViewOptions
+      // const editViewOptions = vm.editViewOptions
       // console.log(editViewOptions)
-      const data = await vm.modalForm({
-        fields: editViewOptions.fields
+      // const data = await vm.modalForm({
+      //   fields: editViewOptions.fields
+      // }, {
+      //   title: editViewOptions.title || (item ? '编辑' : '创建') + editViewOptions.modelName,
+      //   item
+      // })
+      // const itemAfterSave = await vm.hooks.action_save.apply(vm, [data])
+      const itemAfterSave = await vm.modalEditView({
+        id, ...vm.editViewOptions
       }, {
-        title: editViewOptions.title || (item ? '编辑' : '创建') + editViewOptions.modelName,
-        item
+        title: vm.editViewOptions.title || (item ? '编辑' : '创建') + vm.editViewOptions.modelName,
       })
-      const itemAfterSave = await vm.hooks.action_save.apply(vm, [data])
       return itemAfterSave
     },
     async action_delete (item) {

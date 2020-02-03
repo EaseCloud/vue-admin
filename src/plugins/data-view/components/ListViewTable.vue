@@ -386,7 +386,8 @@ export default {
       }))
       if (vm.options.show_actions === void 0 || vm.options.show_actions) {
         const columnActions = {
-          title: '操作',
+          title: vm.options.action_column_label === void 0
+            ? '操作' : vm.options.action_column_label,
           width: vm.options.action_column_width,
           fixed: vm.options.action_column_fixed,
           render (h, { row, index }) {
@@ -411,7 +412,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      const result = action.action.apply(vm, [item])
+                      const result = action.action.apply(vm, [item, vm])
                       // result.catch && result.catch(_ => _)
                     }
                   }
@@ -457,7 +458,8 @@ export default {
           columnActions.renderHeader = vm.options.action_column_render_header
         } else if (vm.options.embed_list_actions) {
           columnActions.renderHeader = function render (h) {
-            const result = ['操作']
+            const result = [vm.options.action_column_label === void 0 ?
+              '操作' : vm.options.action_column_label]
             if (vm.options.can_create) {
               result.push(' ')
               result.push(h('i-button', {
@@ -481,15 +483,8 @@ export default {
                 }
                 result.push(' ')
                 result.push(h('i-button', {
-                  props: {
-                    size: 'small',
-                    type: action.buttonType,
-                    on: {
-                      click () {
-                        action.action.apply(vm)
-                      }
-                    }
-                  }
+                  props: { size: 'small', type: action.buttonType },
+                  on: { click: () => action.action.apply(vm, [vm]) }
                 }, action.label))
               })
             }

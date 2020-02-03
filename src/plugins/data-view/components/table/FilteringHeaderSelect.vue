@@ -9,7 +9,8 @@
       const vm = this
       const key = vm.options.key
       const choices = vm.options.choices
-      const value = vm.field.$view.query[key] || ''
+      let value = vm.field.$view.query[key] || ''
+      if (vm.options.refiner) value = vm.options.refiner(value)
 
       if (value) {
         return h('tag', {
@@ -26,7 +27,7 @@
       } else {
         return h('dropdown', {
           style: { marginLeft: '4px' },
-          props: { trigger: 'click' },
+          props: { trigger: 'click', transfer: true },
           on: {
             'on-click': async value => {
               await vm.query(value)

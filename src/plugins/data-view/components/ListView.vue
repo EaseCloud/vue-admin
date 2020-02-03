@@ -10,7 +10,7 @@
                           typeof(action.display) === 'function' && action.display(this) ||
                           typeof(action.display) !== 'function' && !!action.display"
                     :type="action.buttonType"
-                    @click="doAction(action.action)">{{action.label}}
+                    @click="doAction(action.action, $refs.table)">{{action.label}}
           </i-button>
           <i :key="'_'+i"><!--避免按钮之间粘在一起--></i>
         </template>
@@ -35,10 +35,10 @@
                      ref="table">
       <slot name="footer" slot="footer"></slot>
     </list-view-table>
-    <div class="page-footer" v-if="listViewOptions.showPager&&$refs.table&&$refs.table.pager">
+    <div class="page-footer" v-if="listViewOptions.showPager&&pager">
       <page ref="pager"
-            :total="$refs.table.pager.count"
-            :current="$refs.table.pager.page"
+            :total="pager.count"
+            :current="pager.page"
             :page-size-opts="pageSizeOpts"
             show-sizer
             show-total
@@ -56,6 +56,11 @@ import ListViewTable from './ListViewTable.vue'
 export default {
   name: 'ListView',
   props: ListViewTable.props,
+  data() {
+    return {
+      pager: null
+    }
+  },
   computed: {
     listViewOptions () {
       const vm = this
@@ -90,6 +95,7 @@ export default {
     },
     onLoaded (items) {
       const vm = this
+      vm.pager = vm.$refs.table.pager
       vm.$emit('loaded', items)
     },
     onQuery (queryChange) {

@@ -1,3 +1,5 @@
+@import (once) '../../src/style/defines';
+
 html {
   font-size: 14px;
   text-rendering: optimizeLegibility;
@@ -35,3 +37,21 @@ body {
   //transition: background 1s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
+// 筛选器的样式要修正
+.ivu-table-header {
+  .ivu-table-cell {
+    .ivu-tag.ivu-tag-closable {
+      .nowrap();
+      margin: 2px 0 !important;
+      font-size: 12px;
+      padding: 2px 2px;
+      line-height: 1em;
+      height: 1em;
+      box-sizing: content-box;
+    }
+    .ivu-icon {
+      font-size: 12px !important;
+      margin-left: 0;
+    }
+  }
+}
