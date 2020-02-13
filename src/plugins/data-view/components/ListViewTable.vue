@@ -250,7 +250,13 @@ export default {
         //   // TODO: 尚未实现
         //   return h('div', `TODO:${type}`)
       } else if (type === 'render') {
-        return field.render(h, value, field, index)
+        return h('render-component', {
+          props: {
+            render(h2) {
+              return field.render(h2, value, field, index)
+            }
+          }
+        })
       } else {
         return h(`未定义的字段类型: ${type}`)
       }
