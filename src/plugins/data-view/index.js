@@ -125,7 +125,8 @@ export default {
           width = 800,
           okText = '确认',
           cancelText = '取消',
-          scrollable = true
+          scrollable = true,
+          multiple = false
         } = {}) {
           const vm = this
           return new Promise((resolve, reject) => {
@@ -134,9 +135,11 @@ export default {
               ...listViewOptions,
               options: {
                 ...(listViewOptions.options || {}),
+                can_select: multiple,
                 can_edit: false,
                 can_delete: false,
-                action_column_width: 80
+                action_column_width: 80,
+                show_actions: !multiple
               },
               actions: [...(listViewOptions.actions || []), {
                 label: '选择',
@@ -163,7 +166,10 @@ export default {
                 })
                 return el
               },
-              onOk: reject,
+              onOk () {
+                if (!multiple) reject()
+                resolve(el.componentInstance.selectedItems)
+              },
               onCancel: reject
             })
           })
