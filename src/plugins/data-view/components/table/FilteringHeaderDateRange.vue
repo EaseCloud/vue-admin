@@ -16,7 +16,8 @@
             size: 'small',
             confirm: true,
             clearable: false,
-            placement: 'bottom'
+            // placement: 'bottom',
+            transfer: true
           })
         }
       }
