@@ -125,7 +125,9 @@ function notifyResponseMessage (response) {
     vm.$Message.error('请求失败：服务器没有响应')
   } else if (response.data.msg) {
     if (response.data.silent) return
+    if (loadingCount < vm.loading_count) return
     vm.$Message[response.data.ok ? 'success' : 'warning'](response.data.msg)
+    vm.loading_count = null
   } else if (response.status >= 400) {
     vm.$Message.error(JSON.stringify(response.data))
   }
