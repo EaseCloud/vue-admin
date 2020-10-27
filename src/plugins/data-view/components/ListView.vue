@@ -1,8 +1,8 @@
 <template>
   <card class="page-content list-view">
     <div slot="title" class="page-header">
-      <h3 class="title">{{title}}</h3>
-      <h4 class="subtitle">{{subtitle}}</h4>
+      <h3 class="title">{{ title }}</h3>
+      <h4 class="subtitle">{{ subtitle }}</h4>
       <div class="controls">
         <template v-for="(action, i) in listActions">
           <i-button :key="i"
@@ -10,7 +10,7 @@
                           typeof(action.display) === 'function' && action.display(this) ||
                           typeof(action.display) !== 'function' && !!action.display"
                     :type="action.buttonType"
-                    @click="doAction(action.action, $refs.table)">{{action.label}}
+                    @click="doAction(action.action, $refs.table)">{{ action.label }}
           </i-button>
           <i :key="'_'+i"><!--避免按钮之间粘在一起--></i>
         </template>
@@ -56,7 +56,7 @@ import ListViewTable from './ListViewTable.vue'
 export default {
   name: 'ListView',
   props: ListViewTable.props,
-  data() {
+  data () {
     return {
       pager: null
     }
@@ -64,7 +64,7 @@ export default {
   computed: {
     listViewOptions () {
       const vm = this
-      const initQuery = { ...vm.$route.query }
+      const initQuery = {...vm.$route.query}
       delete initQuery.page
       delete initQuery.page_size
       return {
@@ -78,7 +78,7 @@ export default {
     },
     hooks () {
       const vm = this
-      return { ...defaults.hooks, ...(vm.$attrs.hooks || {}) }
+      return {...defaults.hooks, ...(vm.$attrs.hooks || {})}
     },
     pageSizeOpts () {
       const vm = this
@@ -101,7 +101,7 @@ export default {
     onQuery (queryChange) {
       // console.log('onQuery', queryChange)
       const vm = this
-      const query = { ...vm.$route.query }
+      const query = {...vm.$route.query}
       vm._.forEach(queryChange, (value, key) => {
         // 删除查询条件机制
         if (value === null || value === void 0) {
@@ -110,20 +110,20 @@ export default {
           query[key] = value
         }
       })
-      vm.$router.replace({ query })
+      vm.$router.replace({query})
     },
     async pageTo (page) {
       const vm = this
       // 需要的时候才跳转，跳转后交由 $watch.$route 接管
       if (Number(vm.$route.query.page || 1) !== Number(page)) {
-        vm.$router.replace({ query: { ...vm.$route.query, page } })
+        vm.$router.replace({query: {...vm.$route.query, page}})
       }
     },
     async pageSizeTo (pageSize) {
       const vm = this
       // 需要的时候才跳转，跳转后交由 $watch.$route 接管
       if (Number(vm.$route.query.page_size || 10) !== Number(pageSize)) {
-        vm.$router.replace({ query: { ...vm.$route.query, page_size: pageSize } })
+        vm.$router.replace({query: {...vm.$route.query, page_size: pageSize}})
       }
     }
   },
@@ -142,7 +142,7 @@ export default {
           $table.pageTo(Number(routeTo.query.page))
         }
         // 强制变更查询条件
-        const query = { ...vm.$route.query }
+        const query = {...vm.$route.query}
         delete query.page
         delete query.page_size
         $table.doQuery(query)
@@ -162,23 +162,28 @@ export default {
   right: 10px;
   bottom: 10px;
   padding-bottom: 60px;
+
   .page-header {
     .clearfix();
+
     .title {
       .title();
       display: inline-block;
       line-height: 32px;
     }
+
     .subtitle {
       .text();
       display: inline-block;
       line-height: 32px;
       margin-left: 1em;
     }
+
     .controls {
       float: right;
     }
   }
+
   .page-footer {
     position: absolute;
     text-align: right;
@@ -190,6 +195,7 @@ export default {
     background: white;
     z-index: 2;
   }
+
   & /deep/ .ivu-card-body {
     position: absolute;
     top: 62px;
@@ -198,6 +204,7 @@ export default {
     bottom: 0;
     padding-bottom: 60px;
   }
+
   .list-view-table {
     position: absolute;
     top: 0;
