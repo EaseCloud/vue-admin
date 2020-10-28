@@ -411,7 +411,7 @@ export default {
                 'i-button', {
                   props: {
                     size: 'small',
-                    type: action.buttonType,
+                    type: vm.finalizeSync(action.buttonType, item),
                     shape: action.buttonShape,
                     icon: action.buttonIcon,
                     ghost: !!action.ghost
