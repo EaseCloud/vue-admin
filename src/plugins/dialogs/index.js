@@ -9,7 +9,7 @@ export default {
           const el = document.createElement('div')
           document.body.appendChild(el)
           const ModalComponent = Vue.extend(Dialog)
-          return new ModalComponent({ el, propsData: { options } })
+          return new ModalComponent({el, propsData: {options}})
         },
         /**
          * Promise 形式实现，类似于原声 confirm 方法
@@ -76,12 +76,12 @@ export default {
               cancelText,
               render (h) {
                 return h('i-form', {
-                  style: { marginTop: '16px' },
-                  props: { labelPosition: 'top' }
+                  style: {marginTop: '16px'},
+                  props: {labelPosition: 'top'}
                 }, [h('form-item', {
-                  props: { label: message }
+                  props: {label: message}
                 }, [h('i-input', {
-                  props: { value, autofocus: true, placeholder },
+                  props: {value, autofocus: true, placeholder},
                   on: {
                     input (val) {
                       value = val
@@ -127,7 +127,7 @@ export default {
               scrollable,
               render (h) {
                 el = h('edit-view-form', {
-                  style: { marginTop: '16px' },
+                  style: {marginTop: '16px'},
                   props: editViewOptions
                 })
                 return el
@@ -145,6 +145,7 @@ export default {
         async modalForm (formOptions, {
           title = '填写表单',
           width = 540,
+          onOk = null,
           okText = '确认',
           cancelText = '取消',
           scrollable = true,
@@ -163,7 +164,7 @@ export default {
               loading,
               render (h) {
                 el = h('embed-form', {
-                  style: { marginTop: '16px' },
+                  style: {marginTop: '16px'},
                   props: formOptions,
                   noInit: !!item
                 })
@@ -178,8 +179,9 @@ export default {
               async onOk () {
                 const $form = el.componentInstance
                 await $form.validate()
-                const result = JSON.parse(JSON.stringify($form.item))
-                resolve(result)
+                let result = JSON.parse(JSON.stringify($form.item))
+                // 支持自定义的异步处理函数
+                resolve(onOk ? (await onOk(result)) : result)
               },
               onCancel: reject
             })
