@@ -116,6 +116,12 @@ class RestResource {
     return resp.data
   }
 
+  // 根据 ID 获取指定模型的对象
+  async list (filters) {
+    const resp = await this.request('GET', {}, filters)
+    return resp.data.results
+  }
+
 }
 
 // Axios instance
