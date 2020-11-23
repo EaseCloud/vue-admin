@@ -39,7 +39,7 @@ function parseArgs (method, args) {
     throw new Error('不支持的 http 方法：' + method)
   }
   const hasBody = httpMethodsParseBody[method.toLowerCase()]
-  const options = { method, params: {}, query: {} }
+  const options = {method, params: {}, query: {}}
   switch (args.length) {
     case 3:
       if (hasBody) {
@@ -76,8 +76,8 @@ function parseArgs (method, args) {
 
 class RestResource {
   constructor (model,
-               root = config.api_root || '',
-               format = config.api_format || '{/id}{/action}/') {
+    root = config.api_root || '',
+    format = config.api_format || '{/id}{/action}/') {
     if (!model) {
       throw new Error('没有为 api 指定对应的 model')
     }
@@ -97,7 +97,7 @@ class RestResource {
   }
 
   async request (method = 'GET', ...args) {
-    let { params, data, query } = parseArgs(method, args)
+    let {params, data, query} = parseArgs(method, args)
     data = await config.hooks.filter_data_before_api_request.apply(this.vm, [data])
     loadingCount += 1
     // console.log('>>> loadingCount', loadingCount)
@@ -109,6 +109,13 @@ class RestResource {
       data
     })
   }
+
+  // 根据 ID 获取指定模型的对象
+  async retrieve (id, pk = 'id') {
+    const resp = await this.request('GET', {[pk]: id})
+    return resp.data
+  }
+
 }
 
 // Axios instance
@@ -148,7 +155,7 @@ function showLoading () {
   const ModalComponent = Vue.extend(Loading)
   const div = document.createElement('div')
   el.appendChild(div)
-  return new ModalComponent({ el: div })
+  return new ModalComponent({el: div})
 }
 
 function hideLoading () {
@@ -174,7 +181,7 @@ export default {
           // 保留 vm 的引用
           resource.vm = vm
           return resource
-        },
+        }
       }
     })
   }
