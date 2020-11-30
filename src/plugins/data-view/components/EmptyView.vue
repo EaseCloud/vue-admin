@@ -1,8 +1,8 @@
 <template>
   <card class="page-content empty-view">
     <div slot="title" class="page-header">
-      <h3 class="title">{{title}}<slot name="title"></slot></h3>
-      <h4 class="subtitle">{{subtitle}}<slot name="subtitle"></slot></h4>
+      <slot name="title"><h3 class="title">{{title}}</h3></slot>
+      <slot name="subtitle"><h4 class="subtitle">{{subtitle}}</h4></slot>
       <div class="controls">
         <template v-for="(action, i) in actions"
                   v-if="action.display===void 0||finalizeSync(action.display)">
