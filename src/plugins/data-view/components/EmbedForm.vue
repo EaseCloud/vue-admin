@@ -90,6 +90,10 @@
       <form-field-editor v-else-if="field.type==='editor'"
                          :field="field"
                          @input="updateField(field, $event)"></form-field-editor>
+      <!-- type: code -->
+      <form-field-code v-else-if="field.type==='code'"
+                         :field="field"
+                         @input="updateField(field, $event)"></form-field-code>
       <!-- type: object -->
       <form-field-object v-else-if="field.type==='object'"
                          :field="field"

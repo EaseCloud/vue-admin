@@ -1,4 +1,5 @@
 export default {
+  FormFieldCode: () => import('./FormFieldCode.vue'),
   FormFieldLabel: () => import('./FormFieldLabel.vue'),
   FormFieldInput: () => import('./FormFieldInput.vue'),
   FormFieldSelect: () => import('./FormFieldSelect.vue'),

@@ -2,11 +2,14 @@ import App from './views/App.vue'
 import iView from 'iview'
 import VueQuillEditor from 'vue-quill-editor'
 import VueAMap from 'vue-amap'
+import VueCodemirror from 'vue-codemirror'
 
 import 'iview/dist/styles/iview.css'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/theme/darcula.css'
 
 import '../assets/style/style.less'
 
@@ -57,7 +60,18 @@ export default {
       ],
       // 高德 sdk 版本，默认为 1.4.4
       v: '1.4.4'
-    });
+    })
+
+    // https://github.com/surmon-china/vue-codemirror
+    Vue.use(VueCodemirror, {
+      options: {
+        tabSize: 4,
+        theme: 'darcula',
+        size: 500,
+        lineNumbers: true,
+        line: true
+      }
+    })
 
     const AppConstructor = Vue.extend(App)
 
