@@ -121,11 +121,12 @@
             ...(vm.field.listViewOptions.options || {}),
             can_edit: false,
             can_delete: false
-          }
+          },
         }
         // 选的时候还要排除重复项
         options.filters = options.filters || {}
         options.filters['!pk__in'] = (vm.field.value || []).map(x => x.toString()).join(',')
+        options.actions = []
         return options
       }
     }
