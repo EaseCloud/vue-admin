@@ -88,6 +88,8 @@
     },
     data () {
       const vm = this
+      const query = vm.filters instanceof Function ?
+        {...vm.initQuery} : {...vm.filters, ...vm.initQuery}
       return {
         // 是否已初始化
         initialized: false,
@@ -102,7 +104,7 @@
         // 选中的项目列表，主键 pk 的列表
         selectedIndices: [],
         // 固化查询条件
-        query: null,
+        query,
         // 固化分页条件
         pager: {
           page: vm.page,
@@ -302,7 +304,7 @@
         if (vm.filters instanceof Function) {
           // 如果 filters 是函数，每次都按照条件重新计算
           vm.query = {...vm.query, ...(await vm.filters())}
-        } else if (!vm.query) {
+        } else if (!vm.initialized) {
           // 否则，仅在开始的时候更新一次
           vm.query = {...vm.filters, ...vm.initQuery}
         }
