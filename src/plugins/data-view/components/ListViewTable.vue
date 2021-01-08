@@ -51,6 +51,8 @@
       actions: {type: Array, default: () => []},
       // 页面级操作按钮
       listActions: {type: Array, default: () => []},
+      // 批量操作按钮
+      batchActions: {type: Array, default: () => []},
       options: {
         type: Object,
         default: () => ({
@@ -346,6 +348,7 @@
       async pageTo (page, forceReload = false) {
         const vm = this
         if (forceReload || Number(vm.pager.page) !== Number(page)) {
+          vm.selectedIndices.splice(0, vm.selectedIndices.length)
           vm.pager.page = page
           await vm.reload()
           vm.$emit('page_to', page)
@@ -501,6 +504,22 @@
                   result.push(h('i-button', {
                     props: {size: 'small', type: action.buttonType},
                     on: {click: () => action.action.apply(vm, [vm])}
+                  }, action.label))
+                })
+              }
+              if (vm.batchActions) {
+                vm.batchActions.forEach(action => {
+                  if (action.display !== void 0 && !action.display ||
+                    typeof(action.display) === 'function' && !action.display.apply(vm, [vm])) {
+                    return
+                  }
+                  result.push(' ')
+                  result.push(h('i-button', {
+                    props: {
+                      size: 'small',
+                      type: action.buttonType
+                    },
+                    on: {click: () => action.action.apply(vm, [vm.selectedItems])}
                   }, action.label))
                 })
               }
