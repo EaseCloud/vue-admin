@@ -203,6 +203,12 @@ export default {
             }
             elFile.click()
           })
+        },
+        async downloadFile (url, filename='') {
+          const a = document.createElement('a')
+          a.href = url
+          if (filename) a.download = filename
+          a.click()
         }
       }
     })
