@@ -153,13 +153,10 @@ api.interceptors.response.use(response => {
   return Promise.reject(error)
 })
 
-// (config.request_interceptors || []).forEach(interceptor => {
-//   api.interceptors.request.use(...interceptor)
-// })
-//
-// (config.response_interceptors || []).forEach(interceptor => {
-//   api.interceptors.response.use(...interceptor)
-// })
+// Added config hook for accessing interceptor or other behavior under api
+if (config.axios_setup) {
+  config.axios_setup(api)
+}
 
 function showLoading () {
   if (document.getElementById('api_loading')) return
