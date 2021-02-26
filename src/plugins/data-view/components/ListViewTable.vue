@@ -78,7 +78,7 @@
       },
       // 当 edit_inline = true 时，根据这个选项进行弹窗编辑
       editViewOptions: {type: Object, default: null},
-      filters: {type: Object, default: () => ({})},
+      filters: {type: [Object, Function], default: () => ({})},
       initQuery: {type: Object, default: () => ({})},
       rowClassName: {type: Function},
       size: {
@@ -143,6 +143,8 @@
       },
       async reload () {
         const vm = this
+        // 考虑 filters 可能是函数的情况，reload 之前需要更新一下 query 的值
+        await vm.updateQuery()
         vm.loading = true
         const {page, count, results} = await vm.hooks.action_load_data.apply(vm)
         // 整除：https://stackoverflow.com/a/4228528/2544762
@@ -296,12 +298,8 @@
       //     },
       //   },
       // };
-      /**
-       * 修改当前查询集的查询条件并且刷新数据
-       */
-      async doQuery (query, forceReload = false, reloadHeader = true) {
+      async updateQuery() {
         const vm = this
-        let updated = false
         // 更新查询条件 query
         if (vm.filters instanceof Function) {
           // 如果 filters 是函数，每次都按照条件重新计算
@@ -310,6 +308,14 @@
           // 否则，仅在开始的时候更新一次
           vm.query = {...vm.filters, ...vm.initQuery}
         }
+      },
+      /**
+       * 修改当前查询集的查询条件并且刷新数据
+       */
+      async doQuery (query, forceReload = false, reloadHeader = true) {
+        const vm = this
+        let updated = false
+        await vm.updateQuery()
         vm._.forEach(query, (value, key) => {
           // 删除查询条件机制
           if (value === null || value === void 0) {
@@ -324,12 +330,6 @@
             }
           }
         })
-        // // TODO: 添加文档
-        // vm.$emit('query', query)
-        // // TODO: 为何这里要加 nextTick，另外为何不是先 reload 再 emit
-        // vm.$nextTick(() => {
-        //   vm.reload()
-        // })
         // 如果全部参数都是一样的情况下，不做刷新
         if (forceReload || updated) {
           // 修改查询条件的话跳回第一页并加载数据
