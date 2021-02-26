@@ -26,6 +26,12 @@ export default {
   mounted () {
     const vm = this
     vm.field.$el = this
+  },
+  methods: {
+    reload () {
+      const vm = this
+      vm.$refs.input.setCurrentValue(vm.field.value)
+    }
   }
 }
 </script>
