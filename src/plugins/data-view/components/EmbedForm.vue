@@ -50,6 +50,10 @@
       <form-field-date v-else-if="field.type==='date'"
                        :field="field"
                        @input="updateField(field, $event)"></form-field-date>
+      <!-- type: time -->
+      <form-field-time v-else-if="field.type==='time'"
+                       :field="field"
+                       @input="updateField(field, $event)"></form-field-time>
       <!-- type: radio -->
       <form-field-radio v-else-if="field.type==='radio'"
                         :field="field"
