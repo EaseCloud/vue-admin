@@ -14,24 +14,27 @@
 </template>
 
 <script>
-export default {
-  name: 'FormFieldInput',
-  props: {
-    field: {
-      type: Object,
-      default: () => {
+  export default {
+    name: 'FormFieldInput',
+    props: {
+      field: {
+        type: Object,
+        default: () => {
+        }
+      }
+    },
+    mounted () {
+      const vm = this
+      vm.field.$el = this
+    },
+    methods: {
+      async reload () {
+        const vm = this
+        // 支持 onWrite 回写到控件，其他尚未实现的控件可以用同样方法支持
+        if (vm.$refs.input) {
+          vm.$refs.input.setCurrentValue(vm.field.value)
+        }
       }
     }
-  },
-  mounted () {
-    const vm = this
-    vm.field.$el = this
-  },
-  methods: {
-    reload () {
-      const vm = this
-      vm.$refs.input.setCurrentValue(vm.field.value)
-    }
   }
-}
 </script>
