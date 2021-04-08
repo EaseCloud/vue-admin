@@ -2,11 +2,11 @@
   <div class="list-view-table">
     <div v-if="options.show_filtering_form">
       <filtering-form-field
-         v-for="field in fields" v-if="field.filtering"
+        v-for="field in fields" v-if="field.filtering"
         :field="field" :key="field.key"
-         @query="Object.assign(queryFormBuffer, $event)">
+        @query="Object.assign(queryFormBuffer, $event)">
       </filtering-form-field>
-      <i-button @click="doQuery(queryFormBuffer)">查询</i-button>
+      <i-button @click="doQuery(queryFormBuffer)" type="info" size="small">查询</i-button>
     </div>
     <i-table ref="table"
              v-if="initialized"
