@@ -1,10 +1,12 @@
 <script>
   import FilteringFormFieldKeyword from './FilteringFormFieldKeyword.vue'
+  import FilteringFormFieldDateRange from './FilteringFormFieldDateRange.vue'
 
   export default {
-    name: 'FiterlingFormField',
+    name: 'FilteringFormField',
     components: {
       FilteringFormFieldKeyword,
+      FilteringFormFieldDateRange
     },
     props: {
       field: {
@@ -50,10 +52,15 @@
         //   return h(FilteringHeaderRange, {
         //     props: { field: vm.field, options: opt }
         //   })
-        // } else if (opt.type === 'date-range') { // 日期范围类型
-        //   return h(FilteringHeaderDateRange, {
-        //     props: { field: vm.field, options: opt }
-        //   })
+        } else if (opt.type === 'date-range') { // 日期范围类型
+          return h(FilteringFormFieldDateRange, {
+            props: { field: vm.field, options: opt },
+            on: {
+              query(queryDict) {
+                vm.$emit('query', queryDict)
+              }
+            }
+          })
         // } else {
         //   console.error('未定义的 filtering 类型', vm.field)
         //   return h('div', '未定义的 filtering 类型')

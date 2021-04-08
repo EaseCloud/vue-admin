@@ -1,15 +1,14 @@
 <template>
-  <div>
-    <label>{{field.final.label}}</label>
-    <input type="text" v-model="value" @input="emitQuery()"/>
-    <!--<i-button @click="query()">查询</i-button>-->
+  <div style="display: inline-block; margin-right: 12px; margin-bottom: 12px">
+    <label style="font-size: 12px">{{field.final.label}}</label>
+    <Input type="text" v-model="value" @input="emitQuery()" style="width: 130px" size="small"/>
   </div>
 </template>
 
 <script>
 export default {
   name: 'FilteringHeaderKeyword',
-  data() {
+  data () {
     const vm = this
     const key = vm.options.key
     let value = vm.field.$view.query[key] || ''
