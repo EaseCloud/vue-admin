@@ -1,7 +1,7 @@
 <template>
   <div class="field-item field-item-upload"
        :style="{width: !!field.final.width && field.final.width}">
-    <upload v-if="!field.readonly && !field.disabled && !(!field.multiple && value.length)"
+    <upload v-if="!field.readonly && !field.disabled && !(!field.multiple && value && value.length)"
             :drag="!!field.drag"
             :accept="field.accept"
             :multiple="!!field.multiple"
@@ -9,7 +9,7 @@
             :before-upload="handleUpload">
       <i-button size="small">上传文件</i-button>
     </upload>
-    <ul class="list-file" v-if="value.length">
+    <ul class="list-file" v-if="value && value.length">
       <li class="item-file" v-for="(item, i) in value" :key="i">
         <a class="link-file" :href="item.url" target="_blank">
           <x-icon :name="getIcon(item.name)"></x-icon>
