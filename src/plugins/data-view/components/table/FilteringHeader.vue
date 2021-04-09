@@ -1,5 +1,6 @@
 <script>
   import FilteringHeaderKeyword from './FilteringHeaderKeyword.vue'
+  import FilteringHeaderText from './FilteringHeaderText.vue'
   import FilteringHeaderSelect from './FilteringHeaderSelect.vue'
   import FilteringHeaderRange from './FilteringHeaderRange.vue'
   import FilteringHeaderDateRange from './FilteringHeaderDateRange.vue'
@@ -8,6 +9,7 @@
     name: 'FilteringHeader',
     components: {
       FilteringHeaderKeyword,
+      FilteringHeaderText,
       FilteringHeaderSelect,
       FilteringHeaderRange
     },
@@ -36,6 +38,10 @@
         const vm = this
         if ((opt.type || 'keyword') === 'keyword') { // 关键词类型
           return h(FilteringHeaderKeyword, {
+            props: { field: vm.field, options: opt }
+          })
+        } else if (opt.type === 'text') { // TODO: 嵌入文本框类型
+          return h(FilteringHeaderText, {
             props: { field: vm.field, options: opt }
           })
         } else if (opt.type === 'select') { // 选项类型

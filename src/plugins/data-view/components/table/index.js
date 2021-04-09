@@ -4,5 +4,6 @@ export default {
   TableFieldSwitch: () => import('./TableFieldSwitch.vue'),
   TableFieldImage: () => import('./TableFieldImage.vue'),
   TableHeaderField: () => import('./TableHeaderField.vue'),
-  FilteringHeader: () => import('./FilteringHeader.vue')
+  FilteringHeader: () => import('./FilteringHeader.vue'),
+  FilteringFormField: () => import('./FilteringFormField.vue')
 }

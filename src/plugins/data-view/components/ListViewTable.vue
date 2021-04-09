@@ -1,5 +1,13 @@
 <template>
   <div class="list-view-table">
+    <div v-if="options.show_filtering_form">
+      <filtering-form-field
+        v-for="field in fields" v-if="field.filtering"
+        :field="field" :key="field.key"
+        @query="Object.assign(queryFormBuffer, $event)">
+      </filtering-form-field>
+      <i-button @click="doQuery(queryFormBuffer)" type="info" size="small">查询</i-button>
+    </div>
     <i-table ref="table"
              v-if="initialized"
              :columns="columns"
@@ -105,6 +113,8 @@
         items: [],
         // 选中的项目列表，主键 pk 的列表
         selectedIndices: [],
+        // 表单化查询器缓存
+        queryFormBuffer: {},
         // 固化查询条件
         query,
         // 固化分页条件
