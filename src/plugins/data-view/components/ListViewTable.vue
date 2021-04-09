@@ -437,8 +437,7 @@
                       type: vm.finalizeSync(action.buttonType, item),
                       shape: action.buttonShape,
                       icon: action.buttonIcon,
-                      ghost: !!action.ghost,
-                      disabled: action.disabled && action.disabled.apply(vm, [item, vm])
+                      ghost: !!action.ghost
                     },
                     on: {
                       click: () => {
