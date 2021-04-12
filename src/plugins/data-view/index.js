@@ -134,12 +134,12 @@ export default {
             const modalListViewOptions = {
               ...listViewOptions,
               options: {
-                ...(listViewOptions.options || {}),
                 can_select: multiple,
                 can_edit: false,
                 can_delete: false,
                 action_column_width: 80,
-                show_actions: !multiple
+                show_actions: !multiple,
+                ...(listViewOptions.options || {})
               },
               actions: [...(listViewOptions.actions || []), {
                 label: '选择',
