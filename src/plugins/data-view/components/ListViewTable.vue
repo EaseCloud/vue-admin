@@ -448,7 +448,8 @@
                       ghost: !!action.ghost
                     },
                     on: {
-                      click: () => {
+                      click: (e) => {
+                        e.stopPropagation()
                         const result = action.action.apply(vm, [item, vm])
                         // result.catch && result.catch(_ => _)
                       }
@@ -463,7 +464,8 @@
                   'Button', {
                     props: {size: 'small'},
                     on: {
-                      async click () {
+                      async click (e) {
+                        e.stopPropagation()
                         await (vm.options.edit_inline ? vm.actionInlineEdit(item) : vm.actionEdit(item))
                         vm.reload()
                       }
