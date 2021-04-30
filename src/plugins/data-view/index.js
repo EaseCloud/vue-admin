@@ -126,7 +126,8 @@ export default {
           okText = '确认',
           cancelText = '取消',
           scrollable = true,
-          multiple = false
+          multiple = false,
+          noSelect = false // 隐藏选择按钮
         } = {}) {
           const vm = this
           return new Promise((resolve, reject) => {
@@ -134,20 +135,20 @@ export default {
             const modalListViewOptions = {
               ...listViewOptions,
               options: {
-                ...(listViewOptions.options || {}),
                 can_select: multiple,
                 can_edit: false,
                 can_delete: false,
                 action_column_width: 80,
-                show_actions: !multiple
+                show_actions: !multiple,
+                ...(listViewOptions.options || {})
               },
-              actions: [...(listViewOptions.actions || []), {
+              actions: [...(listViewOptions.actions || []), ...(noSelect ? [] : [{
                 label: '选择',
                 action (item) {
                   dialog.close()
                   resolve(item)
                 }
-              }]
+              }])]
             }
             // 默认情况下要显示分页
             if (vm.evaluate(modalListViewOptions, 'options.show_pager') === void 0) {
