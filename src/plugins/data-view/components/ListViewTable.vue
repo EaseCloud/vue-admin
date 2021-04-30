@@ -14,7 +14,8 @@
              :loading="loading"
              :row-class-name="rowClassNameRaw"
              :size="size"
-             :data="data">
+             :data="data"
+             @on-row-click="onRowClickRaw">
       <slot name="footer" slot="footer"></slot>
     </i-table>
     <div class="list-view-table-footer">
@@ -89,6 +90,7 @@
       filters: {type: [Object, Function], default: () => ({})},
       initQuery: {type: Object, default: () => ({})},
       rowClassName: {type: Function},
+      onRowClick: {type: Function, default: () => {}},
       size: {
         default: 'small',
         validator (value) {
@@ -150,6 +152,12 @@
         const vm = this
         if (!vm.items[index]) return ''
         return vm.rowClassName ? vm.rowClassName(vm.items[index], index) : ''
+      },
+      async onRowClickRaw (row, index) {
+        const vm = this
+        const item = vm.items[index]
+        if (!item) return
+        return vm.onRowClick && vm.onRowClick.apply(vm, [item, index])
       },
       async reload () {
         const vm = this
