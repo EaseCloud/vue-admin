@@ -131,9 +131,13 @@
       }
     },
     computed: {
-      hooks () {
+      activeHooks () {
         const vm = this
-        return {...defaults.hooks, ...(vm.$attrs.hooks || {})}
+        return {
+          ...defaults.hooks,
+          ...vm.config.hooks,
+          ...(vm.$attrs.hooks || {})
+        }
       },
       pageSizeOpts () {
         const vm = this
@@ -164,7 +168,7 @@
         // 考虑 filters 可能是函数的情况，reload 之前需要更新一下 query 的值
         await vm.updateQuery()
         vm.loading = true
-        const {page, count, results} = await vm.hooks.action_load_data.apply(vm)
+        const {page, count, results} = await vm.activeHooks.action_load_data.apply(vm)
         // 整除：https://stackoverflow.com/a/4228528/2544762
         vm.pager.pageCount = ~~((count - 1) / vm.pager.pageSize) + 1
         vm.pager.page = page || vm.pager.page
@@ -172,7 +176,7 @@
         // 预处理所有数据
         const items = []
         await Promise.all(results.map(async function (item, i) {
-          items[i] = await vm.hooks.filter_item_before_render.apply(vm, [item])
+          items[i] = await vm.activeHooks.filter_item_before_render.apply(vm, [item])
         }))
         vm.items = items
         // 预渲染
