@@ -76,7 +76,7 @@ export default {
          */
         async actionEdit (item) {
           const vm = this
-          return vm.hooks.action_edit.apply(vm, [item])
+          return vm.activeHooks.action_edit.apply(vm, [item])
         },
         /**
          * 弹窗行级编辑动作
@@ -85,7 +85,7 @@ export default {
          */
         async actionInlineEdit (item) {
           const vm = this
-          return vm.hooks.action_inline_edit.apply(vm, [item])
+          return vm.activeHooks.action_inline_edit.apply(vm, [item])
         },
         /**
          * 行级删除动作
@@ -94,7 +94,7 @@ export default {
          */
         async actionDelete (item) {
           const vm = this
-          return vm.hooks.action_delete.apply(vm, [item])
+          return vm.activeHooks.action_delete.apply(vm, [item])
         },
         /**
          * 跳转到列表
@@ -102,7 +102,7 @@ export default {
          */
         async redirectList () {
           const vm = this
-          return vm.hooks.action_redirect_list.apply(vm, [vm.model])
+          return vm.activeHooks.action_redirect_list.apply(vm, [vm.model])
         },
         /**
          * 跳转到创建页面
@@ -110,7 +110,7 @@ export default {
          */
         async redirectCreate () {
           const vm = this
-          return vm.hooks.action_create.apply(vm)
+          return vm.activeHooks.action_create.apply(vm)
         },
         /**
          * 在本页面弹窗创建
@@ -118,7 +118,7 @@ export default {
          */
         async inlineCreate () {
           const vm = this
-          return vm.hooks.action_inline_create.apply(vm)
+          return vm.activeHooks.action_inline_create.apply(vm)
         },
         async pickObject (listViewOptions = {}, {
           title = '选取对象',

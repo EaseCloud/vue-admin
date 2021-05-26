@@ -56,6 +56,14 @@
           id: Number(vm.$props.id || vm.$route.params.id)
         }
       },
+      activeHooks () {
+        const vm = this
+        return {
+          ...defaults.hooks,
+          ...vm.config.hooks,
+          ...(vm.$attrs.hooks || {})
+        }
+      },
       item () {
         const vm = this
         return vm.$refs.form.item

@@ -40,9 +40,13 @@
       }
     },
     computed: {
-      hooks () {
+      activeHooks () {
         const vm = this
-        return { ...defaults.hooks, ...(vm.$attrs.hooks || {}) }
+        return {
+          ...defaults.hooks,
+          ...vm.config.hooks,
+          ...(vm.$attrs.hooks || {})
+        }
       },
       item () {
         const vm = this
@@ -82,8 +86,8 @@
         vm.loading = true
         const $form = await vm.waitFor(vm.$refs, 'form')
         let item
-        item = await vm.hooks.action_load_data_single.apply(vm, [vm.id_])
-        item = await vm.hooks.filter_item_before_render_single.apply(vm, [item])
+        item = await vm.activeHooks.action_load_data_single.apply(vm, [vm.id_])
+        item = await vm.activeHooks.filter_item_before_render_single.apply(vm, [item])
         await $form.setItem(item)
         vm.$emit('loaded', item)
         vm.loading = false
@@ -96,24 +100,24 @@
         const vm = this
         let itemToSave = vm.item
         const isCreate = !vm.id_
-        itemToSave = await vm.config.hooks.filter_edit_view_pre_save.apply(vm, [vm.item])
+        itemToSave = await vm.activeHooks.filter_edit_view_pre_save.apply(vm, [vm.item])
         vm.$emit('pre_save', itemToSave)
         let itemAfterSave
         if (isCreate) {
           // 新建的情况
-          itemAfterSave = await vm.config.hooks.action_edit_view_create_item.apply(vm, [itemToSave])
+          itemAfterSave = await vm.activeHooks.action_edit_view_create_item.apply(vm, [itemToSave])
         } else {
           // 编辑的情况
-          itemAfterSave = await vm.config.hooks.action_edit_view_update_item.apply(vm, [itemToSave])
+          itemAfterSave = await vm.activeHooks.action_edit_view_update_item.apply(vm, [itemToSave])
         }
         vm.id_ = itemAfterSave[await vm.finalize(vm.pk)]
-        await vm.config.hooks.action_edit_view_post_save.apply(vm, [itemAfterSave])
+        await vm.activeHooks.action_edit_view_post_save.apply(vm, [itemAfterSave])
         vm.$emit('post_save', itemAfterSave)
         return itemAfterSave
       },
       async erase () {
         const vm = this
-        return vm.config.action_data_view_delete_item.apply(vm, [vm.item])
+        return vm.activeHooks.action_data_view_delete_item.apply(vm, [vm.item])
       },
       async validate () {
         const vm = this
