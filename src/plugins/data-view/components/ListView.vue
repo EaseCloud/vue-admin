@@ -87,9 +87,13 @@
           initQuery
         }
       },
-      hooks () {
+      activeHooks () {
         const vm = this
-        return {...defaults.hooks, ...(vm.$attrs.hooks || {})}
+        return {
+          ...defaults.hooks,
+          ...vm.config.hooks,
+          ...(vm.$attrs.hooks || {})
+        }
       },
       pageSizeOpts () {
         const vm = this
