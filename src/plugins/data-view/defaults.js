@@ -54,7 +54,7 @@ export default {
     },
     async action_inline_create () {
       const vm = this
-      await vm.hooks.action_inline_edit.apply(vm)
+      await vm.activeHooks.action_inline_edit.apply(vm)
     },
     async action_redirect_list () {
       const vm = this
