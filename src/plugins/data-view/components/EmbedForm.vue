@@ -240,7 +240,7 @@
           }
         }
         // 写入完毕之后，要更新所有其他字段的 display 值
-        vm.fields.forEach(async f => await vm.finalizeField(f))
+        await Promise.all(vm.fields.map(f => vm.finalizeField(f)))
       },
       /**
        * 校验表单，通过 Promise 返回校验结果
