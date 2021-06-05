@@ -9,6 +9,7 @@
       <i-button @click="doQuery(queryFormBuffer)" type="info" size="small">查询</i-button>
     </div>
     <i-table ref="table"
+             border
              v-if="initialized"
              :columns="columns"
              :loading="loading"
@@ -418,6 +419,8 @@
           // 指定其他宽度
           if (field.minWidth) columns[i].minWidth = field.minWidth
           if (field.maxWidth) columns[i].maxWidth = field.maxWidth
+          // 不指定任何宽度设置的时候，最小 80，避免界面崩溃
+          if (!field.width && !field.minWidth && !field.maxWidth) columns[i].minWidth = 80
           // 隐藏列的变通处理
           if (field.visible && !field.visible.apply(vm)) {
             columns[i].width = -1

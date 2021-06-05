@@ -110,6 +110,10 @@
       <form-field-list-view v-else-if="field.type==='list-view'"
                             :field="field"
                             @input="updateField(field, $event)"></form-field-list-view>
+      <!-- type: item-list -->
+      <form-field-item-list v-else-if="field.type==='item-list'"
+                         :field="field"
+                         @input="updateField(field, $event)"></form-field-item-list>
       <!-- type: render -->
       <form-field-render v-else-if="field.type==='render'"
                          :field="field"
@@ -227,7 +231,7 @@
         const vm = this
         if (field.onWriteField) {
           // Custom write field hook
-          field.onWriteField(field, item)
+          await field.onWriteField(field, item)
         } else if (field.type === 'geo') {
           // vm.setProperty(item, field.key && field.key.lat || 'geo_lat', field.value.lat)
           // vm.setProperty(item, field.key && field.key.lng || 'geo_lng', field.value.lng)
@@ -295,7 +299,7 @@
         if (field.data !== data && !field.noSync) field.value = data
         // onUpdate 的返回值可以控制是否执行 writeField，如果返回 === false 将跳过 writeField
         let write = true
-        if (field.onUpdate) write = await field.onUpdate.apply(vm, [field, data]) !== false
+        if (field.onUpdate) write = (await field.onUpdate.apply(vm, [field, data])) !== false
         if (write) await vm.writeField(field, vm.item)
         await vm.renderField(field)
         vm.$emit('update', field)
