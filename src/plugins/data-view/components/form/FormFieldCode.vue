@@ -6,6 +6,7 @@
                 v-model="field.value"
                 :options="{theme: 'default', ...(field.options || {})}"
                 @input="$emit('input', $event)"/>
+    <div class="clearfix"></div>
   </div>
 </template>
 
@@ -26,7 +27,9 @@
   }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
+  @import "../../../../libs/less-template/template-defines";
+
   .field-item-code {
     line-height: 20px;
     .form-field-input {
@@ -35,10 +38,13 @@
       height: auto;
     }
   }
+</style>
 
+<style lang="less">
   .CodeMirror {
+    // height: auto 和 max-height 二选一
     height: auto;
-    max-height: 150px;
+    // max-height: 500px;
     border-radius: 4px;
     border: 1px solid rgb(220, 222, 226);
   }
