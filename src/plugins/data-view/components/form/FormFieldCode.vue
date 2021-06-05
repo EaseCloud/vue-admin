@@ -4,7 +4,7 @@
     <codemirror class="form-field-input"
                 ref="input"
                 v-model="field.value"
-                :options="field.options || {}"
+                :options="{theme: 'default', ...(field.options || {})}"
                 @input="$emit('input', $event)"/>
   </div>
 </template>
@@ -30,13 +30,16 @@
   .field-item-code {
     line-height: 20px;
     .form-field-input {
-      width:100%;
+      width: 100%;
       max-width: 800px;
       height: auto;
     }
   }
+
   .CodeMirror {
     height: auto;
     max-height: 150px;
+    border-radius: 4px;
+    border: 1px solid rgb(220, 222, 226);
   }
 </style>
