@@ -73,7 +73,7 @@ router.beforeEach(async function (to, from, next) {
 })
 
 router.afterEach((to) => {
-  iView.LoadingBar.finish()
+  ViewUI.LoadingBar.finish()
   window.scrollTo(0, 0)
 })
 

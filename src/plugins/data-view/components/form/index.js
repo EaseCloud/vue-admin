@@ -21,5 +21,6 @@ export default {
   FormFieldListView: () => import('./FormFieldListView.vue'),
   FormFieldRender: () => import('./FormFieldRender.vue'),
   FormFieldMap: () => import('./FormFieldMap.vue'),
-  FormFieldUpload: () => import('./FormFieldUpload.vue')
+  FormFieldUpload: () => import('./FormFieldUpload.vue'),
+  FormFieldItemList: () => import('./FormFieldItemList.vue')
 }
