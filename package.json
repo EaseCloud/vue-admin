@@ -12,7 +12,7 @@
     "china-area-data": "^4.0.0",
     "dayjs": "^1.5.24",
     "echarts": "^4.1.0",
-    "iview": "^3.0.1",
+    "view-design": "^4.0.0",
     "js-cookie": "^2.2.0",
     "json-server": "^0.12.2",
     "less": "^3.0.4",
