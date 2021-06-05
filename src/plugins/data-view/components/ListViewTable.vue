@@ -91,7 +91,10 @@
       filters: {type: [Object, Function], default: () => ({})},
       initQuery: {type: Object, default: () => ({})},
       rowClassName: {type: Function},
-      onRowClick: {type: Function, default: () => {}},
+      onRowClick: {
+        type: Function, default: () => {
+        }
+      },
       size: {
         default: 'small',
         validator (value) {
@@ -270,14 +273,6 @@
           return h(tableComponents.TableFieldSwitch, {
             props: {value, field, index, vmTable: vm}
           })
-          //   // TODO: 尚未实现
-          //   return h('div', `TODO:${type}`)
-          // } else if (type === 'html') {
-          //   // TODO: 尚未实现
-          //   return h('div', `TODO:${type}`)
-          // } else if (type === 'html') {
-          //   // TODO: 尚未实现
-          //   return h('div', `TODO:${type}`)
         } else if (type === 'render') {
           return h('render-component', {
             props: {
@@ -321,7 +316,7 @@
       //     },
       //   },
       // };
-      async updateQuery() {
+      async updateQuery () {
         const vm = this
         // 更新查询条件 query
         if (vm.filters instanceof Function) {
