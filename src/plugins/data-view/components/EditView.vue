@@ -53,7 +53,7 @@
         return {
           ...vm.$attrs,
           ...vm.$props,
-          id: Number(vm.$props.id || vm.$route.params.id)
+          id: isNaN(Number(vm.$props.id || vm.$route.params.id)) ? String(vm.$props.id || vm.$route.params.id) : Number(vm.$props.id || vm.$route.params.id)
         }
       },
       activeHooks () {
