@@ -1,10 +1,10 @@
 import App from './views/App.vue'
-import iView from 'iview'
+import ViewUI from 'view-design'
 import VueQuillEditor from 'vue-quill-editor'
 import VueAMap from 'vue-amap'
 import VueCodemirror from 'vue-codemirror'
 
-import 'iview/dist/styles/iview.css'
+import 'view-design/dist/styles/iview.css'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
@@ -32,7 +32,7 @@ export default {
   install (Vue, options = {}) {
     Vue.use(VueQuillEditor)
     Vue.use(VueAMap)
-    Vue.use(iView)
+    Vue.use(ViewUI)
     Vue.use(pluginXIcon)
 
     Vue.use(pluginImageViewer)
