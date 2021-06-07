@@ -13,7 +13,7 @@
     name: 'EditViewForm',
     props: {
       // TODO: 所有属性支持的 finalize 函数格式需要确定并且文档化
-      id: { type: Number, default: 0 },
+      id: { type: [Number, String], default: 0 },
       model: { type: String, required: true },
       title: { type: [String, Function], default: '编辑视图' },
       subtitle: { type: [String, Function], default: 'EditView' },
