@@ -9,6 +9,7 @@
       <i-button @click="doQuery(queryFormBuffer)" type="info" size="small">查询</i-button>
     </div>
     <i-table ref="table"
+             border
              v-if="initialized"
              :columns="columns"
              :loading="loading"
@@ -90,7 +91,10 @@
       filters: {type: [Object, Function], default: () => ({})},
       initQuery: {type: Object, default: () => ({})},
       rowClassName: {type: Function},
-      onRowClick: {type: Function, default: () => {}},
+      onRowClick: {
+        type: Function, default: () => {
+        }
+      },
       size: {
         default: 'small',
         validator (value) {
@@ -269,14 +273,6 @@
           return h(tableComponents.TableFieldSwitch, {
             props: {value, field, index, vmTable: vm}
           })
-          //   // TODO: 尚未实现
-          //   return h('div', `TODO:${type}`)
-          // } else if (type === 'html') {
-          //   // TODO: 尚未实现
-          //   return h('div', `TODO:${type}`)
-          // } else if (type === 'html') {
-          //   // TODO: 尚未实现
-          //   return h('div', `TODO:${type}`)
         } else if (type === 'render') {
           return h('render-component', {
             props: {
@@ -320,7 +316,7 @@
       //     },
       //   },
       // };
-      async updateQuery() {
+      async updateQuery () {
         const vm = this
         // 更新查询条件 query
         if (vm.filters instanceof Function) {
@@ -418,6 +414,8 @@
           // 指定其他宽度
           if (field.minWidth) columns[i].minWidth = field.minWidth
           if (field.maxWidth) columns[i].maxWidth = field.maxWidth
+          // 不指定任何宽度设置的时候，最小 80，避免界面崩溃
+          if (!field.width && !field.minWidth && !field.maxWidth) columns[i].minWidth = 80
           // 隐藏列的变通处理
           if (field.visible && !field.visible.apply(vm)) {
             columns[i].width = -1

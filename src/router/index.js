@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import iView from 'iview'
+import ViewUI from 'view-design'
 import VueRouter from 'vue-router'
 // import Cookies from 'js-cookie'
 
@@ -31,7 +31,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach(async function (to, from, next) {
-  iView.LoadingBar.start()
+  ViewUI.LoadingBar.start()
   // 动态更新 html 标题
   const title = typeof to.meta.title === 'function'
     ? await utils.general.finalize(to.meta.title(to.params))
@@ -73,7 +73,7 @@ router.beforeEach(async function (to, from, next) {
 })
 
 router.afterEach((to) => {
-  iView.LoadingBar.finish()
+  ViewUI.LoadingBar.finish()
   window.scrollTo(0, 0)
 })
 
