@@ -18,7 +18,7 @@
         <i-button v-if="$refs.form && (options.can_edit === void 0 || finalizeSync(options.can_edit, $refs.form.item))"
                   type="primary" @click="submit">保存
         </i-button>
-        <i-button v-if="Number($route.params.id) && $refs.form &&
+        <i-button v-if="isNaN(Number($route.params.id)) ? String($route.params.id) : Number($route.params.id) && $refs.form &&
                         (options.can_delete === void 0 || finalizeSync(options.can_delete, $refs.form.item))"
                   type="error" @click="remove">删除
         </i-button>
