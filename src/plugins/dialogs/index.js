@@ -146,6 +146,7 @@ export default {
           title = '填写表单',
           width = 540,
           onOk = null,
+          onCancel = null,
           okText = '确认',
           cancelText = '取消',
           scrollable = true,
@@ -181,9 +182,15 @@ export default {
                 await $form.validate()
                 let result = JSON.parse(JSON.stringify($form.item))
                 // 支持自定义的异步处理函数
-                resolve(onOk ? (await onOk(result)) : result)
+                result = onOk ? (await onOk(result, {dialog, resolve, reject})) : result
+                if (!loading) resolve(result)
               },
-              onCancel: reject
+              async onCancel () {
+                const $form = el.componentInstance
+                let result = JSON.parse(JSON.stringify($form.item))
+                if (onCancel) await onCancel(result, {dialog, resolve, reject})
+                if (!loading) reject()
+              }
             })
           })
         },
@@ -204,7 +211,7 @@ export default {
             elFile.click()
           })
         },
-        async downloadFile (url, filename='') {
+        async downloadFile (url, filename = '') {
           const a = document.createElement('a')
           a.href = url
           if (filename) a.download = filename
