@@ -37,7 +37,8 @@
         validator (value) {
           return ['large', 'default', 'small'].indexOf(value) > -1
         }
-      }
+      },
+      hooks: {type: Object, defaults: () => {}}
     },
     computed: {
       activeHooks () {
