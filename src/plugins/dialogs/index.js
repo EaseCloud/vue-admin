@@ -137,8 +137,12 @@ export default {
                 await $form.validate()
                 const item = await $form.save()
                 resolve(item)
+                dialog.close()
               },
-              onCancel: reject
+              async onCancel () {
+                reject()
+                dialog.close()
+              }
             })
           })
         },

@@ -40,7 +40,10 @@ export default {
         title: vm.editViewOptions.title || (item ? '编辑' : '创建') + vm.editViewOptions.modelName,
         width: 1000
       })
-      return itemAfterSave
+      return await vm.activeHooks.filter_item_after_save.apply(vm, [itemAfterSave])
+    },
+    async filter_item_after_save(item) {
+      return item
     },
     async action_delete (item) {
       const vm = this
