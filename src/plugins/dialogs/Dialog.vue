@@ -11,67 +11,67 @@
   </modal>
 </template>
 <script>
-export default {
-  data () {
-    return { value: true }
-  },
-  props: {
-    options: Object
-  },
-  // render (h) {
-  //   const vm = this
-  //   const contents = vm.options.render ? [vm.options.render(h)] : [vm.options.content]
-  //   return h('modal', {
-  //     props: {
-  //       title: vm.options.title,
-  //       closable: vm.options.closable,
-  //       maskClosable: vm.options.maskClosable,
-  //       scrollable: vm.options.scrollable,
-  //       fullscreen: vm.options.fullscreen,
-  //       draggable: vm.options.draggable,
-  //       mask: vm.options.mask,
-  //       okText: vm.options.okText,
-  //       cancelText: vm.options.cancelText,
-  //       width: vm.options.width,
-  //       footerHide: vm.options.footerHide,
-  //       styles: vm.options.styles,
-  //       className: vm.options.className,
-  //       transitionNames: vm.options.transitionNames,
-  //       transfer: vm.options.transfer,
-  //       content: vm.options.content,
-  //       value: true // 立即显示
-  //     },
-  //     on: {
-  //       'on-ok': () => {
-  //         vm.options.onOk && vm.options.onOk(...arguments)
-  //         vm.value = false
-  //         vm.close()
-  //       },
-  //       'on-cancel': () => {
-  //         vm.options.onCancel && vm.options.onCancel(...arguments)
-  //         vm.value = false
-  //         vm.close()
-  //       }
-  //     }
-  //   }, [...contents])
-  //   // TODO: 这个地方，on-ok 是刹不了车的，
-  // },
-  methods: {
-    async onOk () {
-      const vm = this
-      vm.options.onOk && await vm.options.onOk.apply(vm)
-      vm.close()
+  export default {
+    data () {
+      return {value: true}
     },
-    async onCancel () {
-      const vm = this
-      vm.options.onCancel && await vm.options.onCancel.apply(vm)
-      vm.close()
+    props: {
+      options: Object
     },
-    close () {
-      const vm = this
-      vm.$destroy()
-      vm.$el.parentElement.removeChild(vm.$el)
+    // render (h) {
+    //   const vm = this
+    //   const contents = vm.options.render ? [vm.options.render(h)] : [vm.options.content]
+    //   return h('modal', {
+    //     props: {
+    //       title: vm.options.title,
+    //       closable: vm.options.closable,
+    //       maskClosable: vm.options.maskClosable,
+    //       scrollable: vm.options.scrollable,
+    //       fullscreen: vm.options.fullscreen,
+    //       draggable: vm.options.draggable,
+    //       mask: vm.options.mask,
+    //       okText: vm.options.okText,
+    //       cancelText: vm.options.cancelText,
+    //       width: vm.options.width,
+    //       footerHide: vm.options.footerHide,
+    //       styles: vm.options.styles,
+    //       className: vm.options.className,
+    //       transitionNames: vm.options.transitionNames,
+    //       transfer: vm.options.transfer,
+    //       content: vm.options.content,
+    //       value: true // 立即显示
+    //     },
+    //     on: {
+    //       'on-ok': () => {
+    //         vm.options.onOk && vm.options.onOk(...arguments)
+    //         vm.value = false
+    //         vm.close()
+    //       },
+    //       'on-cancel': () => {
+    //         vm.options.onCancel && vm.options.onCancel(...arguments)
+    //         vm.value = false
+    //         vm.close()
+    //       }
+    //     }
+    //   }, [...contents])
+    //   // TODO: 这个地方，on-ok 是刹不了车的，
+    // },
+    methods: {
+      async onOk () {
+        const vm = this
+        vm.options.onOk && await vm.options.onOk.apply(vm)
+        if (!vm.options.loading) vm.close()
+      },
+      async onCancel () {
+        const vm = this
+        vm.options.onCancel && await vm.options.onCancel.apply(vm)
+        if (!vm.options.loading) vm.close()
+      },
+      close () {
+        const vm = this
+        vm.$destroy()
+        vm.$el.parentElement.removeChild(vm.$el)
+      }
     }
   }
-}
 </script>
