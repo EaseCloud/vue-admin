@@ -41,6 +41,7 @@
 
 <script>
   import EditViewForm from './EditViewForm.vue'
+  import defaults from '../defaults'
 
   export default {
     name: 'EditView',
@@ -61,7 +62,8 @@
         return {
           ...defaults.hooks,
           ...vm.config.hooks,
-          ...(vm.$attrs.hooks || {})
+          ...(vm.$attrs.hooks || {}),
+          ...vm.hooks
         }
       },
       item () {
