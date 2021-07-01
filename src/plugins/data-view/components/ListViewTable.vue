@@ -100,7 +100,8 @@
         validator (value) {
           return ['large', 'default', 'small'].indexOf(value) > -1
         }
-      }
+      },
+      hooks: {type: Object, defaults: () => {}}
     },
     data () {
       const vm = this
@@ -140,7 +141,8 @@
         return {
           ...defaults.hooks,
           ...vm.config.hooks,
-          ...(vm.$attrs.hooks || {})
+          ...(vm.$attrs.hooks || {}),
+          ...vm.hooks
         }
       },
       pageSizeOpts () {
