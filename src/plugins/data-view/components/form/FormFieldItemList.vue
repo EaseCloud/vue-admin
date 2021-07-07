@@ -69,7 +69,8 @@
       <codemirror v-if="rawMode"
                   class="form-field-input"
                   ref="input"
-                  v-model="rawText"
+                  :value="rawText"
+                  @blur="setRawText"
                   :options="{theme: 'default', ...(field.codeOptions || {})}"/>
 
     </div>
@@ -93,26 +94,9 @@
       }
     },
     computed: {
-      rawText: {
-        get () {
-          const vm = this
-          return vm.items.map(x => `${x.key}: ${x.value}`).join('\n')
-        },
-        set (value) {
-          const vm = this
-          console.log(arguments)
-          const items = []
-          value.split('\n').forEach(line => {
-            const pos = line.indexOf(':')
-            if (pos === -1) return
-            const key = line.substr(0, pos).trim()
-            const value = line.substr(pos + 1).trim()
-            if (!key) return
-            items.push({key, value})
-          })
-          vm.items = items
-          vm.$emit('input', vm.items)
-        }
+      rawText () {
+        const vm = this
+        return vm.items.map(x => `${x.key}: ${x.value}`).join('\n')
       }
     },
     mounted () {
@@ -145,6 +129,20 @@
         }))
         item = await vm.modalForm({fields}, {title: '修改对象'})
         vm.items.splice(index, 1, item)
+        vm.$emit('input', vm.items)
+      },
+      setRawText (cm, e) {
+        const vm = this
+        const items = []
+        cm.getValue().split('\n').forEach(line => {
+          const pos = line.indexOf(':')
+          if (pos === -1) return
+          const key = line.substr(0, pos).trim()
+          const value = line.substr(pos + 1).trim()
+          if (!key) return
+          items.push({key, value})
+        })
+        vm.items = items
         vm.$emit('input', vm.items)
       }
     }
