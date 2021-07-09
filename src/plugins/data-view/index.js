@@ -127,9 +127,12 @@ export default {
           cancelText = '取消',
           scrollable = true,
           multiple = false,
-          noSelect = false // 隐藏选择按钮
+          noSelect = false, // 隐藏选择按钮
+          onSelect = null,
+          onOpen = null
         } = {}) {
           const vm = this
+          const loading = noSelect
           return new Promise((resolve, reject) => {
             let el
             const modalListViewOptions = {
@@ -144,7 +147,8 @@ export default {
               },
               actions: [...(listViewOptions.actions || []), ...(noSelect ? [] : [{
                 label: '选择',
-                action (item) {
+                async action (item) {
+                  if (onSelect) await onSelect(item, dialog)
                   dialog.close()
                   resolve(item)
                 }
@@ -160,19 +164,25 @@ export default {
               okText,
               cancelText,
               scrollable,
+              loading,
               render (h) {
                 el = h('list-view-table', {
-                  style: { marginTop: '16px' },
+                  style: {marginTop: '16px'},
                   props: modalListViewOptions
                 })
                 return el
               },
               onOk () {
-                if (!multiple) reject()
-                resolve(el.componentInstance.selectedItems)
+                if (!multiple) {
+                  reject()
+                } else {
+                  resolve(el.componentInstance.selectedItems)
+                }
+                if (loading) dialog.close()
               },
               onCancel: reject
             })
+            if (onOpen) onOpen(dialog)
           })
         }
       }
