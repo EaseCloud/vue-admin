@@ -46,7 +46,8 @@
         return {
           ...defaults.hooks,
           ...vm.config.hooks,
-          ...(vm.$attrs.hooks || {})
+          ...(vm.$attrs.hooks || {}),
+          ...vm.hooks
         }
       },
       item () {
