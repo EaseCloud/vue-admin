@@ -65,7 +65,6 @@
     },
     methods: {
       async reload () {
-        console.log('>>> Form Reload!')
         const vm = this
         // 要支持外部更新 id 之后重载内容
         vm.id_ = vm.id
