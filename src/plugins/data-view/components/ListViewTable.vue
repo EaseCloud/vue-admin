@@ -1,5 +1,5 @@
 <template>
-  <div class="list-view-table">
+  <div class="list-view-table" ref="listViewTable">
     <div v-if="options.show_filtering_form">
       <filtering-form-field
         v-for="field in fields" v-if="field.final && field.final.filtering"
@@ -16,10 +16,12 @@
              :row-class-name="rowClassNameRaw"
              :size="size"
              :data="data"
+             :max-height="options.max_height"
+             :height="options.height"
              @on-row-click="onRowClickRaw">
       <slot name="footer" slot="footer"></slot>
     </i-table>
-    <div class="list-view-table-footer">
+    <div class="list-view-table-footer" v-if="options.show_pager">
       <page v-if="options.show_pager"
             :total="pager.count"
             :current="pager.page"
@@ -76,6 +78,8 @@
           show_pager: false,
           selector_column_width: 40,
           action_column_render_header: null, // 自定义操作列头渲染
+          max_height: null, // 表格的最大高度
+          height: null, // 表格的固定高度
         })
       },
       pageSize: {
@@ -398,6 +402,7 @@
           // const type = await vm.finalize(field.type, vm)
           columns[i] = {
             title: field.final.label,
+            fixed: field.fixed,
             render (h, {row, index}) {
               // 如果 key 为 '@index' 的话，渲染
               let value = row[key]
@@ -607,6 +612,12 @@
         field.$view = vm
       })
       vm.initialize()
+      if (this.options.max_height) {
+        // 由于刚创建页面的时候高度计算有问题，所以这里设置一个等待时间，等页面高度计算完后再进行设置
+        setTimeout(() => {
+          this.options.max_height = this.$refs.listViewTable.clientHeight - 16 * 2
+        }, 500)
+      }
     }
   }
 </script>
