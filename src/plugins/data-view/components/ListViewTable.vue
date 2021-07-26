@@ -486,6 +486,7 @@
               if (vm.options.can_delete === void 0 || vm.finalizeSync(vm.options.can_delete, item)) {
                 controls.push(h('Poptip', {
                   props: {
+                    transfer: true,
                     confirm: true,
                     title: '确认删除这项数据？',
                     placement: 'left'
