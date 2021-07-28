@@ -180,7 +180,10 @@ export default {
                 }
                 if (loading) dialog.close()
               },
-              onCancel: reject
+              onCancel () {
+                if (loading) dialog.close()
+                reject()
+              }
             })
             if (onOpen) onOpen(dialog)
           })

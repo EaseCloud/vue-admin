@@ -1,5 +1,5 @@
 <template>
-  <card class="page-content list-view">
+  <card class="page-content list-view" :class="{'no-footer': !(listViewOptions.showPager&&pager)}">
     <div slot="title" class="page-header">
       <h3 class="title">{{ title }}</h3>
       <h4 class="subtitle">{{ subtitle }}</h4>
@@ -208,7 +208,7 @@
       padding: 14px 16px;
       border-top: 1px solid rgb(233, 234, 236);
       background: white;
-      z-index: 2;
+      //z-index: 2;
     }
 
     & /deep/ .ivu-card-body {
@@ -228,6 +228,18 @@
       right: 0;
       padding: 16px;
       overflow-y: auto;
+    }
+
+    &.no-footer {
+      padding-bottom: 0;
+
+      & /deep/ .ivu-card-body {
+        padding-bottom: 0;
+      }
+
+      .list-view-table {
+        bottom: 2px;
+      }
     }
   }
 </style>
