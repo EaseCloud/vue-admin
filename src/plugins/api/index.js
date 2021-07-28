@@ -190,7 +190,7 @@ export default {
         // 从性能角度来看，可以考虑将多次的构造缓存下来，支持重复使用
         api (model, root = config.api_root) {
           const vm = this
-          const resource = new RestResource(model || vm.model, root)
+          const resource = new RestResource(model || vm.model, vm.api_root || root)
           // 保留 vm 的引用
           resource.vm = vm
           return resource
