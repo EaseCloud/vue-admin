@@ -49,7 +49,7 @@ export default {
       const vm = this
       const pk = await vm.finalize(vm.pk, item)
       const id = await vm.evaluate(item, pk)
-      await vm.api().delete({ id })
+      await vm.api(vm.model, vm.apiRoot || vm.config.api_root).delete({ id })
     },
     async action_create () {
       const vm = this
