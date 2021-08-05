@@ -85,7 +85,7 @@ export default {
       const title = await vm.finalize(route.meta && route.meta.title, params)
       vm.$store.commit('replacePage', { name, params, query, title, meta: route.meta })
     },
-    closePage (index) {
+    async closePage (index) {
       const vm = this
       // let pagesOpened = vm.$store.state.app.pagesOpened
       // let lastPageObj = pagesOpened[0]
@@ -99,16 +99,21 @@ export default {
       if (isCurrentPageClosing) {
         // 没有了就打开首页
         if (vm.$store.state.app.pagesOpened.length === 0) {
-          vm.$router.push(vm.config.home_route)
+          await vm.$router.push(vm.config.home_route).catch(err => {
+            if (err.name !== 'NavigationDuplicated') throw err
+          })
         } else {
-          vm.$router.push(
-            vm.$store.state.app.pagesOpened[vm.$store.state.app.currentPageIndex].route)
+          await vm.$router.push(
+            vm.$store.state.app.pagesOpened[vm.$store.state.app.currentPageIndex].route
+          ).catch(err => {
+            if (err.name !== 'NavigationDuplicated') throw err
+          })
         }
       }
     },
-    closeCurrentPage () {
+    async closeCurrentPage () {
       const vm = this
-      vm.closePage(vm.$store.state.app.currentPageIndex)
+      await vm.closePage(vm.$store.state.app.currentPageIndex)
     }
   }
 }
