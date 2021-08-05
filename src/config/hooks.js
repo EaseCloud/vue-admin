@@ -120,7 +120,7 @@ export default {
    */
   async action_list_view_load_data () {
     const vm = this
-    return vm.api().get({
+    return vm.api(vm.model, vm.apiRoot || vm.config.api_root).get({
       // page
     })
   },
@@ -138,7 +138,7 @@ export default {
    */
   async action_edit_view_create_item (item) {
     const vm = this
-    const resp = await vm.api().post(item)
+    const resp = await vm.api(vm.model, vm.apiRoot || vm.config.api_root).post(item)
     vm.$Message.success('操作成功')
     return resp.data
   },
@@ -149,7 +149,7 @@ export default {
   async action_edit_view_update_item (item) {
     const vm = this
     const id = vm.evaluate(item, await vm.finalize(vm.pk))
-    const resp = await vm.api().patch({ id }, item)
+    const resp = await vm.api(vm.model, vm.apiRoot || vm.config.api_root).patch({ id }, item)
     vm.$Message.success('操作成功')
     return resp.data
   },
@@ -171,7 +171,7 @@ export default {
    */
   async action_model_delete_item (model, id) {
     const vm = this
-    return vm.api(model).delete({ id })
+    return vm.api(model, vm.apiRoot || vm.config.api_root).delete({ id })
   },
   /**
    * 获取模型的对象
@@ -181,7 +181,7 @@ export default {
    */
   async action_model_get_item (model, id) {
     const vm = this
-    const resp = await vm.api(model).get({ id })
+    const resp = await vm.api(model, vm.apiRoot || vm.config.api_root).get({ id })
     return resp.data
   },
   /**

@@ -53,6 +53,7 @@
     mixins: [fieldSetMixins],
     props: {
       model: {type: String, required: true},
+      apiRoot: {type: String, required: false},
       title: {type: String, default: '列表视图'},
       subtitle: {type: String, default: 'ListView'},
       pk: {type: String, default: 'id'},
