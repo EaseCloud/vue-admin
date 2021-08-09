@@ -63,7 +63,7 @@
         if (/.(?:png|jpg|jpeg|tif|bmp|gif)$/.test(fileName)) {
           return 'far fa-image'
         } else if (/.(?:pdf)$/.test(fileName)) {
-          return 'far fa-pdf'
+          return 'far fa-file-pdf'
         } else if (/.docx?$/.test(fileName)) {
           return 'far fa-file-word'
         } else if (/.xlsx?$/.test(fileName)) {
