@@ -106,7 +106,10 @@
           return ['large', 'default', 'small'].indexOf(value) > -1
         }
       },
-      hooks: {type: Object, defaults: () => {}}
+      hooks: {
+        type: Object, defaults: () => {
+        }
+      }
     },
     data () {
       const vm = this
@@ -626,6 +629,10 @@
 
 <style lang="less" scoped>
   @import "../../../style/defines";
+
+  /deep/ .ivu-table-header th {
+    padding: 2px 0;
+  }
 
   .list-view-table-footer {
     margin: 10px 0;
