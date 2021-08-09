@@ -631,7 +631,8 @@
   @import "../../../style/defines";
 
   /deep/ .ivu-table-header th {
-    padding: 2px 0;
+    padding: 4px 0;
+    line-height: 24px;
   }
 
   .list-view-table-footer {
