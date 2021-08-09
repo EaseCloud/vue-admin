@@ -1,6 +1,6 @@
 <template>
   <div class="field-item field-item-label"
-       :style="{width: field.final.width || '250px'}">
+       :style="{width: field.final.width || 'auto'}">
     {{field.value}}
   </div>
 </template>
