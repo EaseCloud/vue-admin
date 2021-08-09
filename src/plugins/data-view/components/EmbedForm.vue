@@ -9,7 +9,7 @@
                :style="field.formItemStyle"
                label-position="left">
       <div v-if="field.fullWidth" class="field-title-full">
-        <h3 class="field-label">{{field.final.label}}</h3>
+        <h3 class="field-label" v-if="field.final.label">{{field.final.label}}</h3>
         <div class="field-actions">
           <template v-for="(action, i) in field.actions"
                     v-if="action.display===void 0||finalizeSync(action.display, field.context.item)">
