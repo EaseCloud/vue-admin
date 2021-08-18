@@ -72,7 +72,7 @@
       },
       displayListHooks () {
         const vm = this
-        const hooks = { ...(vm.field.listViewOptions.hooks || {}) }
+        const hooks = {...(vm.field.listViewOptions.hooks || {})}
         hooks.action_load_data = async function () {
           // 默认情况下使用 id 列表获取
           const results = []
@@ -81,16 +81,16 @@
             results[i] = await vm.config.hooks.action_model_get_item.apply(
               vm, [vm.field.listViewOptions.model, id])
           }))
-          return { page: 1, count: results.length, results }
+          return {page: 1, count: results.length, results}
         }
         return hooks
       },
       displayListOptions () {
         const vm = this
-        const options = { ...(vm.field.listViewOptions.options || {}) }
+        const options = {...(vm.field.listViewOptions.options || {})}
         // options.can_edit = false
         options.can_delete = false
-        options.action_column_width = 180
+        options.action_column_width = options.action_column_width || 180
         options.action_column_render_header = (h) => {
           return h('i-button', {
             props: {
@@ -100,12 +100,17 @@
             on: {
               async click () {
                 const value = vm.field.value || []
-                vm.item = await vm.pickObject(
-                  vm.modalListViewOptions(), vm.field.modalOptions || {}
-                ).catch(() => 0)
-                if (!vm.item) return
-                value.push(vm.item[vm.field.listViewOptions.pk || 'id'])
-                vm.$emit('input', value)
+                const ids = []
+                if (vm.field.actionAddItem) {
+                  ids.splice(0, 0, ...await vm.field.actionAddItem.apply(vm))
+                } else {
+                  const item = await vm.pickObject(
+                    vm.modalListViewOptions(), vm.field.modalOptions || {}
+                  ).catch(() => 0)
+                  if (!item) return
+                  ids.push(item[vm.field.listViewOptions.pk || 'id'])
+                }
+                vm.$emit('input', vm._.union(value, ids))
                 vm.$refs.table.reload()
               }
             }
