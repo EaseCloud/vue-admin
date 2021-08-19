@@ -41,12 +41,17 @@
           ? await vm.config.hooks.action_model_get_item.apply(
             vm, [vm.field.listViewOptions.model, vm.field.value])
           : null
-        vm.setItem(item)
+        await vm.setItem(item)
       },
       async pick () {
         const vm = this
-        const item = await vm.pickObject(vm.field.listViewOptions, vm.field.modalOptions || {})
-        vm.setItem(item)
+        let item
+        if (vm.field.actionPickObject) {
+          item = await vm.field.actionPickObject()
+        } else {
+          item = await vm.pickObject(vm.field.listViewOptions, vm.field.modalOptions || {})
+        }
+        await vm.setItem(item)
         vm.$emit('input', vm.item[vm.field.listViewOptions.pk || 'id'])
       },
       async navigate (item) {
@@ -57,12 +62,12 @@
           const model = vm.field.listViewOptions.model
           const route = await vm.config.hooks.action_get_model_edit_route.apply(
             vm, [model, item[vm.field.listViewOptions.pk || 'id']])
-          vm.$router.push(route)
+          await vm.$router.push(route)
         }
       },
       async reset () {
         const vm = this
-        vm.setItem(null)
+        await vm.setItem(null)
         vm.$emit('input', null)
       },
       async setItem (item) {
