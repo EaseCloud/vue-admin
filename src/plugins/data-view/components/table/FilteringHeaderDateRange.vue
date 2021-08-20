@@ -10,7 +10,7 @@
       return {
         calendarProps: {
           open: false,
-          type: 'daterange',
+          type: vm.options.showTime ? 'datetimerange' : 'daterange',
           // 支持覆盖 iview calendar 属性
           ...(vm.options.calendarOptions || {
             size: 'small',
