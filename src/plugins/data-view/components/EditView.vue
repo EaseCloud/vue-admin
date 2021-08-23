@@ -3,6 +3,7 @@
     <div slot="title" class="page-header">
       <h3 class="title">{{title}}</h3>
       <h4 class="subtitle">{{subtitle}}</h4>
+      <slot name="title"></slot>
       <div class="controls">
         <template v-for="(action, i) in actions"
                   v-if="$refs.form && (action.display===void 0||finalizeSync(action.display, $refs.form.item))">
