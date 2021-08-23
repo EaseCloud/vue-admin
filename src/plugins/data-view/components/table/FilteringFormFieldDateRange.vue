@@ -46,7 +46,7 @@ export default {
       }, this.field.final.label),
       h('date-picker', {
         style: {
-          width: '180px'
+          width: '220px'
         },
         props: vm.calendarProps,
         on: {
