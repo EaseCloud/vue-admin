@@ -122,7 +122,9 @@
       <div v-else>未实现的字段类型：{{field.type}}</div>
 
       <!-- description -->
-      <div v-if="field.description" style="color: #80848f"
+      <div v-if="field.description"
+           class="field-description"
+           style="color: #80848f"
            :style="field.descriptionStyle">{{field.description}}
       </div>
     </form-item>
@@ -334,5 +336,10 @@
       display: inline-block;
       float: right;
     }
+  }
+
+  .field-description {
+    line-height: 20px;
+    margin-top: 5px;
   }
 </style>
