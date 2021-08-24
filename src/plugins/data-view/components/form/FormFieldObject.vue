@@ -62,7 +62,7 @@
           const model = vm.field.listViewOptions.model
           const route = await vm.config.hooks.action_get_model_edit_route.apply(
             vm, [model, item[vm.field.listViewOptions.pk || 'id']])
-          await vm.$router.push(route)
+          await vm.$router.push(route).catch(_ => _)
         }
       },
       async reset () {
