@@ -99,7 +99,7 @@
           // 如果是创建要跳转页面
           const route = await vm.getModelEditRoute(vm.model, vm.$refs.form.id_)
           await vm.closeCurrentPage()
-          await vm.$router.replace(route).catch(() => {}) // Silent Redundant Page Redirect
+          await vm.$router.replace(route).catch(_ => _) // Silent Redundant Page Redirect
           await vm.replacePage(route)
         } else {
           await vm.refresh()
