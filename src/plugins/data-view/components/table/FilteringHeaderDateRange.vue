@@ -68,14 +68,19 @@
         const query = {}
         query[keyGte] = valGte
         query[keyLte] = valLte
+        // 字段修改的拦截钩子
+        if (vm.options.onChange) await vm.options.onChange(query)
         // ListViewTable 执行查询
         await vm.field.$view.doQuery(query)
       },
       async reset () {
         const vm = this
         const [keyGte, keyLte] = vm.options.key
+        const query = { [keyGte]: null, [keyLte]: null }
+        // 字段修改的拦截钩子
+        if (vm.options.onChange) await vm.options.onChange(query)
         // ListViewTable 执行查询
-        await vm.field.$view.doQuery({ [keyGte]: null, [keyLte]: null })
+        await vm.field.$view.doQuery(query)
       }
     }
   }

@@ -3,6 +3,7 @@
     <div slot="title" class="page-header">
       <h3 class="title">{{title}}</h3>
       <h4 class="subtitle">{{subtitle}}</h4>
+      <slot name="title"></slot>
       <div class="controls">
         <template v-for="(action, i) in actions"
                   v-if="$refs.form && (action.display===void 0||finalizeSync(action.display, $refs.form.item))">
@@ -98,7 +99,7 @@
           // 如果是创建要跳转页面
           const route = await vm.getModelEditRoute(vm.model, vm.$refs.form.id_)
           await vm.closeCurrentPage()
-          await vm.$router.replace(route).catch(() => {}) // Silent Redundant Page Redirect
+          await vm.$router.replace(route).catch(_ => _) // Silent Redundant Page Redirect
           await vm.replacePage(route)
         } else {
           await vm.refresh()
