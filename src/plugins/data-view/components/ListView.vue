@@ -125,20 +125,20 @@
             query[key] = value
           }
         })
-        vm.$router.replace({query})
+        vm.$router.replace({query}).catch(_ => _)
       },
       async pageTo (page) {
         const vm = this
         // 需要的时候才跳转，跳转后交由 $watch.$route 接管
         if (Number(vm.$route.query.page || 1) !== Number(page)) {
-          vm.$router.replace({query: {...vm.$route.query, page}})
+          await vm.$router.replace({query: {...vm.$route.query, page}}).catch(_ => _)
         }
       },
       async pageSizeTo (pageSize) {
         const vm = this
         // 需要的时候才跳转，跳转后交由 $watch.$route 接管
         if (Number(vm.$route.query.page_size || 10) !== Number(pageSize)) {
-          vm.$router.replace({query: {...vm.$route.query, page_size: pageSize}})
+          await vm.$router.replace({query: {...vm.$route.query, page_size: pageSize}}).catch(_ => _)
         }
       }
     },
