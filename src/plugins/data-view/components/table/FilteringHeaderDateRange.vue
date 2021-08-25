@@ -27,12 +27,14 @@
       const [keyGte, keyLte] = vm.options.key
       let valGte = vm.field.$view.query[keyGte]
       let valLte = vm.field.$view.query[keyLte]
-
       const hasQuery = valGte !== void 0 || valLte !== void 0
       return h('date-picker', {
         style: { marginLeft: '8px' },
         class: { collapsible: !hasQuery },
-        props: vm.calendarProps,
+        props: {
+          value: [valGte, valLte],
+          ...vm.calendarProps
+        },
         on: {
           async 'on-change' (data) {
             valGte = data[0]
@@ -57,17 +59,6 @@
         }, [h('x-icon', {
           props: { name: 'fa fa-calendar' }
         })])
-        // 取消按钮
-        // h('a', {
-        //   style: {
-        //     display: hasQuery ? 'inline' : 'none'
-        //   },
-        //   on: {
-        //     click () {
-        //       vm.reset()
-        //     }
-        //   }
-        // }, '×')
       ])
     },
     methods: {
