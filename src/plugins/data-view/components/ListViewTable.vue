@@ -1,6 +1,6 @@
 <template>
   <div class="list-view-table" ref="listViewTable">
-    <div v-if="options.show_filtering_form">
+    <div v-if="initialized && options.show_filtering_form">
       <filtering-form-field
         v-for="field in fields" v-if="field.final && field.final.filtering"
         :field="field" :key="field.key"
