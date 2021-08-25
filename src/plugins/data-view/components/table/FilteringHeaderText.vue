@@ -53,14 +53,20 @@ export default {
         defaultValue: value
       }).catch(() => 0)
       if (vm.options.mapper) text = await vm.options.mapper.apply(vm, [text])
+      const query = { [key]: text }
+      // 字段修改的拦截钩子
+      if (vm.options.onChange) await vm.options.onChange(query)
       // ListViewTable 执行查询
-      if (text) vm.field.$view.doQuery({ [key]: text })
+      if (text) await vm.field.$view.doQuery(query)
     },
     async reset () {
       const vm = this
       const key = vm.options.key
+      const query = { [key]: null }
+      // 字段修改的拦截钩子
+      if (vm.options.onChange) await vm.options.onChange(query)
       // ListViewTable 执行查询
-      vm.field.$view.doQuery({ [key]: null })
+      await vm.field.$view.doQuery(query)
     }
   }
 }
