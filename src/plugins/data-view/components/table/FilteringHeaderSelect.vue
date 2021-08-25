@@ -48,14 +48,20 @@
         const vm = this
         const key = vm.options.key
         let value = vm.options.filter ? await vm.options.filter(val) : val
+        const query = {[key]: value}
+        // 字段修改的拦截钩子
+        if (vm.options.onChange) await vm.options.onChange(query)
         // ListViewTable 执行查询
-        vm.field.$view.doQuery({ [key]: value })
+        await vm.field.$view.doQuery(query)
       },
       async reset () {
         const vm = this
         const key = vm.options.key
+        const query = {[key]: null}
+        // 字段修改的拦截钩子
+        if (vm.options.onChange) await vm.options.onChange(query)
         // ListViewTable 执行查询
-        vm.field.$view.doQuery({ [key]: null })
+        await vm.field.$view.doQuery(query)
       },
       renderText (value) {
         const vm = this

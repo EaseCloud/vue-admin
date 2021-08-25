@@ -399,6 +399,7 @@
         const columns = []
         await Promise.all(vm.fields.map(async function (field, i) {
           vm.setListViewFieldDefault(field)
+          // ================ STEP 1: 处理原始 fields 列 ================
           // 计算所有字段选项值
           const key = `__column${i}__`
           await vm.finalizeFields(field)
@@ -434,6 +435,47 @@
             columns[i].renderHeader = () => null
           }
         }))
+        // ================ STEP 2: 分级表头的合并处理 ================
+        // 例如配置 field.columnStack = ['A', 'B']，可以配置合并分级表头
+        const newColumns = []
+        const columnStack = []
+        let nCols = columns.length
+        for (let i = 0; i < nCols; ++i) {
+          const field = vm.fields[i]
+          const col = columns[i]
+          // TODO: 目前仅支持 columnStack 的元素 stkOpt 为 String 类型，代表 key
+          // TODO: 后续如果需要在 columnStack 上加入其它可配置内容（例如 filtering），可在这里扩展
+          const stk = (field.columnStack || [])
+          // 找到第一个分歧点位置 k
+          let k = 0
+          while (k < columnStack.length && k < stk.length && columnStack[k].key === stk[k]) k += 1
+          // 删除原路径上的后续节点
+          columnStack.splice(k, columnStack.length)
+          for (let j = k; j < stk.length; ++j) {
+            const newCol = {
+              title: stk[j],
+              // align: 'center',
+              children: []
+            }
+            if (columnStack.length > 0) {
+              columnStack[columnStack.length - 1].column.children.push(newCol)
+            }
+            columnStack.push({key: stk[j], column: newCol})
+          }
+          if (columnStack.length > 0) {
+            columnStack[columnStack.length - 1].column.children.push(col)
+          }
+          // 如果分歧点为根节点，目标 column 需要放入当前的列
+          if (k === 0) {
+            if (columnStack.length > 0) {
+              newColumns.push(columnStack[0].column)
+            } else {
+              newColumns.push(col)
+            }
+          }
+        }
+        columns.splice(0, columns.length, ...newColumns)
+        // ================ STEP 3: 操作列的处理 ================
         if (vm.options.show_actions === void 0 || vm.options.show_actions) {
           const columnActions = {
             title: vm.options.action_column_label === void 0
@@ -562,6 +604,7 @@
           }
           columns.push(columnActions)
         }
+        // ================ STEP 4: 勾选列 ================
         // 初始化勾选列
         if (vm.options.can_select) {
           columns.unshift({
