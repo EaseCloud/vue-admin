@@ -38,7 +38,7 @@ export default {
         id, ...vm.editViewOptions
       }, {
         title: vm.editViewOptions.title || (item ? '编辑' : '创建') + vm.editViewOptions.modelName,
-        width: 1000
+        width: (vm.editViewOptions.options && vm.editViewOptions.options.modalWidth) || 1000
       })
       return await vm.activeHooks.filter_item_after_save.apply(vm, [itemAfterSave])
     },
