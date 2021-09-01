@@ -1,3 +1,4 @@
+<script src="../../../../../config/index.js"></script>
 <template>
   <div class="list-view-table" ref="listViewTable">
     <div v-if="initialized && options.show_filtering_form">
