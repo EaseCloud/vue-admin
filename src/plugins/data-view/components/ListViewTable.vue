@@ -673,7 +673,7 @@
 <style lang="less" scoped>
   @import "../../../style/defines";
 
-  /deep/ .ivu-table-header th {
+  /deep/ .ivu-table-header th, /deep/ .ivu-table-fixed-header th {
     padding: 4px 0;
     line-height: 24px;
   }

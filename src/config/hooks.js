@@ -198,5 +198,13 @@ export default {
    */
   async action_edit_view_post_save (item) {
     return item
+  },
+  /**
+   * ListView, EditView 使用：删除对象之后的动作
+   * 默认：返回删除的对象
+   * @return {Promise}
+   */
+  async action_after_delete (item) {
+    return item
   }
 }
