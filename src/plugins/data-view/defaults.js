@@ -50,6 +50,7 @@ export default {
       const pk = await vm.finalize(vm.pk, item)
       const id = await vm.evaluate(item, pk)
       await vm.api(vm.model, vm.apiRoot || vm.config.api_root).delete({ id })
+      await vm.activeHooks.action_after_delete.apply(vm, [item])
     },
     async action_create () {
       const vm = this
