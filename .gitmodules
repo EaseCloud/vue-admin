@@ -1,4 +1,4 @@
 [submodule "src/libs/less-template"]
 	path = src/libs/less-template
-	url = https://github.com/easecloud/less-template
+	url = git@github.com:EaseCloud/less-template.git
 	branch = master
