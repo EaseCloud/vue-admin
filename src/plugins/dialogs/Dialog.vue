@@ -1,5 +1,5 @@
 <template xmlns:v-slot="http://www.w3.org/1999/xhtml">
-  <modal v-bind="options" :value="value">
+  <modal v-bind="options" :value="value" @on-visible-change="onVisibleChange">
     <template v-if="options.render">
       <render-component :render="options.render"></render-component>
     </template>
@@ -71,6 +71,10 @@
         const vm = this
         vm.$destroy()
         vm.$el.parentElement.removeChild(vm.$el)
+      },
+      async onVisibleChange (value) {
+        const vm = this
+        vm.options.onVisibleChange && await vm.options.onVisibleChange.apply(vm, [value])
       }
     }
   }
