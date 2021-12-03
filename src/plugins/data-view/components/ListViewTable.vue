@@ -493,6 +493,12 @@
                   (!action.display && action.display !== void 0)) {
                   return
                 }
+                let disabled
+                if (action.disabled instanceof Function) {
+                  disabled = action.disabled.apply(vm, [item])
+                } else {
+                  disabled = action.disabled && action.disabled !== void 0
+                }
                 controls.push(h(
                   'i-button', {
                     props: {
@@ -500,7 +506,8 @@
                       type: vm.finalizeSync(action.buttonType, item),
                       shape: action.buttonShape,
                       icon: action.buttonIcon,
-                      ghost: !!action.ghost
+                      ghost: !!action.ghost,
+                      disabled: disabled
                     },
                     on: {
                       click: (e) => {
