@@ -5,7 +5,7 @@
                :key="field.key+'_'+i"
                :label="field.fullWidth?'':field.final.label"
                :required="field.final.required"
-               :label-width="field.fullWidth?0:180"
+               :label-width="field.fullWidth?0:field.labelWidth||180"
                :style="field.formItemStyle"
                label-position="left">
       <div v-if="field.fullWidth" class="field-title-full">
