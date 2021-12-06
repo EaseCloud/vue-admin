@@ -500,7 +500,8 @@
                       type: vm.finalizeSync(action.buttonType, item),
                       shape: action.buttonShape,
                       icon: action.buttonIcon,
-                      ghost: !!action.ghost
+                      ghost: !!action.ghost,
+                      disabled: vm.finalizeSync(action.disabled, item)
                     },
                     on: {
                       click: (e) => {
