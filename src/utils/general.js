@@ -118,7 +118,7 @@ export default {
   },
   wrapChoices (choices) {
     if (choices instanceof Array || !(choices instanceof Object)) return choices
-    return _.map(choices, (value, key) => ({ value: key, text: value }))
+    return _.map(choices, (value, key) => ({value: key, text: value}))
   },
   async doAction (action, args) {
     return action.apply(this, args)
