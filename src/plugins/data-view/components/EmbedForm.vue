@@ -55,8 +55,8 @@
                          @input="updateField(field, $event)"></form-field-select>
       <!-- type: multi-select -->
       <form-field-multi-select v-else-if="field.type==='multi-select'"
-                         :field="field"
-                         @input="updateField(field, $event)"></form-field-multi-select>
+                               :field="field"
+                               @input="updateField(field, $event)"></form-field-multi-select>
       <!-- type: cascade -->
       <form-field-cascade v-else-if="field.type==='cascade'"
                           :field="field"
@@ -278,8 +278,9 @@ export default {
      *    validator 方法内部 this 指向 EmbedForm
      *    传入第一个参数为根据 field.key 获取的 value
      *    传入第二个参数为 field 本身
+     * 3. 如果指定 silent 为 true，则不会弹出相关提示
      */
-    async validate () {
+    async validate (silent = false) {
       const vm = this
       await Promise.all(vm.fields.map(field => new Promise(async (resolve, reject) => {
         // 先校验 required（0 被看做是有数值的），空数组也不行
@@ -288,7 +289,7 @@ export default {
           field.value instanceof Array && !field.value.length
         )) {
           const msg = `必须填写【${field.label}】字段`
-          vm.$Message.warning(msg)
+          if (!silent) vm.$Message.warning(msg)
           reject(new Error(msg))
         }
         // 校验
@@ -297,7 +298,7 @@ export default {
             const value = await vm.evaluate(vm.item, field.key, field.default)
             await field.validator.apply(vm, [value, field])
           } catch (e) {
-            vm.$Message.warning(e.message)
+            if (!silent) vm.$Message.warning(e.message)
             reject(e)
           }
         }
