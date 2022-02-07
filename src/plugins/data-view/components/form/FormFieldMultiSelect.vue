@@ -12,7 +12,7 @@
               :placeholder="field.placeholder"
               :value="field.value"
               :remoteMethod="doQuery"
-              @set-default-options="doQuery('')"
+              @set-default-options="doQuery()"
               @input="$emit('input', $event===void 0 ? null : $event)">
       <template v-for="choice in choices">
         <option-group v-if="choice.children"
@@ -58,11 +58,11 @@ export default {
       const vm = this
       vm.choices.push({value: val, label: val})
     },
-    async doQuery (keyword) {
+    async doQuery (keyword = '') {
       const vm = this
       vm.loading = true
-      if (vm.choices instanceof Function) {
-        vm.choices = await vm.choices(keyword)
+      if (vm.field.asyncChoices) {
+        vm.choices = await vm.field.asyncChoices(keyword)
       } else {
         vm.choices = vm.wrapChoices(await vm.finalize(vm.field.choices))
       }
