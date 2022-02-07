@@ -50,8 +50,10 @@ export default {
 import _ from 'lodash'
 import {quillEditor, Quill} from 'vue-quill-editor'
 import {ImageExtend, QuillWatch} from '@/vue-admin/src/libs/quill-image-extend-module'
+import ImageResize from '@/vue-admin/src/libs/quill-image-resize-module/ImageResize'
 
 Quill.register('modules/ImageExtend', ImageExtend)
+Quill.register('modules/ImageResize', ImageResize)
 
 export default {
   data () {
@@ -86,6 +88,16 @@ export default {
               size: 1, // 单位为 M
               action: '/api/image/', // 上传图片 POST 请求的地址
               response: resp => resp.image // 从响应中提取 URL 的方法
+            },
+            ImageResize: {
+              modules: ['Resize', 'DisplaySize'], // Toolbar 有点问题，不用也罢
+              handleStyles: {
+                backgroundColor: 'blue',
+                width: '6px',
+                height: '6px',
+                border: 'none',
+                color: 'white'
+              }
             }
           }
         }
