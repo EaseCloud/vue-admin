@@ -47,7 +47,7 @@ export class ImageExtend {
    * @param e
    */
   pasteHandle (e) {
-    // e.preventDefault()
+    e.preventDefault()
     QuillWatch.emit(this.quill.id, 0)
     let clipboardData = e.clipboardData
     let i = 0
@@ -79,9 +79,9 @@ export class ImageExtend {
           return
         }
         if (this.config.action) {
-          // this.uploadImg()
+          this.uploadImg()
         } else {
-          // this.toBase64()
+          this.toBase64()
         }
       }
     }

@@ -75,7 +75,9 @@ export default {
                 ['clean'], ['link', 'image']
               ],
               handlers: {
-                image: () => QuillWatch.emit(this.quill.id)
+                image () {
+                  QuillWatch.emit(this.quill.id)
+                }
               }
             },
             ImageExtend: {
