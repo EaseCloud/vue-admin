@@ -81,7 +81,7 @@ export default {
                   QuillWatch.emit(this.quill.id)
                 }
               }
-            },
+            }
             ImageExtend: {
               loading: true,
               name: 'image', // 上传图片的字段 formData 的 key
