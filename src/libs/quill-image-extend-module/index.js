@@ -38,7 +38,7 @@ export class ImageExtend {
     self.config = config
     self.file = ''  // 要上传的图片
     self.imgURL = ''  // 图片地址
-    self.selection = null
+    // self.selection = null
     // https://quilljs.com/docs/api/#editor-change
     // quill.on('editor-change', function (eventName, ...args) {
     //   console.log('editor-change', eventName, args)
@@ -119,7 +119,8 @@ export class ImageExtend {
     } else if (dataTransfer.items[0].kind === 'string') {
       // TODO: 精细化的复合处理
       // 可以预期的第三第四第五种情况
-      self.quill.insertText(self.selection.index, dataTransfer.getData(items[0].type))
+      const selection = self.quill.getSelection()
+      self.quill.insertText(selection.index, dataTransfer.getData(items[0].type))
       e.preventDefault()
     } else {
       // TODO: 未预期的其他情况，直接默认处理
