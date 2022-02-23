@@ -9,6 +9,9 @@ export default {
           const el = document.createElement('div')
           document.body.appendChild(el)
           const ModalComponent = Vue.extend(Dialog)
+          // 获取焦点，避免触发原有焦点上的事件
+          el.tabIndex = 0
+          el.focus()
           return new ModalComponent({el, propsData: {options}})
         },
         /**
@@ -33,29 +36,51 @@ export default {
           render
         } = {}) {
           const vm = this
-          return new Promise((resolve, reject) => {
-            vm.openDialog({
+          // 先记录焦点，后面返还焦点
+          const $focusEl = document.activeElement
+          return new Promise(async (resolve, reject) => {
+            const $modal = vm.openDialog({
               title,
-              content: message,
               width,
+              // content: message,
               okText,
               cancelText,
               scrollable,
-              render,
+              // render,
+              // 不用默认的 message，这里整这么复杂就是为了按 Enter 可以响应确认
+              render (h) {
+                const $content = h('div', {
+                  attrs: {tabIndex: 0},
+                  style: {outline: 'none'}
+                }, [render ? render(...arguments) : message])
+                vm.$nextTick(() => {
+                  const $el = $content.context.$el
+                  $el.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter') {
+                      $modal.close()
+                      resolve()
+                      e.preventDefault()
+                      e.stopPropagation()
+                      // 返还焦点
+                      $focusEl.focus()
+                    } else if (e.key === 'Escape') {
+                      $modal.close()
+                      reject()
+                      e.preventDefault()
+                      e.stopPropagation()
+                      // 返还焦点
+                      $focusEl.focus()
+                    }
+                  })
+                  // 夺取焦点
+                  $el.focus()
+                })
+                return $content
+              },
               onOk: resolve,
               onCancel: reject
             })
-            // vm.$Modal[method]({
-            //   title,
-            //   content: message,
-            //   width,
-            //   okText,
-            //   cancelText,
-            //   scrollable,
-            //   render,
-            //   onOk: resolve,
-            //   onCancel: reject
-            // })
+            await vm.$nextTick()
           })
         },
         async $prompt (message = '', {
