@@ -58,44 +58,34 @@ export default {
         } = {}) {
           const vm = this
           let value = defaultValue
-          return new Promise((resolve, reject) => {
-            const dialog = vm.openDialog({
+          let $input
+          const promise = new Promise((resolve, reject) => {
+            vm.openDialog({
               title,
               width,
               okText,
               cancelText,
               render (h) {
-                return h('i-form', {
-                  style: {marginTop: '16px'},
-                  props: {labelPosition: 'top'}
-                }, [h('form-item', {
-                  props: {label: message}
-                }, [h('i-input', {
-                  props: {value, autofocus: true, placeholder},
+                $input = h('i-input', {
+                  props: {value, placeholder},
                   on: {
                     input (val) {
                       value = val
-                    },
-                    'on-keydown' (event) {
-                      if (event.keyCode === 13) {
-                        // Enter
-                        resolve(value)
-                        dialog.close()
-                        event.preventDefault()
-                      } else if (event.keyCode === 27) {
-                        // Escape
-                        reject(new Error('用户取消了操作'))
-                        dialog.close()
-                        event.preventDefault()
-                      }
                     }
                   }
-                })])])
+                })
+                return h('i-form', {
+                  style: {marginTop: '16px'},
+                  props: {labelPosition: 'top'}
+                }, [h('form-item', {props: {label: message}}, [$input])])
               },
               onOk: () => resolve(value),
               onCancel: reject
             })
           })
+          // 打开提示框之后马上获取焦点
+          vm.$nextTick(() => $input.componentInstance.focus())
+          return promise
         },
         async modalEditView (editViewOptions, {
           title = '编辑模型',
