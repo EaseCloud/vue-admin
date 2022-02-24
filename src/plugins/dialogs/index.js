@@ -42,6 +42,7 @@ export default {
               okText,
               cancelText,
               scrollable,
+              supportEnter: true,
               render,
               onOk: resolve,
               onCancel: reject
@@ -65,6 +66,7 @@ export default {
               width,
               okText,
               cancelText,
+              supportEnter: true,
               render (h) {
                 $input = h('i-input', {
                   props: {value, placeholder},
