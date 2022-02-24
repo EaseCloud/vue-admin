@@ -9,13 +9,11 @@ export default {
           const el = document.createElement('div')
           document.body.appendChild(el)
           const ModalComponent = Vue.extend(Dialog)
-          // 获取焦点，避免触发原有焦点上的事件
-          el.tabIndex = 0
-          el.focus()
           return new ModalComponent({el, propsData: {options}})
         },
         /**
-         * Promise 形式实现，类似于原声 confirm 方法
+         * Promise 形式实现，类似于原生 confirm 方法
+         * TODO: 实际上当
          * @param message
          * @param title
          * @param width
@@ -36,51 +34,18 @@ export default {
           render
         } = {}) {
           const vm = this
-          // 先记录焦点，后面返还焦点
-          const $focusEl = document.activeElement
-          return new Promise(async (resolve, reject) => {
-            const $modal = vm.openDialog({
+          return new Promise((resolve, reject) => {
+            vm.openDialog({
               title,
               width,
-              // content: message,
+              content: message,
               okText,
               cancelText,
               scrollable,
-              // render,
-              // 不用默认的 message，这里整这么复杂就是为了按 Enter 可以响应确认
-              render (h) {
-                const $content = h('div', {
-                  attrs: {tabIndex: 0},
-                  style: {outline: 'none'}
-                }, [render ? render(...arguments) : message])
-                vm.$nextTick(() => {
-                  const $el = $content.context.$el
-                  $el.addEventListener('keydown', function (e) {
-                    if (e.key === 'Enter') {
-                      $modal.close()
-                      resolve()
-                      e.preventDefault()
-                      e.stopPropagation()
-                      // 返还焦点
-                      $focusEl.focus()
-                    } else if (e.key === 'Escape') {
-                      $modal.close()
-                      reject()
-                      e.preventDefault()
-                      e.stopPropagation()
-                      // 返还焦点
-                      $focusEl.focus()
-                    }
-                  })
-                  // 夺取焦点
-                  $el.focus()
-                })
-                return $content
-              },
+              render,
               onOk: resolve,
               onCancel: reject
             })
-            await vm.$nextTick()
           })
         },
         async $prompt (message = '', {
