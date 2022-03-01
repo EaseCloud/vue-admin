@@ -12,7 +12,8 @@ export default {
           return new ModalComponent({el, propsData: {options}})
         },
         /**
-         * Promise 形式实现，类似于原声 confirm 方法
+         * Promise 形式实现，类似于原生 confirm 方法
+         * TODO: 实际上当
          * @param message
          * @param title
          * @param width
@@ -36,26 +37,16 @@ export default {
           return new Promise((resolve, reject) => {
             vm.openDialog({
               title,
-              content: message,
               width,
+              content: message,
               okText,
               cancelText,
               scrollable,
+              supportEnter: true,
               render,
               onOk: resolve,
               onCancel: reject
             })
-            // vm.$Modal[method]({
-            //   title,
-            //   content: message,
-            //   width,
-            //   okText,
-            //   cancelText,
-            //   scrollable,
-            //   render,
-            //   onOk: resolve,
-            //   onCancel: reject
-            // })
           })
         },
         async $prompt (message = '', {
@@ -68,44 +59,35 @@ export default {
         } = {}) {
           const vm = this
           let value = defaultValue
-          return new Promise((resolve, reject) => {
-            const dialog = vm.openDialog({
+          let $input
+          const promise = new Promise((resolve, reject) => {
+            vm.openDialog({
               title,
               width,
               okText,
               cancelText,
+              supportEnter: true,
               render (h) {
-                return h('i-form', {
-                  style: {marginTop: '16px'},
-                  props: {labelPosition: 'top'}
-                }, [h('form-item', {
-                  props: {label: message}
-                }, [h('i-input', {
-                  props: {value, autofocus: true, placeholder},
+                $input = h('i-input', {
+                  props: {value, placeholder},
                   on: {
                     input (val) {
                       value = val
-                    },
-                    'on-keydown' (event) {
-                      if (event.keyCode === 13) {
-                        // Enter
-                        resolve(value)
-                        dialog.close()
-                        event.preventDefault()
-                      } else if (event.keyCode === 27) {
-                        // Escape
-                        reject(new Error('用户取消了操作'))
-                        dialog.close()
-                        event.preventDefault()
-                      }
                     }
                   }
-                })])])
+                })
+                return h('i-form', {
+                  style: {marginTop: '16px'},
+                  props: {labelPosition: 'top'}
+                }, [h('form-item', {props: {label: message}}, [$input])])
               },
               onOk: () => resolve(value),
               onCancel: reject
             })
           })
+          // 打开提示框之后马上获取焦点
+          vm.$nextTick(() => $input.componentInstance.focus())
+          return promise
         },
         async modalEditView (editViewOptions, {
           title = '编辑模型',
