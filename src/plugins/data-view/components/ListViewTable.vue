@@ -18,6 +18,7 @@
              :data="data"
              :max-height="options.max_height"
              :height="options.height"
+             :span-method="handleSpan"
              @on-row-click="onRowClickRaw">
       <slot name="footer" slot="footer"></slot>
     </i-table>
@@ -96,10 +97,8 @@
       filters: {type: [Object, Function], default: () => ({})},
       initQuery: {type: Object, default: () => ({})},
       rowClassName: {type: Function},
-      onRowClick: {
-        type: Function, default: () => {
-        }
-      },
+      onRowClick: {type: Function, default: () => {}},
+      spanMethod: {type: Function, default: () => {}},
       size: {
         default: 'small',
         validator (value) {
@@ -170,6 +169,12 @@
         const vm = this
         if (!vm.items[index]) return ''
         return vm.rowClassName ? vm.rowClassName(vm.items[index], index) : ''
+      },
+      handleSpan ({ row, column, rowIndex, columnIndex }) {
+        const vm = this
+        const item = vm.items[rowIndex]
+        if (!item) return
+        return vm.spanMethod && vm.spanMethod.apply(vm, [{row, column, rowIndex, columnIndex, item}])
       },
       async onRowClickRaw (row, index) {
         const vm = this
