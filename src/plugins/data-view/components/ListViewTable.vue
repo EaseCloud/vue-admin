@@ -110,6 +110,26 @@
         }
       }
     },
+    directives: {  // 使用局部注册指令的方式
+      resize: { // 指令的名称
+        bind (el, binding) { // el为绑定的元素，binding为绑定给指令的对象
+          let width = ''
+          let height = ''
+          function isResize() {
+            const style = document.defaultView.getComputedStyle(el)
+            if (width !== style.width || height !== style.height) {
+              binding.value()  // 关键
+            }
+            width = style.width
+            height = style.height
+          }
+          el.__vueSetInterval__ = setInterval(isResize, 300)
+        },
+        unbind(el) {
+          clearInterval(el.__vueSetInterval__)
+        }
+      }
+    },
     data () {
       const vm = this
       const query = vm.filters instanceof Function ?
@@ -658,6 +678,14 @@
         //   }
         // }]
         vm.initialized = true
+      },
+      setTableHeight () {
+        if (this.options.max_height) {
+          // 由于刚创建页面的时候高度计算有问题，所以这里设置一个等待时间，等页面高度计算完后再进行设置
+          setTimeout(() => {
+            this.options.max_height = this.$refs.listViewTable.clientHeight - 16 * 2
+          }, 500)
+        }
       }
     },
     mounted () {
@@ -666,12 +694,7 @@
         field.$view = vm
       })
       vm.initialize()
-      if (this.options.max_height) {
-        // 由于刚创建页面的时候高度计算有问题，所以这里设置一个等待时间，等页面高度计算完后再进行设置
-        setTimeout(() => {
-          this.options.max_height = this.$refs.listViewTable.clientHeight - 16 * 2
-        }, 500)
-      }
+      this.setTableHeight()
     }
   }
 </script>
