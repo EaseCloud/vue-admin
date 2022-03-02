@@ -1,7 +1,7 @@
 <template>
   <card class="page-content list-view"
         :class="{'no-footer': !(listViewOptions.showPager&&pager)}">
-    <div slot="title" class="page-header">
+    <div slot="title" class="page-header" v-resize="setCardBodyPosition">
       <slot name="title"><h3 class="title">{{title}}</h3></slot>
       <slot name="subtitle"><h4 class="subtitle">{{subtitle}}</h4></slot>
       <div class="controls">
@@ -65,6 +65,26 @@ import ListViewTable from './ListViewTable.vue'
 export default {
   name: 'ListView',
   props: ListViewTable.props,
+  directives: {  // 使用局部注册指令的方式
+    resize: { // 指令的名称
+      bind (el, binding) { // el为绑定的元素，binding为绑定给指令的对象
+        let width = ''
+        let height = ''
+        function isResize() {
+          const style = document.defaultView.getComputedStyle(el)
+          if (width !== style.width || height !== style.height) {
+            binding.value()  // 关键
+          }
+          width = style.width
+          height = style.height
+        }
+        el.__vueSetInterval__ = setInterval(isResize, 300)
+      },
+      unbind(el) {
+        clearInterval(el.__vueSetInterval__)
+      }
+    }
+  },
   data () {
     return {
       pager: null
@@ -100,6 +120,9 @@ export default {
       opts.sort((a, b) => a - b)
       return opts
     }
+  },
+  mounted () {
+    this.setCardBodyPosition()
   },
   methods: {
     refresh () {
@@ -138,6 +161,13 @@ export default {
       if (Number(vm.$route.query.page_size || 10) !== Number(pageSize)) {
         await vm.$router.replace({query: {...vm.$route.query, page_size: pageSize}}).catch(_ => _)
       }
+    },
+    setCardBodyPosition () {
+      this.$nextTick(() => {
+        const cardTitleHeight = this.$el.firstChild.offsetHeight
+        this.$el.lastChild.style.top = cardTitleHeight + 'px'
+        this.$refs.table.setTableHeight()
+      })
     }
   },
   watch: {
