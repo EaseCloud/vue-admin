@@ -679,12 +679,10 @@
         // }]
         vm.initialized = true
       },
-      setTableHeight () {
+      async setTableHeight () {
         if (this.options.max_height) {
-          // 由于刚创建页面的时候高度计算有问题，所以这里设置一个等待时间，等页面高度计算完后再进行设置
-          setTimeout(() => {
-            this.options.max_height = this.$refs.listViewTable.clientHeight - 16 * 2
-          }, 500)
+          await this.waitFor(this.$refs, 'listViewTable')
+          this.options.max_height = this.$refs.listViewTable.clientHeight - 16 * 2
         }
       }
     },

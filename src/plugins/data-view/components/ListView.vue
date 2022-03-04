@@ -4,6 +4,7 @@
     <div slot="title" class="page-header" v-resize="setCardBodyPosition">
       <slot name="title"><h3 class="title">{{title}}</h3></slot>
       <slot name="subtitle"><h4 class="subtitle">{{subtitle}}</h4></slot>
+      <slot name="extra-title"></slot>
       <div class="controls">
         <template v-for="(action, i) in batchActions">
           <i-button :key="i"
@@ -163,9 +164,10 @@ export default {
       }
     },
     setCardBodyPosition () {
-      this.$nextTick(() => {
+      this.$nextTick(async () => {
         const cardTitleHeight = this.$el.firstChild.offsetHeight
         this.$el.lastChild.style.top = cardTitleHeight + 'px'
+        await this.waitFor(this.$refs, 'table')
         this.$refs.table.setTableHeight()
       })
     }
