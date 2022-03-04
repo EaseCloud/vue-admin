@@ -1,6 +1,5 @@
 <template>
   <i-form v-if="initialized" class="embed-form"
-          :class="{['label-'+options.labelPosition]: true}"
           :label-position="options.labelPosition"
           @submit.native.prevent>
     <form-item v-for="(field, i) in fields"
@@ -13,14 +12,14 @@
       <div v-if="field.fullWidth" class="field-title-full">
         <h3 class="field-label" v-if="field.final.label"
             :style="options.labelStyle||field.labelStyle"
-        >{{field.final.label}}</h3>
+        >{{ field.final.label }}</h3>
         <div class="field-actions">
           <template v-for="(action, i) in field.actions"
                     v-if="action.display===void 0||finalizeSync(action.display, field.context.item)">
             <i-button :key="i"
                       size="small"
                       :type="action.buttonType"
-                      @click="doFieldAction(action, field)">{{action.label}}
+                      @click="doFieldAction(action, field)">{{ action.label }}
             </i-button>
             <i :key="'_'+i"><!--避免按钮之间粘在一起--></i>
           </template>
@@ -31,7 +30,7 @@
       <div v-if="field.description && options.descriptionPosition==='top'"
            class="field-description"
            style="color: #80848f; margin-bottom: 10px;"
-           :style="field.descriptionStyle">{{field.description}}
+           :style="field.descriptionStyle">{{ field.description }}
       </div>
 
       <!-- type: input -->
@@ -135,13 +134,13 @@
                          :field="field"
                          @input="updateField(field, $event)"></form-field-render>
       <!-- type: undefined -->
-      <div v-else>未实现的字段类型：{{field.type}}</div>
+      <div v-else>未实现的字段类型：{{ field.type }}</div>
 
       <!-- description -->
       <div v-if="field.description && options.descriptionPosition!=='top'"
            class="field-description"
            style="color: #80848f"
-           :style="field.descriptionStyle">{{field.description}}
+           :style="field.descriptionStyle">{{ field.description }}
       </div>
     </form-item>
   </i-form>
@@ -343,10 +342,10 @@ export default {
 @label-width: 25%;
 
 .embed-form {
-  &.label-left /deep/ .ivu-form-item-label {
+  /deep/ .ivu-form-item-label {
     width: @label-width;
   }
-  &.label-left /deep/ .ivu-form-item-content {
+  /deep/ .ivu-form-item-content {
     margin-left: @label-width;
   }
   .field-item {
@@ -358,6 +357,7 @@ export default {
   h3.field-label {
     display: inline-block;
   }
+
   .field-actions {
     display: inline-block;
     float: right;
