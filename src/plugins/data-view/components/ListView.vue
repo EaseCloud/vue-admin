@@ -164,9 +164,10 @@ export default {
       }
     },
     setCardBodyPosition () {
-      this.$nextTick(() => {
+      this.$nextTick(async () => {
         const cardTitleHeight = this.$el.firstChild.offsetHeight
         this.$el.lastChild.style.top = cardTitleHeight + 'px'
+        await this.waitFor(this.$refs, 'table')
         this.$refs.table.setTableHeight()
       })
     }
