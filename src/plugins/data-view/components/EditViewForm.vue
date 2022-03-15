@@ -2,6 +2,7 @@
   <!-- 如果是新建的话需要 EmbedForm 自动 init 对象，否则设置 noInit 等待数据载入 -->
   <embed-form :fields="fields"
               :noInit="!!id"
+              :options="options"
               @update="$emit('update', $event)"
               ref="form"></embed-form>
 </template>
