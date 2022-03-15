@@ -2,3 +2,6 @@
 	path = src/libs/less-template
 	url = git@github.com:EaseCloud/less-template.git
 	branch = master
+[submodule "src/plugins/jsmind/JsMindPro"]
+	path = src/plugins/jsmind/JsMindPro
+	url = git@github.com:fish-ball/JsMindPro.git
