@@ -8,7 +8,7 @@
     <template v-else>{{options.content}}</template>
     <template v-slot:footer>
       <i-button type="text" @click="onCancel()">{{options.cancelText || '取消'}}</i-button>
-      <i-button type="primary" @click="onOk()">{{options.okText || '确认'}}</i-button>
+      <i-button type="primary" @click="onOk()" v-if="options.onOk">{{options.okText || '确认'}}</i-button>
     </template>
   </modal>
 </template>
