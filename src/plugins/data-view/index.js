@@ -172,14 +172,12 @@ export default {
                 })
                 return el
               },
-              onOk () {
-                if (!multiple) {
-                  reject()
-                } else {
+              ...(multiple ? {
+                onOk () {
                   resolve(el.componentInstance.selectedItems)
+                  if (loading) dialog.close()
                 }
-                if (loading) dialog.close()
-              },
+              } : {}),
               onCancel () {
                 if (loading) dialog.close()
                 reject()
