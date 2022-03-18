@@ -1,6 +1,5 @@
 <template>
-  <div class="jsmind-container">
-  </div>
+  <div class="jsmind-container" v-dragscroll:nochilddrag></div>
 </template>
 
 <script>
@@ -115,7 +114,7 @@ export default {
       } else if (eventType === JsMind.event_type.select) {
         vm.$emit('select_node', vm.jm.get_selected_node())
       } else {
-        console.log(eventType, params)
+        // console.log(eventType, params)
       }
     })
   },
