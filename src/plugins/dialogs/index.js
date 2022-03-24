@@ -180,12 +180,13 @@ export default {
             })
           })
         },
-        async pickFile (multi = false) {
+        async pickFile (multi = false, accept='*') {
           return new Promise((resolve, reject) => {
             const elFile = document.getElementById('_vue_admin_file_picker')
               || document.createElement('input')
             elFile.id = '_vue_admin_file_picker'
             elFile.setAttribute('type', 'file')
+            elFile.setAttribute('accept', accept)
             elFile.setAttribute('style', 'opacity:0;position:absolute;z-index:-1;left:0;top:0')
             elFile.value = null
             if (multi) elFile.setAttribute('multi', true)
