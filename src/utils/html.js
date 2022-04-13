@@ -14,7 +14,7 @@ export default {
    * @param lang
    * @returns {string}
    */
-  dateFromNow (dt, lang='zh-cn') {
+  dateFromNow (dt, lang = 'zh-cn') {
     return moment(dt).locale(lang).fromNow()
   },
   /**
@@ -32,5 +32,27 @@ export default {
     return input.replace(commentsAndPhpTags, '').replace(tags, function ($0, $1) {
       return allowed.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 : ''
     })
+  },
+  async copyToClipboard (text) {
+    if (navigator.clipboard && 'writeText' in navigator.clipboard) {
+      console.log('>>> 浏览器支持剪贴板操作！！navigator.clipboard is enabled!')
+      // console.log(text)
+      navigator.clipboard.writeText(text)
+    } else {
+      const el = document.createElement('textarea')
+      document.body.appendChild(el)
+      el.innerHTML = text
+      el.select()
+      document.execCommand('copy')
+      document.body.removeChild(el)
+    }
+  },
+  async readClipboardText () {
+    if (navigator.clipboard && 'readText' in navigator.clipboard) {
+      return navigator.clipboard.readText()
+    } else {
+      await vm.$Message.error('浏览器不支持粘贴操作，请确定已启用 https。')
+      throw new Error('浏览器不支持粘贴操作，请确定已启用 https。')
+    }
   }
 }
