@@ -1,5 +1,7 @@
 <template>
-  <div class="jsmind-container" v-dragscroll:nochilddrag></div>
+  <div class="jsmind-container" v-dragscroll:nochilddrag
+       @contextmenu="$emit('mind-menu', $event)"
+  ></div>
 </template>
 
 <script>
@@ -45,7 +47,7 @@ export default {
       theme: 'xmind',
       mode: 'side',           // 显示模式
       support_html: true,    // 是否支持节点里的HTML元素
-      render_node (el, node) {
+      async render_node (el, node) {
         // destroy old component
         if (node.meta.view.component) {
           node.meta.view.component.$destroy()
@@ -60,6 +62,11 @@ export default {
           obj[param.nodeName] = param.nodeValue
           return obj
         }, {})
+
+        function timeout (ms) {
+          return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
         // console.log(attrs)
         const component = new Render({el, render: h => vm.options.renderNode(h, node, attrs)})
         node.meta.view.component = component
@@ -79,17 +86,32 @@ export default {
       },
       shortcut: {
         enable: true,        // 是否启用快捷键
-        handles: {},         // 命名的快捷键事件处理器
-        mapping: {           // 快捷键映射
-          addchild: 9,    // <Tab>
-          addbrother: 13,    // <Enter>
-          editnode: 113,   // <F2>
-          delnode: 46,    // <Delete>
-          toggle: 32,    // <Space>
-          left: 37,    // <Left>
-          up: 38,    // <Up>
-          right: 39,    // <Right>
-          down: 40,    // <Down>
+        // 命名的快捷键事件处理器
+        handles: {
+          /**
+           * 默认的未捕捉热键处理
+           * @param e {KeyboardEvent}
+           * @param keyName {String} 按键全名，例如 Ctrl+Alt+1
+           */
+          default (e, keyName) {
+            console.log(keyName)
+          },
+          // expand_all: e => vm.jm.expand_all(),
+          // collapse_all: e => vm.jm.collapse_all()
+        },
+        // 快捷键映射
+        mapping: {
+          Insert: 'addchild',
+          Tab: 'addchild',
+          Enter: 'addbrother',
+          F2: 'editnode',
+          Delete: 'delnode',
+          Space: 'toggle',
+          ArrowLeft: 'left',
+          ArrowRight: 'right',
+          ArrowUp: 'up',
+          ArrowDown: 'down',
+          ...(vm.options.keyMap || {})
         }
       }
     }
@@ -99,6 +121,7 @@ export default {
       format: vm.format,
       data: vm.data
     })
+    vm.$emit('jsmind', vm.$options.jm)
 
     // TODO: DEBUG
     window.jm = vm.jm
@@ -119,6 +142,8 @@ export default {
     })
   },
   methods: {
+    // !!WARNING!! 不要尝试重构下面这些操作方法的命名。
+    // 之所以使用下划线，是因为跟 JsMindPro 里面的 shortcut 同步，直接动态映射方法名
     async add_node (parentId, nodeId, topic, data) {
       const vm = this
       const node = vm.jm.get_node(nodeId)
@@ -143,7 +168,8 @@ export default {
       const vm = this
       const prevNode = prevId === '_last_' ? null : vm.jm.get_node(prevId)
       vm.$emit('move_node', node, parent, prevNode)
-    }
+    },
+    // ^^^ WARNING END ^^^
   }
 }
 </script>
