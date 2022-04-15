@@ -27,10 +27,15 @@
       </div>
 
       <!-- description -->
-      <div v-if="field.description && options.descriptionPosition==='top'"
-           class="field-description"
-           style="color: #80848f; margin-bottom: 10px;"
-           :style="field.descriptionStyle">{{ field.description }}
+      <div v-if="field.description && options.descriptionPosition==='top'">
+        <render-component class="field-description"
+                          style="color: #80848f; margin-bottom: 10px;"
+                          :render="field.description"
+                          v-if="typeof field.description === 'function'"></render-component>
+        <div class="field-description"
+             style="color: #80848f; margin-bottom: 10px;"
+             :style="field.descriptionStyle"
+             v-else>{{field.description}}</div>
       </div>
 
       <!-- type: input -->
@@ -137,10 +142,15 @@
       <div v-else>未实现的字段类型：{{ field.type }}</div>
 
       <!-- description -->
-      <div v-if="field.description && options.descriptionPosition!=='top'"
-           class="field-description"
-           style="color: #80848f"
-           :style="field.descriptionStyle">{{ field.description }}
+      <div v-if="field.description && options.descriptionPosition!=='top'">
+        <render-component class="field-description"
+                          style="color: #80848f"
+                          :render="field.description"
+                          v-if="typeof field.description === 'function'"></render-component>
+        <div class="field-description"
+             style="color: #80848f"
+             :style="field.descriptionStyle"
+             v-else>{{field.description}}</div>
       </div>
     </form-item>
   </i-form>
