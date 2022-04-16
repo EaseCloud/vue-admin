@@ -41,9 +41,10 @@ export default {
   },
   async mounted () {
     const vm = this
+    console.log(vm.options)
     const options = {
       container: vm.$el,
-      editable: true,
+      editable: vm.options.editable === void 0 || vm.options.editable,
       theme: 'xmind',
       mode: 'side',           // 显示模式
       support_html: true,    // 是否支持节点里的HTML元素
