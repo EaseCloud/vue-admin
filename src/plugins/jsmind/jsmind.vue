@@ -10,6 +10,7 @@ import Vue from 'vue'
 import './JsMindPro/style/jsmind.css'
 import './JsMindPro/style/jsmind.theme-xmind.css'
 import JsMind from './JsMindPro/js/jsmindpro/JsMind'
+import {EVENT_TYPE} from './JsMindPro/js/jsmindpro/JsMind'
 
 import './JsMindPro/js/jsmindpro/extensions/JsMindExtensionDraggable'
 import RenderComponent from '../../components/RenderComponent'
@@ -32,7 +33,9 @@ export default {
       default: 'node_array',
       validator: s => /node_tree|node_array|freemind/.test(s)
     },
-    data: {required: true}
+    data: {
+      required: true
+    }
   },
   computed: {
     jm () {
@@ -41,12 +44,11 @@ export default {
   },
   async mounted () {
     const vm = this
-    console.log(vm.options)
     const options = {
       container: vm.$el,
       editable: vm.options.editable === void 0 || vm.options.editable,
       theme: 'xmind',
-      mode: 'side',           // 显示模式
+      mode: 'side',           // 显示模式: both/side
       support_html: true,    // 是否支持节点里的HTML元素
       async render_node (el, node) {
         // destroy old component
@@ -105,6 +107,7 @@ export default {
           Insert: 'addchild',
           Tab: 'addchild',
           Enter: 'addbrother',
+          NumpadEnter: 'addbrother',
           F2: 'editnode',
           Delete: 'delnode',
           Space: 'toggle',
@@ -117,30 +120,45 @@ export default {
       }
     }
     // 保留引用
-    vm.$options.jm = await JsMind.show(options, {
-      meta: vm.meta,
-      format: vm.format,
-      data: vm.data
-    })
+    vm.$options.jm = await JsMind.show(options, vm.format, vm.data)
     vm.$emit('jsmind', vm.$options.jm)
 
     // TODO: DEBUG
     window.jm = vm.jm
 
+    // 添加热键事件侦听器
     vm.jm.add_event_listener((eventType, params) => {
-      if (eventType === JsMind.event_type.edit) {
+      if (eventType === EVENT_TYPE.edit) {
         const {evt, data, node} = params
         if (vm[evt] instanceof Function) {
           vm[evt](...data)
         } else {
           console.log(params)
         }
-      } else if (eventType === JsMind.event_type.select) {
+      } else if (eventType === EVENT_TYPE.select) {
         vm.$emit('select_node', vm.jm.get_selected_node())
       } else {
         // console.log(eventType, params)
       }
     })
+
+    // 大小变化的事件响应
+    if ('ResizeObserver' in window) {
+      const resizeObserver = new ResizeObserver(function (entry, observer) {
+        console.log('Resize observer', arguments)
+        // vm.jm.view.reinit()
+      })
+      resizeObserver.observe(vm.$el)
+      vm.$options.resizeObserver = resizeObserver
+    } else {
+      console.warn('当前版本的浏览器不支持 ResizeObserver，大小调整事件处理将不起作用。')
+    }
+  },
+  async beforeDestroy () {
+    const vm = this
+    if (vm.$options.resizeObserver) {
+      vm.$options.resizeObserver.disconnect()
+    }
   },
   methods: {
     // !!WARNING!! 不要尝试重构下面这些操作方法的命名。
