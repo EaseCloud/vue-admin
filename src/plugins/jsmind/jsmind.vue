@@ -6,13 +6,13 @@
 
 <script>
 import Vue from 'vue'
+import _ from 'lodash-es'
 // TODO: import 放在一个 install 里面，不装不引入
-import './JsMindPro/style/jsmind.css'
-import './JsMindPro/style/jsmind.theme-xmind.css'
-import JsMind from './JsMindPro/js/jsmindpro/JsMind'
-import {EVENT_TYPE} from './JsMindPro/js/jsmindpro/JsMind'
+import './JsMindPro/src/style/jsmind.css'
+import './JsMindPro/src/style/jsmind.theme-xmind.css'
+import JsMind from './JsMindPro/src/js/JsMind'
 
-import './JsMindPro/js/jsmindpro/extensions/JsMindExtensionDraggable'
+import './JsMindPro/src/js/extensions/JsMindExtensionDraggable'
 import RenderComponent from '../../components/RenderComponent'
 // import('./JsMindPro/js/jsmind/jsmind.screenshot')
 
@@ -65,10 +65,6 @@ export default {
           obj[param.nodeName] = param.nodeValue
           return obj
         }, {})
-
-        function timeout (ms) {
-          return new Promise(resolve => setTimeout(resolve, ms));
-        }
 
         // console.log(attrs)
         const component = new Render({el, render: h => vm.options.renderNode(h, node, attrs)})
@@ -128,14 +124,14 @@ export default {
 
     // 添加热键事件侦听器
     vm.jm.add_event_listener((eventType, params) => {
-      if (eventType === EVENT_TYPE.edit) {
+      if (eventType === JsMind.EVENT_TYPE.edit) {
         const {evt, data, node} = params
         if (vm[evt] instanceof Function) {
           vm[evt](...data)
         } else {
           console.log(params)
         }
-      } else if (eventType === EVENT_TYPE.select) {
+      } else if (eventType === JsMind.EVENT_TYPE.select) {
         vm.$emit('select_node', vm.jm.get_selected_node())
       } else {
         // console.log(eventType, params)
