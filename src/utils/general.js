@@ -108,7 +108,7 @@ export default {
     const deadline = Date.now() + timeout
     return new Promise((resolve, reject) => {
       const check = () => {
-        let value = vm.evaluate(item, key)
+        let value = item instanceof Function ? item.apply(vm, [key]) : vm.evaluate(item, key)
         if (value) resolve(value)
         if (Date.now() > deadline) reject(new Error('waitFor timed out'))
         setTimeout(check, interval)
