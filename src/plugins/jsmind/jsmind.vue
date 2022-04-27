@@ -132,7 +132,7 @@ export default {
           console.log(params)
         }
       } else if (eventType === JsMind.EVENT_TYPE.select) {
-        vm.$emit('select_node', vm.jm.get_selected_node())
+        vm.$emit('select_node', params.node)
       } else {
         // console.log(eventType, params)
       }
@@ -142,7 +142,6 @@ export default {
     if ('ResizeObserver' in window) {
       const resizeObserver = new ResizeObserver(function (entry, observer) {
         console.log('Resize observer', arguments)
-        // vm.jm.view.reinit()
       })
       resizeObserver.observe(vm.$el)
       vm.$options.resizeObserver = resizeObserver
