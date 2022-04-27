@@ -137,23 +137,9 @@ export default {
         // console.log(eventType, params)
       }
     })
-
-    // 大小变化的事件响应
-    if ('ResizeObserver' in window) {
-      const resizeObserver = new ResizeObserver(function (entry, observer) {
-        console.log('Resize observer', arguments)
-      })
-      resizeObserver.observe(vm.$el)
-      vm.$options.resizeObserver = resizeObserver
-    } else {
-      console.warn('当前版本的浏览器不支持 ResizeObserver，大小调整事件处理将不起作用。')
-    }
   },
   async beforeDestroy () {
     const vm = this
-    if (vm.$options.resizeObserver) {
-      vm.$options.resizeObserver.disconnect()
-    }
   },
   methods: {
     // !!WARNING!! 不要尝试重构下面这些操作方法的命名。
