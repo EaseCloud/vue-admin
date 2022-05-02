@@ -125,7 +125,7 @@ export default {
     // 添加热键事件侦听器
     vm.jm.add_event_listener((eventType, params) => {
       if (eventType === JsMind.EVENT_TYPE.edit) {
-        const {evt, data, node} = params
+        const {evt, data} = params
         if (vm[evt] instanceof Function) {
           vm[evt](...data)
         } else {
@@ -144,29 +144,25 @@ export default {
   methods: {
     // !!WARNING!! 不要尝试重构下面这些操作方法的命名。
     // 之所以使用下划线，是因为跟 JsMindPro 里面的 shortcut 同步，直接动态映射方法名
-    async add_node (parentId, nodeId, topic, data) {
+    async add_node (node) {
       const vm = this
-      const node = vm.jm.get_node(nodeId)
       vm.$emit('add_node', node)
     },
-    async insert_node_after (prevId, nodeId, topic, data) {
+    async insert_node_after (node, nodeAfter) {
       const vm = this
-      const node = vm.jm.get_node(nodeId)
-      const prevNode = vm.jm.get_node(prevId)
-      vm.$emit('add_node', node, prevNode)
+      vm.$emit('add_node', node, nodeAfter)
     },
     async update_node (nodeId, topic) {
       const vm = this
       const node = vm.jm.get_node(nodeId)
       vm.$emit('update_node', node)
     },
-    async remove_node (nodeId) {
+    async remove_node (node) {
       const vm = this
-      vm.$emit('remove_node', nodeId)
+      vm.$emit('remove_node', node)
     },
-    async move_node (node, prevId, parent, direction) {
+    async move_node (node, parent, prevNode) {
       const vm = this
-      const prevNode = prevId === '_last_' ? null : vm.jm.get_node(prevId)
       vm.$emit('move_node', node, parent, prevNode)
     },
     // ^^^ WARNING END ^^^
