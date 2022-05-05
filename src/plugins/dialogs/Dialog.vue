@@ -5,10 +5,15 @@
     <template v-if="options.render">
       <render-component ref="content" :render="options.render"></render-component>
     </template>
-    <template v-else>{{options.content}}</template>
+    <template v-else>{{ options.content }}</template>
     <template v-slot:footer>
-      <i-button type="text" @click="onCancel()">{{options.cancelText || '取消'}}</i-button>
-      <i-button type="primary" @click="onOk()" v-if="options.onOk">{{options.okText || '确认'}}</i-button>
+      <template v-if="options.renderFooter">
+        <render-component ref="footer" :render="options.renderFooter"></render-component>
+      </template>
+      <template v-else>
+        <i-button type="text" @click="onCancel()">{{ options.cancelText || '取消' }}</i-button>
+        <i-button type="primary" @click="onOk()" v-if="options.onOk">{{ options.okText || '确认' }}</i-button>
+      </template>
     </template>
   </modal>
 </template>
