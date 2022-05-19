@@ -83,9 +83,9 @@ export default {
          * @param item
          * @returns {Promise<void>}
          */
-        async actionInlineEdit (item) {
+        async actionInlineEdit (item, options) {
           const vm = this
-          return vm.activeHooks.action_inline_edit.apply(vm, [item])
+          return vm.activeHooks.action_inline_edit.apply(vm, [item, options])
         },
         /**
          * 行级删除动作
@@ -116,9 +116,9 @@ export default {
          * 在本页面弹窗创建
          * @returns {Promise<void>}
          */
-        async inlineCreate () {
+        async inlineCreate (options) {
           const vm = this
-          return vm.activeHooks.action_inline_create.apply(vm)
+          return vm.activeHooks.action_inline_create.apply(vm, [options])
         },
         async pickObject (listViewOptions = {}, {
           title = '选取对象',

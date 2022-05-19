@@ -547,7 +547,7 @@
                     on: {
                       async click (e) {
                         e.stopPropagation()
-                        await (vm.options.edit_inline ? vm.actionInlineEdit(item) : vm.actionEdit(item))
+                        await (vm.options.edit_inline ? vm.actionInlineEdit(item, {listView: vm}) : vm.actionEdit(item))
                         vm.reload()
                       }
                     }
@@ -590,7 +590,7 @@
                   },
                   on: {
                     async click () {
-                      await (vm.options.edit_inline ? vm.inlineCreate() : vm.redirectCreate())
+                      await (vm.options.edit_inline ? vm.inlineCreate({listView: vm}) : vm.redirectCreate())
                       vm.reload()
                     }
                   }
