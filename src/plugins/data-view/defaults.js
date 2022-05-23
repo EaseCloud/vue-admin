@@ -21,7 +21,7 @@ export default {
       const id = await vm.evaluate(item, pk)
       vm.$router.push(await vm.getModelEditRoute(vm.model, id))
     },
-    async action_inline_edit (item = null) {
+    async action_inline_edit (item = null, options = null) {
       const vm = this
       const pk = await vm.finalize(vm.pk, item)
       const id = item ? await vm.evaluate(item, pk) : 0
@@ -34,6 +34,9 @@ export default {
       //   item
       // })
       // const itemAfterSave = await vm.hooks.action_save.apply(vm, [data])
+      if (options) {
+        Object.assign(vm.editViewOptions.options || {}, options)
+      }
       const itemAfterSave = await vm.modalEditView({
         id, ...vm.editViewOptions
       }, {
@@ -56,9 +59,9 @@ export default {
       const vm = this
       vm.$router.push(await vm.getModelEditRoute(vm.model, 0))
     },
-    async action_inline_create () {
+    async action_inline_create (options) {
       const vm = this
-      await vm.activeHooks.action_inline_edit.apply(vm)
+      await vm.activeHooks.action_inline_edit.apply(vm, [null, options])
     },
     async action_redirect_list () {
       const vm = this
