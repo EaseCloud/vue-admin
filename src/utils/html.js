@@ -12,10 +12,13 @@ export default {
    * 输入一个日期，返回一个友好的时间显示（例如：刚刚/5分钟前）
    * @param dt
    * @param lang
+   * @param mustBefore {Boolean} 是否必须限制为早于当前时间
    * @returns {string}
    */
-  dateFromNow (dt, lang='zh-cn') {
-    return moment(dt).locale(lang).fromNow()
+  dateFromNow (dt, lang = 'zh-cn', mustBefore = true) {
+    let then = moment(dt)
+    if (mustBefore && moment.now() < then) then = moment.now()
+    return then.locale(lang).fromNow()
   },
   /**
    * Strip tags from a html markup input string.
