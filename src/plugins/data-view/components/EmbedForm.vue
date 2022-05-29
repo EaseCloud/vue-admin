@@ -1,7 +1,7 @@
 <template>
   <i-form v-if="initialized" class="embed-form"
-          :class="{['label-'+options.labelPosition]: true}"
-          :label-position="options.labelPosition">
+          :label-position="options.labelPosition"
+          @submit.native.prevent>
     <form-item v-for="(field, i) in fields"
                v-if="field.final && (field.final.display === void 0 || field.final.display)"
                :key="field.key+'_'+i"
@@ -12,14 +12,14 @@
       <div v-if="field.fullWidth" class="field-title-full">
         <h3 class="field-label" v-if="field.final.label"
             :style="options.labelStyle||field.labelStyle"
-        >{{field.final.label}}</h3>
+        >{{ field.final.label }}</h3>
         <div class="field-actions">
           <template v-for="(action, i) in field.actions"
                     v-if="action.display===void 0||finalizeSync(action.display, field.context.item)">
             <i-button :key="i"
                       size="small"
                       :type="action.buttonType"
-                      @click="doFieldAction(action, field)">{{action.label}}
+                      @click="doFieldAction(action, field)">{{ action.label }}
             </i-button>
             <i :key="'_'+i"><!--避免按钮之间粘在一起--></i>
           </template>
@@ -27,10 +27,15 @@
       </div>
 
       <!-- description -->
-      <div v-if="field.description && options.descriptionPosition==='top'"
-           class="field-description"
-           style="color: #80848f; margin-bottom: 10px;"
-           :style="field.descriptionStyle">{{field.description}}
+      <div v-if="field.description && options.descriptionPosition==='top'">
+        <render-component class="field-description"
+                          style="color: #80848f; margin-bottom: 10px;"
+                          :render="field.description"
+                          v-if="typeof field.description === 'function'"></render-component>
+        <div class="field-description"
+             style="color: #80848f; margin-bottom: 10px;"
+             :style="field.descriptionStyle"
+             v-else>{{field.description}}</div>
       </div>
 
       <!-- type: input -->
@@ -134,13 +139,18 @@
                          :field="field"
                          @input="updateField(field, $event)"></form-field-render>
       <!-- type: undefined -->
-      <div v-else>未实现的字段类型：{{field.type}}</div>
+      <div v-else>未实现的字段类型：{{ field.type }}</div>
 
       <!-- description -->
-      <div v-if="field.description && options.descriptionPosition!=='top'"
-           class="field-description"
-           style="color: #80848f"
-           :style="field.descriptionStyle">{{field.description}}
+      <div v-if="field.description && options.descriptionPosition!=='top'">
+        <render-component class="field-description"
+                          style="color: #80848f"
+                          :render="field.description"
+                          v-if="typeof field.description === 'function'"></render-component>
+        <div class="field-description"
+             style="color: #80848f"
+             :style="field.descriptionStyle"
+             v-else>{{field.description}}</div>
       </div>
     </form-item>
   </i-form>
@@ -192,7 +202,7 @@ export default {
       const item = {}
       vm.fields.forEach((field, i) => {
         // 设置默认值
-        if (field.key) vm.setProperty(item, field.key, field.default)
+        if (field.key) vm.setProperty(item, field.key, field.default instanceof Function ? field.default.apply(vm) : field.default)
       })
       await vm.setItem(item)
       // 向外抛出 item 引用
@@ -229,7 +239,7 @@ export default {
         await field.preRender.apply(vm, [field])
       }
       // 获取初始值
-      let value = await vm.evaluate(vm.item, field.key, field.default)
+      let value = await vm.evaluate(vm.item, field.key, field.default instanceof Function ? field.default.apply(vm) : field.default)
       // 根据 filter 过滤
       if (field.filter) value = await field.filter.apply(vm, [value])
       // 根据 mapper 过滤
@@ -295,7 +305,7 @@ export default {
         // 校验
         if (field.validator) {
           try {
-            const value = await vm.evaluate(vm.item, field.key, field.default)
+            const value = await vm.evaluate(vm.item, field.key, field.default instanceof Function ? field.default.apply(vm) : field.default)
             await field.validator.apply(vm, [value, field])
           } catch (e) {
             if (!silent) vm.$Message.warning(e.message)
@@ -342,10 +352,10 @@ export default {
 @label-width: 25%;
 
 .embed-form {
-  &.label-left /deep/ .ivu-form-item-label {
+  /deep/ .ivu-form-item-label {
     width: @label-width;
   }
-  &.label-left /deep/ .ivu-form-item-content {
+  /deep/ .ivu-form-item-content {
     margin-left: @label-width;
   }
   .field-item {
@@ -357,6 +367,7 @@ export default {
   h3.field-label {
     display: inline-block;
   }
+
   .field-actions {
     display: inline-block;
     float: right;
