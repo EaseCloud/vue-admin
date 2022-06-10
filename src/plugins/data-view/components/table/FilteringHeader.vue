@@ -4,6 +4,7 @@
   import FilteringHeaderSelect from './FilteringHeaderSelect.vue'
   import FilteringHeaderRange from './FilteringHeaderRange.vue'
   import FilteringHeaderDateRange from './FilteringHeaderDateRange.vue'
+  import FilteringHeaderMultiSelect from './FilteringHeaderMultiSelect'
 
   export default {
     name: 'FilteringHeader',
@@ -11,7 +12,8 @@
       FilteringHeaderKeyword,
       FilteringHeaderText,
       FilteringHeaderSelect,
-      FilteringHeaderRange
+      FilteringHeaderRange,
+      FilteringHeaderMultiSelect
     },
     props: {
       field: {
@@ -56,6 +58,12 @@
           return h(FilteringHeaderDateRange, {
             props: { field: vm.field, options: opt }
           })
+        } else if (opt.type === 'multi-select') { // 多选类型
+          return h(FilteringHeaderMultiSelect, {
+            props: { field: vm.field, options: opt }
+          })
+        } else if (opt.type === 'render') { // 自定义
+          return opt.render(h, {field: vm.field, options: opt})
         } else {
           console.error('未定义的 filtering 类型', vm.field)
           return h('div', '未定义的 filtering 类型')
