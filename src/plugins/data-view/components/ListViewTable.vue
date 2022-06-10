@@ -531,7 +531,7 @@
                     on: {
                       click: (e) => {
                         e.stopPropagation()
-                        const result = action.action.apply(vm, [item, vm])
+                        const result = action.action.apply(vm, [item, vm, index])
                         // result.catch && result.catch(_ => _)
                       }
                     }
