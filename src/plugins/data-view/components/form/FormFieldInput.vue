@@ -6,6 +6,7 @@
              v-model="field.value"
              @input="$emit('input', $event)"
              :type="field.final.htmlType || 'text'"
+             :number="field.final.htmlType === 'number'"
              :size="field.size"
              :rows="field.rows || 5"
              :disabled="field.final.disabled"
