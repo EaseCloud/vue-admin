@@ -57,5 +57,17 @@ export default {
       await vm.$Message.error('浏览器不支持粘贴操作，请确定已启用 https。')
       throw new Error('浏览器不支持粘贴操作，请确定已启用 https。')
     }
+  },
+  /**
+   * 判断一个 HTMLElement 是否在可视区域内
+   * https://stackoverflow.com/a/7557433/2544762
+   * @param el {HTMLElement}
+   * @returns {boolean}
+   */
+  isElementInViewport (el) {
+    const rect = el.getBoundingClientRect();
+    return rect.top >= 0 && rect.left >= 0 &&
+      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
   }
 }
