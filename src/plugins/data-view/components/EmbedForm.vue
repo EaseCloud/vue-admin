@@ -202,7 +202,7 @@ export default {
       const item = {}
       vm.fields.forEach((field, i) => {
         // 设置默认值
-        if (field.key) vm.setProperty(item, field.key, field.default instanceof Function ? field.default.apply(vm) : field.default)
+        if (field.key) vm.setProperty(item, field.key, field.default instanceof Function ? field.default.apply(vm, [field]) : field.default)
       })
       await vm.setItem(item)
       // 向外抛出 item 引用
@@ -239,7 +239,7 @@ export default {
         await field.preRender.apply(vm, [field])
       }
       // 获取初始值
-      let value = await vm.evaluate(vm.item, field.key, field.default instanceof Function ? field.default.apply(vm) : field.default)
+      let value = await vm.evaluate(vm.item, field.key, field.default instanceof Function ? field.default.apply(vm, [field]) : field.default)
       // 根据 filter 过滤
       if (field.filter) value = await field.filter.apply(vm, [value])
       // 根据 mapper 过滤
@@ -305,7 +305,7 @@ export default {
         // 校验
         if (field.validator) {
           try {
-            const value = await vm.evaluate(vm.item, field.key, field.default instanceof Function ? field.default.apply(vm) : field.default)
+            const value = await vm.evaluate(vm.item, field.key, field.default instanceof Function ? field.default.apply(vm, [field]) : field.default)
             await field.validator.apply(vm, [value, field])
           } catch (e) {
             if (!silent) vm.$Message.warning(e.message)
