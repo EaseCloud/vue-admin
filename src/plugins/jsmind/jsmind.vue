@@ -13,6 +13,7 @@ import './JsMindPro/src/style/jsmind.theme-xmind.css'
 import JsMind from './JsMindPro/src/js/JsMind'
 
 import './JsMindPro/src/js/extensions/JsMindExtensionDraggable'
+import './JsMindPro/src/js/extensions/JsMindExtensionDragScroll'
 import RenderComponent from '../../components/RenderComponent'
 // import('./JsMindPro/js/jsmind/jsmind.screenshot')
 
