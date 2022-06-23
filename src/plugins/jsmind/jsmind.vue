@@ -133,7 +133,7 @@ export default {
           console.log(params)
         }
       } else if (eventType === JsMind.EVENT_TYPE.select) {
-        vm.$emit('select_node', params.node)
+        vm.$emit('select_node', params.node, params.nodes)
       } else {
         // console.log(eventType, params)
       }
@@ -161,6 +161,10 @@ export default {
     async remove_node (node) {
       const vm = this
       vm.$emit('remove_node', node)
+    },
+    async remove_nodes (nodes) {
+      const vm = this
+      vm.$emit('remove_nodes', nodes)
     },
     async move_node (node, parent, prevNode) {
       const vm = this
