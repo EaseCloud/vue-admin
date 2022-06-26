@@ -14,6 +14,7 @@ import JsMind from './JsMindPro/src/js/JsMind'
 
 import './JsMindPro/src/js/extensions/JsMindExtensionDraggable'
 import './JsMindPro/src/js/extensions/JsMindExtensionDragScroll'
+import './JsMindPro/src/js/extensions/JsMindExtensionRectSelect'
 import RenderComponent from '../../components/RenderComponent'
 // import('./JsMindPro/js/jsmind/jsmind.screenshot')
 
