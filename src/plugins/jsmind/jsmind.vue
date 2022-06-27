@@ -135,6 +135,8 @@ export default {
         }
       } else if (eventType === JsMind.EVENT_TYPE.select) {
         vm.$emit('select_node', params.node, params.nodes)
+      } else if (eventType === JsMind.EVENT_TYPE.resize) {
+        vm.$emit('resize')
       } else {
         // console.log(eventType, params)
       }
