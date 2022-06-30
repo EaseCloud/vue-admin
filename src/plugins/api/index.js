@@ -77,7 +77,8 @@ function parseArgs (method, args) {
 class RestResource {
   constructor (model,
     root = config.api_root || '',
-    format = config.api_format || '{/id}{/action}/') {
+    format = config.api_format || '{/id}{/action}/',
+    axiosOptions = {}) {
     if (!model) {
       throw new Error('没有为 api 指定对应的 model')
     }
@@ -88,6 +89,7 @@ class RestResource {
     this.model = model
     this.root = root
     this.urlTemplate = template.parse(format)
+    this.axiosOptions = axiosOptions
     httpMethods.forEach(method => {
       this[method] = async function () {
         // console.log(method, arguments)
@@ -106,7 +108,8 @@ class RestResource {
       method,
       url: urljoin(this.root, this.model, this.urlTemplate.expand(params)),
       params: query,
-      data
+      data,
+      ...this.axiosOptions
     })
   }
 
@@ -188,9 +191,13 @@ export default {
       },
       methods: {
         // 从性能角度来看，可以考虑将多次的构造缓存下来，支持重复使用
-        api (model, root = config.api_root) {
+        api (model, root = config.api_root, axiosOptions = {}) {
           const vm = this
-          const resource = new RestResource(model || vm.model, vm.api_root || root)
+          const resource = new RestResource(
+            model || vm.model,
+            vm.api_root || root,
+            config.api_format || '{/id}{/action}/',
+            axiosOptions)
           // 保留 vm 的引用
           resource.vm = vm
           return resource
