@@ -48,47 +48,36 @@ export default {
     const vm = this
     const options = {
       container: vm.$el,
+      mode: 'side',           // 显示模式: both/side
       editable: vm.options.editable === void 0 || vm.options.editable,
       theme: 'xmind',
-      mode: 'side',           // 显示模式: both/side
-      support_html: true,    // 是否支持节点里的HTML元素
-      async render_node (el, node) {
-        // destroy old component
-        if (node.meta.view.component) {
-          node.meta.view.component.$destroy()
-          delete node.meta.view.component
-        }
-        // const attrs = {
-        //   nodeid: el.attributes.nodeid,
-        //   class: [...el.classList],
-        //   style: el.attributes.style.nodeValue
-        // }
-        const attrs = _.reduce(el.attributes, (obj, param) => {
-          obj[param.nodeName] = param.nodeValue
-          return obj
-        }, {})
-
-        // console.log(attrs)
-        const component = new Render({el, render: h => vm.options.renderNode(h, node, attrs)})
-        node.meta.view.component = component
-        return component.$el
-      },
       view: {
-        engine: 'svg',   // 思维导图各节点之间线条的绘制引擎
-        hmargin: 100,        // 思维导图距容器外框的最小水平距离
-        vmargin: 50,         // 思维导图距容器外框的最小垂直距离
-        line_width: 1,       // 思维导图线条的粗细
-        line_color: '#558ED5'   // 思维导图线条的颜色
-      },
-      layout: {
-        hspace: 20,          // 节点之间的水平间距
-        vspace: 15,       // 节点之间的垂直间距
-        pspace: 10          // 节点与连接线之间的水平间距（用于容纳节点收缩/展开控制器）
+        async render_node (el, node) {
+          // destroy old component
+          if (node.meta.view.component) {
+            node.meta.view.component.$destroy()
+            delete node.meta.view.component
+          }
+          // const attrs = {
+          //   nodeid: el.attributes.nodeid,
+          //   class: [...el.classList],
+          //   style: el.attributes.style.nodeValue
+          // }
+          const attrs = _.reduce(el.attributes, (obj, param) => {
+            obj[param.nodeName] = param.nodeValue
+            return obj
+          }, {})
+
+          // console.log(attrs)
+          const component = new Render({el, render: h => vm.options.renderNode(h, node, attrs)})
+          node.meta.view.component = component
+          return component.$el
+        },
       },
       shortcut: {
         enable: true,        // 是否启用快捷键
         // 命名的快捷键事件处理器
-        handles: {
+        handlers: {
           /**
            * 默认的未捕捉热键处理
            * @param e {KeyboardEvent}
