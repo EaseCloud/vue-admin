@@ -137,7 +137,8 @@ export default {
           cancelText = '取消',
           scrollable = true,
           loading = false,
-          item = null
+          item = null,
+          maskClosable = true
         } = {}) {
           const vm = this
           return new Promise((resolve, reject) => {
@@ -149,6 +150,7 @@ export default {
               cancelText,
               scrollable,
               loading,
+              maskClosable,
               render (h) {
                 el = h('embed-form', {
                   style: {marginTop: '16px'},
