@@ -104,7 +104,8 @@ export default {
           ArrowDown: 'down',
           ...(vm.options.keyMap || {})
         }
-      }
+      },
+      hooks: vm.options.hooks
     }
     // 保留引用
     vm.$options.jm = await JsMind.show(options, vm.format, vm.data)
@@ -137,19 +138,6 @@ export default {
   methods: {
     // !!WARNING!! 不要尝试重构下面这些操作方法的命名。
     // 之所以使用下划线，是因为跟 JsMindPro 里面的 shortcut 同步，直接动态映射方法名
-    async add_node (node) {
-      const vm = this
-      vm.$emit('add_node', node)
-    },
-    async insert_node_after (node, nodeAfter) {
-      const vm = this
-      vm.$emit('add_node', node, nodeAfter)
-    },
-    async update_node (nodeId, topic) {
-      const vm = this
-      const node = vm.jm.get_node(nodeId)
-      vm.$emit('update_node', node)
-    },
     async remove_node (node) {
       const vm = this
       vm.$emit('remove_node', node)
