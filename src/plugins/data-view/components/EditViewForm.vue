@@ -3,6 +3,7 @@
   <embed-form :fields="fields"
               :noInit="!!id"
               :options="options"
+              :validator="validator"
               @update="$emit('update', $event)"
               ref="form"></embed-form>
 </template>
@@ -34,6 +35,7 @@ export default {
         show_actions: true,
       })
     },
+    validator: {type: Function},
     size: {
       default: 'small',
       validator (value) {
