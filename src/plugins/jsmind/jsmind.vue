@@ -113,24 +113,6 @@ export default {
 
     // TODO: DEBUG
     window.jm = vm.jm
-
-    // 添加热键事件侦听器
-    vm.jm.add_event_listener((eventType, params) => {
-      if (eventType === JsMind.EVENT_TYPE.edit) {
-        const {evt, data} = params
-        if (vm[evt] instanceof Function) {
-          vm[evt](...data)
-        } else {
-          console.log(params)
-        }
-      } else if (eventType === JsMind.EVENT_TYPE.select) {
-        vm.$emit('select_node', params.node, params.nodes)
-      } else if (eventType === JsMind.EVENT_TYPE.resize) {
-        vm.$emit('resize')
-      } else {
-        // console.log(eventType, params)
-      }
-    })
   },
   async beforeDestroy () {
     const vm = this
