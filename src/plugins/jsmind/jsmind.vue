@@ -106,7 +106,7 @@ export default {
         }
       },
       hooks: vm.options.hooks,
-      extensions: [
+      plugins: [
         JsMindPluginRectSelect,
         JsMindPluginDraggable,
         JsMindPluginDragScroll
