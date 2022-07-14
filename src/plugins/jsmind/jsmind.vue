@@ -12,9 +12,9 @@ import './JsMindPro/src/style/jsmind.css'
 import './JsMindPro/src/style/jsmind.theme-xmind.css'
 import JsMind from './JsMindPro/src/js/JsMind'
 
-import './JsMindPro/src/js/extensions/JsMindExtensionDraggable'
-import './JsMindPro/src/js/extensions/JsMindExtensionDragScroll'
-import './JsMindPro/src/js/extensions/JsMindExtensionRectSelect'
+import JsMindPluginRectSelect from './JsMindPro/src/js/plugins/rect-select'
+import JsMindPluginDraggable from './JsMindPro/src/js/plugins/draggable'
+import JsMindPluginDragScroll from './JsMindPro/src/js/plugins/drag-scroll'
 import RenderComponent from '../../components/RenderComponent'
 // import('./JsMindPro/js/jsmind/jsmind.screenshot')
 
@@ -105,7 +105,12 @@ export default {
           ...(vm.options.keyMap || {})
         }
       },
-      hooks: vm.options.hooks
+      hooks: vm.options.hooks,
+      extensions: [
+        JsMindPluginRectSelect,
+        JsMindPluginDraggable,
+        JsMindPluginDragScroll
+      ]
     }
     // 保留引用
     vm.$options.jm = await JsMind.show(options, vm.format, vm.data)
