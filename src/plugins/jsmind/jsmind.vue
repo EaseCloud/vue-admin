@@ -15,6 +15,7 @@ import JsMind from './JsMindPro/src/js/JsMind'
 import JsMindPluginRectSelect from './JsMindPro/src/js/plugins/rect-select'
 import JsMindPluginDraggable from './JsMindPro/src/js/plugins/draggable'
 import JsMindPluginDragScroll from './JsMindPro/src/js/plugins/drag-scroll'
+import JsMindPluginHistory from './JsMindPro/src/js/plugins/history'
 import RenderComponent from '../../components/RenderComponent'
 // import('./JsMindPro/js/jsmind/jsmind.screenshot')
 
@@ -109,7 +110,8 @@ export default {
       plugins: [
         JsMindPluginRectSelect,
         JsMindPluginDraggable,
-        JsMindPluginDragScroll
+        JsMindPluginDragScroll,
+        JsMindPluginHistory
       ]
     }
     // 保留引用
