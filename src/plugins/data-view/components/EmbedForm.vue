@@ -180,6 +180,9 @@ export default {
     fields: {
       type: Array,
       default: () => []
+    },
+    validator: {
+      type: Function
     }
   },
   data () {
@@ -314,6 +317,14 @@ export default {
         }
         resolve()
       })))
+      if (vm.validator) {
+        try {
+          await vm.validator.apply(vm, [vm.item])
+        } catch (e) {
+          if (!silent) vm.$Message.warning(e.message)
+          throw e
+        }
+      }
       return vm.item
     },
     getField (key) {
