@@ -47,7 +47,7 @@ export default {
   },
   async mounted () {
     const vm = this
-    const options = {
+    const options = _.defaultsDeep(vm.options, {
       container: vm.$el,
       mode: 'side',           // 显示模式: both/side
       editable: vm.options.editable === void 0 || vm.options.editable,
@@ -103,17 +103,16 @@ export default {
           ArrowRight: 'right',
           ArrowUp: 'up',
           ArrowDown: 'down',
-          ...(vm.options.keyMap || {})
         }
       },
-      hooks: vm.options.hooks,
       plugins: [
         JsMindPluginRectSelect,
         JsMindPluginDraggable,
         JsMindPluginDragScroll,
         JsMindPluginHistory
-      ]
-    }
+      ],
+      plugin_options: {}
+    })
     // 保留引用
     vm.$options.jm = await JsMind.show(options, vm.format, vm.data)
     vm.$emit('jsmind', vm.$options.jm)
