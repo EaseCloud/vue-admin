@@ -32,7 +32,7 @@
         renderData = await vm.field.renderData(vm.field, vm.field.context.item, vm.data)
       }
       vm.renderFunction = function (h) {
-        const component = vm.field.render(h, ...renderData)
+        const component = vm.field.render.apply(vm, [h, ...renderData])
         vm.waitFor(component, 'componentInstance').then(componentInstance => {
           vm.field.component = componentInstance
         })
