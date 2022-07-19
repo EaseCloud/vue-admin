@@ -32,6 +32,7 @@ const httpMethods = [...httpMethodsSafe, ...httpMethodsUnsafe]
  * 从 vue-resource 迁移，当 Resource 方法调用 http 方法的时候，传入参数的归一化
  * 调用的 http 方法
  * @param method @param args 传入的参数数组，即 api(model).get(...args) 或者 api(model).post(...args) 的参数数组
+ * @param args 参数
  * @returns {{method: *, params: {}, query: {}}}
  */
 function parseArgs (method, args) {
@@ -133,8 +134,8 @@ let api = axios.create(config.axios_options)
 function notifyResponseMessage (response) {
   if (!window.app) return
   const vm = window.app
-  vm.loading_count = Math.max(0, vm.loading_count - 1)
   loadingCount = Math.max(0, loadingCount - 1)
+  vm.loading_count = loadingCount
   // console.log('<<< loadingCount', loadingCount)
   if (!loadingCount) hideLoading()
   if (!response) {
