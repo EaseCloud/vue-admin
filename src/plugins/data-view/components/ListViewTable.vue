@@ -82,6 +82,7 @@
           action_column_render_header: null, // 自定义操作列头渲染
           max_height: null, // 表格的最大高度
           height: null, // 表格的固定高度
+          block_router: false // 阻断路由，不监听路由变化
         })
       },
       pageSize: {

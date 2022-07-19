@@ -138,6 +138,7 @@ export default {
     onQuery (queryChange) {
       // console.log('onQuery', queryChange)
       const vm = this
+      if (vm.options.block_router) return
       const query = {...vm.$route.query}
       vm._.forEach(queryChange, (value, key) => {
         // 删除查询条件机制
@@ -181,16 +182,17 @@ export default {
         const $table = await vm.waitFor(vm.$refs, 'table')
         // 先剔除 page_size 和 page 的 query 参数
         if (routeTo.query.page_size && Number(routeTo.query.page_size) !== Number(routeFrom.query.page_size)) {
-          $table.pageSizeTo(Number(routeTo.query.page_size))
+          await $table.pageSizeTo(Number(routeTo.query.page_size))
         }
         if (routeTo.query.page && Number(routeTo.query.page) !== Number(routeFrom.query.page)) {
-          $table.pageTo(Number(routeTo.query.page))
+          await $table.pageTo(Number(routeTo.query.page))
         }
+        if (vm.options.block_router) return
         // 强制变更查询条件
         const query = {...vm.$route.query}
         delete query.page
         delete query.page_size
-        $table.doQuery(query)
+        await $table.doQuery(query)
       }
     }
   }
