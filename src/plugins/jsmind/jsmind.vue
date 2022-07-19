@@ -105,14 +105,25 @@ export default {
           ArrowDown: 'down',
         }
       },
-      plugins: [
+      // lodash.defaultsDeep has issue with array.
+      // So merge manually
+      // plugins: [
+      //   JsMindPluginRectSelect,
+      //   JsMindPluginDraggable,
+      //   JsMindPluginDragScroll,
+      //   JsMindPluginHistory
+      // ],
+      plugin_options: {}
+    })
+    // merge options.plugins manually
+    if (!options.plugins) {
+      options.plugins = [
         JsMindPluginRectSelect,
         JsMindPluginDraggable,
         JsMindPluginDragScroll,
         JsMindPluginHistory
-      ],
-      plugin_options: {}
-    })
+      ]
+    }
     // 保留引用
     vm.$options.jm = await JsMind.show(options, vm.format, vm.data)
     vm.$emit('jsmind', vm.$options.jm)
