@@ -94,8 +94,10 @@ export default {
           width = 540,
           okText = '确认',
           cancelText = '取消',
+          deleteText = '删除',
           method = 'confirm', // info/success/warning/error/confirm
-          scrollable = true
+          scrollable = true,
+          canDelete = false
         } = {}) {
           const vm = this
           return new Promise((resolve, reject) => {
@@ -114,16 +116,47 @@ export default {
                 })
                 return el
               },
-              async onOk () {
-                const $form = el.componentInstance
-                await $form.validate()
-                const item = await $form.save()
-                resolve(item)
-                dialog.close()
-              },
-              async onCancel () {
-                reject()
-                dialog.close()
+              renderFooter (h) {
+                return h('div', [
+                  canDelete && editViewOptions.id ? h('i-button', {
+                    props: {
+                      type: 'error'
+                    },
+                    on: {
+                      click: async () => {
+                        await vm.$confirm('确定删除？', {width: 350})
+                        await el.componentInstance.deleteItem()
+                        resolve(null)
+                        dialog.close()
+                      }
+                    }
+                  }, deleteText) : '',
+                  h('i-button', {
+                    props: {
+                      type: 'text'
+                    },
+                    on: {
+                      click: async () => {
+                        reject()
+                        dialog.close()
+                      }
+                    }
+                  }, cancelText),
+                  h('i-button', {
+                    props: {
+                      type: 'primary'
+                    },
+                    on: {
+                      click: async () => {
+                        const $form = el.componentInstance
+                        await $form.validate()
+                        const item = await $form.save()
+                        resolve(item)
+                        dialog.close()
+                      }
+                    }
+                  }, okText)
+                ])
               }
             })
           })
