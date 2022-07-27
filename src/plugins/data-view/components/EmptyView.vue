@@ -9,6 +9,7 @@
                   v-if="action.display===void 0||finalizeSync(action.display)">
           <i-button :key="i"
                     :type="action.buttonType"
+                    :ref="action.ref"
                     @click="doAction(action.action)">{{action.label}}
           </i-button>&#32;
         </template>
