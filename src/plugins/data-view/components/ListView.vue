@@ -21,6 +21,7 @@
                           typeof(action.display) === 'function' && action.display(this) ||
                           typeof(action.display) !== 'function' && !!action.display"
                     :type="action.buttonType"
+                    :ref="action.ref"
                     @click="doAction(action.action, $refs.table)">{{ action.label }}
           </i-button>&#32;
         </template>
