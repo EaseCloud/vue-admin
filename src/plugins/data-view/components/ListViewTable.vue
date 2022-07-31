@@ -16,9 +16,11 @@
              :row-class-name="rowClassNameRaw"
              :size="size"
              :data="data"
+             :draggable="options.draggable"
              :max-height="options.max_height"
              :height="options.height"
              :span-method="handleSpan"
+             @on-drag-drop="dragDrop"
              @on-row-click="onRowClickRaw">
       <slot name="footer" slot="footer"></slot>
     </i-table>
@@ -82,7 +84,8 @@
           action_column_render_header: null, // 自定义操作列头渲染
           max_height: null, // 表格的最大高度
           height: null, // 表格的固定高度
-          block_router: false // 阻断路由，不监听路由变化
+          block_router: false, // 阻断路由，不监听路由变化
+          draggable: false // 支持拖拉排序
         })
       },
       pageSize: {
@@ -100,6 +103,7 @@
       rowClassName: {type: Function},
       onRowClick: {type: Function, default: () => {}},
       spanMethod: {type: Function, default: () => {}},
+      onDragDrop: {type: Function, default: () => {}},
       size: {
         default: 'small',
         validator (value) {
@@ -685,7 +689,11 @@
           await this.waitFor(this.$refs, 'listViewTable')
           this.options.max_height = this.$refs.listViewTable.clientHeight - 16 * 2
         }
-      }
+      },
+      // 调用回调函数，把数据一起丢过去让用户自己处理。
+     dragDrop (first, end) {
+      this.onDragDrop(this.data, first, end)
+    }
     },
     mounted () {
       const vm = this
