@@ -691,9 +691,9 @@
         }
       },
       // 调用回调函数，把数据一起丢过去让用户自己处理。
-     dragDrop (first, end) {
-      this.onDragDrop(this.data, first, end)
-    }
+      dragDrop (first, end) {
+        this.onDragDrop(this.data, first, end)
+      }
     },
     mounted () {
       const vm = this
