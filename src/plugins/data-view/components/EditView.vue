@@ -9,6 +9,7 @@
                   v-if="$refs.form && (action.display===void 0||finalizeSync(action.display, $refs.form.item))">
           <i-button :key="i"
                     :type="action.buttonType"
+                    :ref="action.ref"
                     @click="doAction(action.action, [$refs.form.item])">{{action.label}}
           </i-button>
           <i :key="'_'+i"><!--避免按钮之间粘在一起--></i>
