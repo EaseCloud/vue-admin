@@ -77,6 +77,9 @@ export default {
         await vm.config.hooks.action_edit_view_create_item.apply(vm, [itemToSave]) :
         await vm.config.hooks.action_edit_view_update_item.apply(vm, [itemToSave])
       return await vm.config.hooks.action_edit_view_post_save.apply(vm, [itemAfterSave])
+    },
+    async action_after_initialized ($table) {
+      return $table
     }
   }
 }

@@ -683,6 +683,7 @@
         //   }
         // }]
         vm.initialized = true
+        await vm.activeHooks.action_after_initialized.apply(vm, [vm])
       },
       async setTableHeight () {
         if (this.options.max_height) {
