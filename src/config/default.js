@@ -35,5 +35,6 @@ export default {
   main_actions: [], // 框架下拉菜单
   // Hooks
   // TODO: Hooks 太杂乱，应该将源码文件拆开，将文档分节
-  hooks
+  hooks,
+  store: {modules: {}}
 }
