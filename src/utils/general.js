@@ -108,7 +108,7 @@ export default {
     const deadline = Date.now() + timeout
     return new Promise((resolve, reject) => {
       const check = () => {
-        let value = vm.evaluate(item, key)
+        let value = item instanceof Function ? item.apply(vm, [key]) : vm.evaluate(item, key)
         if (value) resolve(value)
         if (Date.now() > deadline) reject(new Error('waitFor timed out'))
         setTimeout(check, interval)
@@ -118,7 +118,7 @@ export default {
   },
   wrapChoices (choices) {
     if (choices instanceof Array || !(choices instanceof Object)) return choices
-    return _.map(choices, (value, key) => ({ value: key, text: value }))
+    return _.map(choices, (value, key) => ({value: key, text: value}))
   },
   async doAction (action, args) {
     return action.apply(this, args)

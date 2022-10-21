@@ -49,6 +49,7 @@
         if (vm.field.actionPickObject) {
           item = await vm.field.actionPickObject()
         } else {
+          vm.field.listViewOptions.options = Object.assign({}, vm.field.listViewOptions.options || {}, {$el: vm})
           item = await vm.pickObject(vm.field.listViewOptions, vm.field.modalOptions || {})
         }
         await vm.setItem(item)

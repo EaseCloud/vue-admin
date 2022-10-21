@@ -12,7 +12,8 @@ export default {
           return new ModalComponent({el, propsData: {options}})
         },
         /**
-         * Promise 形式实现，类似于原声 confirm 方法
+         * Promise 形式实现，类似于原生 confirm 方法
+         * TODO: 实际上当
          * @param message
          * @param title
          * @param width
@@ -36,26 +37,16 @@ export default {
           return new Promise((resolve, reject) => {
             vm.openDialog({
               title,
-              content: message,
               width,
+              content: message,
               okText,
               cancelText,
               scrollable,
+              supportEnter: true,
               render,
               onOk: resolve,
               onCancel: reject
             })
-            // vm.$Modal[method]({
-            //   title,
-            //   content: message,
-            //   width,
-            //   okText,
-            //   cancelText,
-            //   scrollable,
-            //   render,
-            //   onOk: resolve,
-            //   onCancel: reject
-            // })
           })
         },
         async $prompt (message = '', {
@@ -68,52 +59,45 @@ export default {
         } = {}) {
           const vm = this
           let value = defaultValue
-          return new Promise((resolve, reject) => {
-            const dialog = vm.openDialog({
+          let $input
+          const promise = new Promise((resolve, reject) => {
+            vm.openDialog({
               title,
               width,
               okText,
               cancelText,
+              supportEnter: true,
               render (h) {
-                return h('i-form', {
-                  style: {marginTop: '16px'},
-                  props: {labelPosition: 'top'}
-                }, [h('form-item', {
-                  props: {label: message}
-                }, [h('i-input', {
-                  props: {value, autofocus: true, placeholder},
+                $input = h('i-input', {
+                  props: {value, placeholder},
                   on: {
                     input (val) {
                       value = val
-                    },
-                    'on-keydown' (event) {
-                      if (event.keyCode === 13) {
-                        // Enter
-                        resolve(value)
-                        dialog.close()
-                        event.preventDefault()
-                      } else if (event.keyCode === 27) {
-                        // Escape
-                        reject(new Error('用户取消了操作'))
-                        dialog.close()
-                        event.preventDefault()
-                      }
                     }
                   }
-                })])])
+                })
+                return h('i-form', {
+                  style: {marginTop: '16px'},
+                  props: {labelPosition: 'top'}
+                }, [h('form-item', {props: {label: message}}, [$input])])
               },
               onOk: () => resolve(value),
               onCancel: reject
             })
           })
+          // 打开提示框之后马上获取焦点
+          vm.$nextTick(() => $input.componentInstance.focus())
+          return promise
         },
         async modalEditView (editViewOptions, {
           title = '编辑模型',
           width = 540,
           okText = '确认',
           cancelText = '取消',
+          deleteText = '删除',
           method = 'confirm', // info/success/warning/error/confirm
-          scrollable = true
+          scrollable = true,
+          canDelete = false
         } = {}) {
           const vm = this
           return new Promise((resolve, reject) => {
@@ -132,16 +116,47 @@ export default {
                 })
                 return el
               },
-              async onOk () {
-                const $form = el.componentInstance
-                await $form.validate()
-                const item = await $form.save()
-                resolve(item)
-                dialog.close()
-              },
-              async onCancel () {
-                reject()
-                dialog.close()
+              renderFooter (h) {
+                return h('div', [
+                  canDelete && editViewOptions.id ? h('i-button', {
+                    props: {
+                      type: 'error'
+                    },
+                    on: {
+                      click: async () => {
+                        await vm.$confirm('确定删除？', {width: 350})
+                        await el.componentInstance.deleteItem()
+                        resolve(null)
+                        dialog.close()
+                      }
+                    }
+                  }, deleteText) : '',
+                  h('i-button', {
+                    props: {
+                      type: 'text'
+                    },
+                    on: {
+                      click: async () => {
+                        reject()
+                        dialog.close()
+                      }
+                    }
+                  }, cancelText),
+                  h('i-button', {
+                    props: {
+                      type: 'primary'
+                    },
+                    on: {
+                      click: async () => {
+                        const $form = el.componentInstance
+                        await $form.validate()
+                        const item = await $form.save()
+                        resolve(item)
+                        dialog.close()
+                      }
+                    }
+                  }, okText)
+                ])
               }
             })
           })
@@ -155,7 +170,8 @@ export default {
           cancelText = '取消',
           scrollable = true,
           loading = false,
-          item = null
+          item = null,
+          maskClosable = true
         } = {}) {
           const vm = this
           return new Promise((resolve, reject) => {
@@ -167,6 +183,7 @@ export default {
               cancelText,
               scrollable,
               loading,
+              maskClosable,
               render (h) {
                 el = h('embed-form', {
                   style: {marginTop: '16px'},
@@ -198,13 +215,14 @@ export default {
             })
           })
         },
-        async pickFile (multi = false) {
+        async pickFile (multi = false, accept='*') {
           return new Promise((resolve, reject) => {
             const elFile = document.getElementById('_vue_admin_file_picker')
               || document.createElement('input')
             elFile.id = '_vue_admin_file_picker'
             elFile.setAttribute('type', 'file')
-            elFile.setAttribute('style', 'opacity:0;position:absolute;z-index:0;left:0;top:0')
+            elFile.setAttribute('accept', accept)
+            elFile.setAttribute('style', 'opacity:0;position:absolute;z-index:-1;left:0;top:0')
             elFile.value = null
             if (multi) elFile.setAttribute('multi', true)
             document.body.appendChild(elFile)

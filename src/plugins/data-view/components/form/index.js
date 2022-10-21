@@ -17,6 +17,7 @@ export default {
   FormFieldTime: () => import('./FormFieldTime.vue'),
   FormFieldObject: () => import('./FormFieldObject.vue'),
   FormFieldMultiObject: () => import('./FormFieldMultiObject.vue'),
+  FormFieldMultiSelect: () => import('./FormFieldMultiSelect.vue'),
   FormFieldDistrict: () => import('./FormFieldDistrict.vue'),
   FormFieldListView: () => import('./FormFieldListView.vue'),
   FormFieldRender: () => import('./FormFieldRender.vue'),

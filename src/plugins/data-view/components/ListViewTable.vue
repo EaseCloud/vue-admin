@@ -16,8 +16,11 @@
              :row-class-name="rowClassNameRaw"
              :size="size"
              :data="data"
+             :draggable="options.draggable"
              :max-height="options.max_height"
              :height="options.height"
+             :span-method="handleSpan"
+             @on-drag-drop="dragDrop"
              @on-row-click="onRowClickRaw">
       <slot name="footer" slot="footer"></slot>
     </i-table>
@@ -81,6 +84,8 @@
           action_column_render_header: null, // 自定义操作列头渲染
           max_height: null, // 表格的最大高度
           height: null, // 表格的固定高度
+          block_router: false, // 阻断路由，不监听路由变化
+          draggable: false // 支持拖拉排序
         })
       },
       pageSize: {
@@ -96,10 +101,9 @@
       filters: {type: [Object, Function], default: () => ({})},
       initQuery: {type: Object, default: () => ({})},
       rowClassName: {type: Function},
-      onRowClick: {
-        type: Function, default: () => {
-        }
-      },
+      onRowClick: {type: Function, default: () => {}},
+      spanMethod: {type: Function, default: () => {}},
+      onDragDrop: {type: Function, default: () => {}},
       size: {
         default: 'small',
         validator (value) {
@@ -108,6 +112,26 @@
       },
       hooks: {
         type: Object, defaults: () => {
+        }
+      }
+    },
+    directives: {  // 使用局部注册指令的方式
+      resize: { // 指令的名称
+        bind (el, binding) { // el为绑定的元素，binding为绑定给指令的对象
+          let width = ''
+          let height = ''
+          function isResize() {
+            const style = document.defaultView.getComputedStyle(el)
+            if (width !== style.width || height !== style.height) {
+              binding.value()  // 关键
+            }
+            width = style.width
+            height = style.height
+          }
+          el.__vueSetInterval__ = setInterval(isResize, 300)
+        },
+        unbind(el) {
+          clearInterval(el.__vueSetInterval__)
         }
       }
     },
@@ -170,6 +194,12 @@
         const vm = this
         if (!vm.items[index]) return ''
         return vm.rowClassName ? vm.rowClassName(vm.items[index], index) : ''
+      },
+      handleSpan ({ row, column, rowIndex, columnIndex }) {
+        const vm = this
+        const item = vm.items[rowIndex]
+        if (!item) return
+        return vm.spanMethod && vm.spanMethod.apply(vm, [{row, column, rowIndex, columnIndex, item}])
       },
       async onRowClickRaw (row, index) {
         const vm = this
@@ -500,12 +530,13 @@
                       type: vm.finalizeSync(action.buttonType, item),
                       shape: action.buttonShape,
                       icon: action.buttonIcon,
-                      ghost: !!action.ghost
+                      ghost: !!action.ghost,
+                      disabled: vm.finalizeSync(action.disabled, item)
                     },
                     on: {
                       click: (e) => {
                         e.stopPropagation()
-                        const result = action.action.apply(vm, [item, vm])
+                        const result = action.action.apply(vm, [item, vm, index])
                         // result.catch && result.catch(_ => _)
                       }
                     }
@@ -521,7 +552,7 @@
                     on: {
                       async click (e) {
                         e.stopPropagation()
-                        await (vm.options.edit_inline ? vm.actionInlineEdit(item) : vm.actionEdit(item))
+                        await (vm.options.edit_inline ? vm.actionInlineEdit(item, {listView: vm}) : vm.actionEdit(item))
                         vm.reload()
                       }
                     }
@@ -564,7 +595,7 @@
                   },
                   on: {
                     async click () {
-                      await (vm.options.edit_inline ? vm.inlineCreate() : vm.redirectCreate())
+                      await (vm.options.edit_inline ? vm.inlineCreate({listView: vm}) : vm.redirectCreate())
                       vm.reload()
                     }
                   }
@@ -652,6 +683,17 @@
         //   }
         // }]
         vm.initialized = true
+        await vm.activeHooks.action_after_initialized.apply(vm, [vm])
+      },
+      async setTableHeight () {
+        if (this.options.max_height) {
+          await this.waitFor(this.$refs, 'listViewTable')
+          this.options.max_height = this.$refs.listViewTable.clientHeight - 16 * 2
+        }
+      },
+      // 调用回调函数，把数据一起丢过去让用户自己处理。
+      dragDrop (first, end) {
+        this.onDragDrop(this.data, first, end)
       }
     },
     mounted () {
@@ -660,12 +702,7 @@
         field.$view = vm
       })
       vm.initialize()
-      if (this.options.max_height) {
-        // 由于刚创建页面的时候高度计算有问题，所以这里设置一个等待时间，等页面高度计算完后再进行设置
-        setTimeout(() => {
-          this.options.max_height = this.$refs.listViewTable.clientHeight - 16 * 2
-        }, 500)
-      }
+      this.setTableHeight()
     }
   }
 </script>
