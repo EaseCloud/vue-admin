@@ -32,6 +32,7 @@ const httpMethods = [...httpMethodsSafe, ...httpMethodsUnsafe]
  * 从 vue-resource 迁移，当 Resource 方法调用 http 方法的时候，传入参数的归一化
  * 调用的 http 方法
  * @param method @param args 传入的参数数组，即 api(model).get(...args) 或者 api(model).post(...args) 的参数数组
+ * @param args 参数
  * @returns {{method: *, params: {}, query: {}}}
  */
 function parseArgs (method, args) {
@@ -77,7 +78,8 @@ function parseArgs (method, args) {
 class RestResource {
   constructor (model,
     root = config.api_root || '',
-    format = config.api_format || '{/id}{/action}/') {
+    format = config.api_format || '{/id}{/action}/',
+    axiosOptions = {}) {
     if (!model) {
       throw new Error('没有为 api 指定对应的 model')
     }
@@ -88,6 +90,7 @@ class RestResource {
     this.model = model
     this.root = root
     this.urlTemplate = template.parse(format)
+    this.axiosOptions = axiosOptions
     httpMethods.forEach(method => {
       this[method] = async function () {
         // console.log(method, arguments)
@@ -106,7 +109,8 @@ class RestResource {
       method,
       url: urljoin(this.root, this.model, this.urlTemplate.expand(params)),
       params: query,
-      data
+      data,
+      ...this.axiosOptions
     })
   }
 
@@ -130,8 +134,8 @@ let api = axios.create(config.axios_options)
 function notifyResponseMessage (response) {
   if (!window.app) return
   const vm = window.app
-  vm.loading_count = Math.max(0, vm.loading_count - 1)
   loadingCount = Math.max(0, loadingCount - 1)
+  vm.loading_count = loadingCount
   // console.log('<<< loadingCount', loadingCount)
   if (!loadingCount) hideLoading()
   if (!response) {
@@ -188,9 +192,13 @@ export default {
       },
       methods: {
         // 从性能角度来看，可以考虑将多次的构造缓存下来，支持重复使用
-        api (model, root = config.api_root) {
+        api (model, root = config.api_root, axiosOptions = {}) {
           const vm = this
-          const resource = new RestResource(model || vm.model, vm.api_root || root)
+          const resource = new RestResource(
+            model || vm.model,
+            vm.api_root || root,
+            config.api_format || '{/id}{/action}/',
+            axiosOptions)
           // 保留 vm 的引用
           resource.vm = vm
           return resource

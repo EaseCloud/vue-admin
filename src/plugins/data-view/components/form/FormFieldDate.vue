@@ -21,7 +21,7 @@
                  :transfer="field.transfer"
                  :time-picker-options="field.timePickerOptions"
                  :placeholder="field.final.placeholder"
-                 @on-change="$emit('input', $event)"
+                 @on-change="$emit('input', $event || null)"
                  @on-clear="$emit('input', null)"></date-picker>
   </div>
 </template>

@@ -96,5 +96,6 @@ export default {
       //   this.$store.commit('setTagsList', tagsList)
       // }
     })
+    store.$app = window.app
   }
 }
