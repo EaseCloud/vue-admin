@@ -3,43 +3,42 @@ import config from '../config'
 
 export default {
   computed: {
-    me () {
+    me() {
       const vm = this
       return vm.$store.state.auth.currentUser
     },
-    currentUserName () {
+    currentUserName() {
       const vm = this
       return vm.config.hooks.func_get_current_user_name.apply(vm)
     },
-    currentUserAvatarUrl () {
+    currentUserAvatarUrl() {
       const vm = this
       return vm.config.hooks.func_get_current_user_avatar_url.apply(vm)
     }
   },
   methods: {
-    async login (username, password) {
+    async login(username, password) {
       const vm = this
       const user = await config.hooks.action_login.apply(vm, [username, password])
       vm.$store.commit('setCurrentUser', user)
-      config.hooks.action_after_login.apply(vm)
+      return config.hooks.action_after_login.apply(vm)
     },
-    async authenticate (reload = false) {
+    async authenticate(reload = false) {
       const vm = this
       if (!reload && vm.me) return vm.me
       const user = await config.hooks.action_authenticate.apply(vm)
       vm.$store.commit('setCurrentUser', user)
       return user
     },
-    logout () {
+    async logout() {
       const vm = this
-      config.hooks.action_logout.apply(vm).then(() => {
-        vm.$store.commit('setCurrentUser', null)
-      })
+      await config.hooks.action_logout.apply(vm)
+      vm.$store.commit('setCurrentUser', null)
     },
-    requireLogin (reload = false, redirectTo = null) {
+    async requireLogin(reload = false, redirectTo = null) {
       const vm = this
       return vm.authenticate(reload).catch(() => {
-        vm.config.hooks.action_goto_login.apply(vm, [redirectTo])
+        return vm.config.hooks.action_goto_login.apply(vm, [redirectTo])
       })
     }
   }
