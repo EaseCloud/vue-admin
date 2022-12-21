@@ -55,7 +55,9 @@ export default {
           okText = '确认',
           cancelText = '取消',
           defaultValue = '',
-          placeholder = ''
+          type = 'text',
+          placeholder = '',
+          supportEnter = true
         } = {}) {
           const vm = this
           let value = defaultValue
@@ -66,10 +68,10 @@ export default {
               width,
               okText,
               cancelText,
-              supportEnter: true,
+              supportEnter,
               render (h) {
                 $input = h('i-input', {
-                  props: {value, placeholder},
+                  props: {value, placeholder, type},
                   on: {
                     input (val) {
                       value = val
