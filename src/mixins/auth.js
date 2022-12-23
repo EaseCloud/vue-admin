@@ -21,7 +21,7 @@ export default {
       const vm = this
       const user = await config.hooks.action_login.apply(vm, [username, password])
       vm.$store.commit('setCurrentUser', user)
-      await config.hooks.action_after_login.apply(vm)
+      return config.hooks.action_after_login.apply(vm)
     },
     async authenticate (reload = false) {
       const vm = this
@@ -38,7 +38,7 @@ export default {
     async requireLogin (reload = false, redirectTo = null) {
       const vm = this
       return vm.authenticate(reload).catch(() => {
-        vm.config.hooks.action_goto_login.apply(vm, [redirectTo])
+        return vm.config.hooks.action_goto_login.apply(vm, [redirectTo])
       })
     }
   }
