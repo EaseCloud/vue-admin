@@ -1,7 +1,7 @@
 <template>
   <div class="field-item field-item-checkbox"
        :style="{width: field.final.width || 'auto'}">
-    <checkbox-group :value="field.value"
+    <checkbox-group v-model="value"
                     :type="field.radio_group_type"
                     :size="field.size"
                     :vertical="!!field.vertical"
@@ -27,12 +27,14 @@
     },
     data () {
       return {
+        value: null,
         choices: null
       }
     },
     async mounted () {
       const vm = this
       vm.choices = vm.wrapChoices(await vm.finalize(vm.field.choices))
+      vm.value = vm.field.value || []
     }
   }
 </script>
