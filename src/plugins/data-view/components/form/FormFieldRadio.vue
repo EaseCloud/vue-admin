@@ -8,31 +8,25 @@
                  @input="$emit('input', $event)">
       <radio v-for="(choice, i) in choices"
              :key="i"
-             :disabled="choice.value!==field.value&&(field.disabled||choice.disabled)"
-             :label="choice.value">{{choice.text}}
+             :disabled="choice.value!==field.value&&(field.final.disabled||choice.disabled)"
+             :label="choice.value">{{ choice.text }}
       </radio>
     </radio-group>
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'FormFieldRadio',
-    props: {
-      field: {
-        type: Object,
-        default: () => {
-        }
-      }
-    },
-    data () {
-      return {
-        choices: null
-      }
-    },
-    async mounted () {
-      const vm = this
-      vm.choices = vm.wrapChoices(await vm.finalize(vm.field.choices))
-    }
+export default {
+  name: 'FormFieldRadio',
+  props: {
+    field: {type: Object, required: true}
+  },
+  data () {
+    return {choices: null}
+  },
+  async mounted () {
+    const vm = this
+    vm.choices = vm.wrapChoices(await vm.finalize(vm.field.choices))
   }
+}
 </script>
