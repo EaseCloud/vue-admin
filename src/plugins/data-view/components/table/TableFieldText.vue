@@ -1,5 +1,5 @@
 <template>
-  <div class="table-field-text" :style="field.style || {}">{{value}}</div>
+  <div class="table-field-text" :style="finalizeSync(field.style || {}, item)">{{value}}</div>
 </template>
 
 <script>
@@ -7,6 +7,7 @@
     name: 'TableFieldText',
     props: {
       value: {},
+      item: {},
       field: {
         type: Object
       }

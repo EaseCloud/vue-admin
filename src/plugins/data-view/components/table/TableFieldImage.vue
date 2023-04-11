@@ -6,29 +6,28 @@
 </template>
 
 <script>
-  export default {
-    name: 'TableFieldImage',
-    props: {
-      value: {
-        type: String,
-        required: false,
-        objectFit: 'cover'
-      },
-      field: {
-        type: Object
-      }
-    }
+export default {
+  name: 'TableFieldImage',
+  props: {
+    value: {
+      type: String,
+      required: false,
+      objectFit: 'cover'
+    },
+    field: {type: Object},
+    item: {}
   }
+}
 </script>
 
 <style type="less" scoped>
-  .table-field-image {
-    display: inline-block;
-    vertical-align: middle;
-    padding: 8px 0;
-  }
+.table-field-image {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 8px 0;
+}
 
-  img {
-    display: block;
-  }
+img {
+  display: block;
+}
 </style>
