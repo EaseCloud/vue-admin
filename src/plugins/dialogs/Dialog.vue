@@ -12,7 +12,7 @@
       </template>
       <template v-else>
         <!-- 位置可控，默认情况下放在“取消”、“确认”前面 -->
-        <i-button v-for="(action, i) in options.actions.filter(a => a.position!=='end')"
+        <i-button v-for="(action, i) in (options.actions||[]).filter(a => a.position!=='end')"
                   v-if="action.display === void 0 ||
                         typeof(action.display) === 'function' && action.display(this) ||
                         typeof(action.display) !== 'function' && !!action.display"
@@ -24,7 +24,7 @@
         <i-button type="text" @click="onCancel()">{{ options.cancelText || '取消' }}</i-button>
         <i-button type="primary" @click="onOk()" v-if="options.onOk">{{ options.okText || '确认' }}</i-button>
         <!-- 位置可控，如果指定了 position: 'end' -->
-        <i-button v-for="(action, i) in options.actions.filter(a => a.position==='end')"
+        <i-button v-for="(action, i) in (options.actions||[]).filter(a => a.position==='end')"
                   v-if="action.display === void 0 ||
                         typeof(action.display) === 'function' && action.display(this) ||
                         typeof(action.display) !== 'function' && !!action.display"
