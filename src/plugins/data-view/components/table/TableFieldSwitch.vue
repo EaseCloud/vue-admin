@@ -17,17 +17,13 @@ export default {
     field: {type: Object},
     index: {type: Number},
     vmTable: {type: Object},
-    item: {}
+    item: {type: Object}
   },
   computed: {
-    item () {
-      const vm = this
-      return vm.vmTable.items[vm.index]
-    },
     disabled () {
       const vm = this
       if (vm.field.disabled instanceof Function) {
-        return vm.field.disabled.apply(vm.vmTable, [vm.vmTable.items[vm.index]])
+        return vm.field.disabled.apply(vm.vmTable, [vm.item])
       } else {
         return !!vm.field.disabled
       }

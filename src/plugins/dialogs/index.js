@@ -21,6 +21,7 @@ export default {
          * @param cancelText
          * @param scrollable
          * @param method
+         * @param actions
          * @param render
          * @returns {Promise<any>}
          */
@@ -31,6 +32,7 @@ export default {
           cancelText = '取消',
           scrollable = true,
           method = 'confirm', // info/success/warning/error/confirm
+          actions = [],
           render
         } = {}) {
           const vm = this
@@ -43,6 +45,7 @@ export default {
               cancelText,
               scrollable,
               supportEnter: true,
+              actions,
               render,
               onOk: resolve,
               onCancel: reject
@@ -57,7 +60,8 @@ export default {
           defaultValue = '',
           type = 'text',
           placeholder = '',
-          supportEnter = true
+          supportEnter = true,
+          actions = []
         } = {}) {
           const vm = this
           let value = defaultValue
@@ -69,6 +73,7 @@ export default {
               okText,
               cancelText,
               supportEnter,
+              actions,
               render (h) {
                 $input = h('i-input', {
                   props: {value, placeholder, type},
@@ -99,7 +104,8 @@ export default {
           deleteText = '删除',
           method = 'confirm', // info/success/warning/error/confirm
           scrollable = true,
-          canDelete = false
+          canDelete = false,
+          actions = []
         } = {}) {
           const vm = this
           return new Promise((resolve, reject) => {
@@ -111,6 +117,7 @@ export default {
               cancelText,
               loading: true,
               scrollable,
+              actions,
               render (h) {
                 el = h('edit-view-form', {
                   style: {marginTop: '16px'},
@@ -173,7 +180,8 @@ export default {
           scrollable = true,
           loading = false,
           item = null,
-          maskClosable = true
+          maskClosable = true,
+          actions = []
         } = {}) {
           const vm = this
           return new Promise((resolve, reject) => {
@@ -186,6 +194,7 @@ export default {
               scrollable,
               loading,
               maskClosable,
+              actions,
               render (h) {
                 el = h('embed-form', {
                   style: {marginTop: '16px'},
@@ -217,7 +226,7 @@ export default {
             })
           })
         },
-        async pickFile (multi = false, accept='*') {
+        async pickFile (multi = false, accept = '*') {
           return new Promise((resolve, reject) => {
             const elFile = document.getElementById('_vue_admin_file_picker')
               || document.createElement('input')
