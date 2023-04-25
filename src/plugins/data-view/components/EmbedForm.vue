@@ -199,21 +199,29 @@ export default {
     async initData () {
       const vm = this
       // 如果指定了 noInit 属性，初始化将跳过设定默认值这一步
-      if (vm.noInit) return
+      if (vm.noInit) return vm.$emit('init')
       // 为了避免在没有任何动作之前点击保存提交的表单会有字段 undefined 的情况
       // 所有指定的 default 值的字段都会先手动设置进去
       const item = {}
-      vm.fields.forEach((field, i) => {
-        // 设置默认值
-        if (field.key) vm.setProperty(item, field.key, field.default instanceof Function ? field.default.apply(vm, [field]) : field.default)
-      })
       await vm.setItem(item)
       // 向外抛出 item 引用
       vm.$emit('loaded', item)
     },
+    async setDefaults () {
+      const vm = this
+      vm.fields.forEach((field, i) => {
+        // 设置默认值，仅当没有的时候才设置
+        if (field.key && vm.item[field.key] === void 0 && field.default !== void 0) {
+          console.log(field.key, field.default instanceof Function ? field.default.apply(vm, [field]) : field.default)
+          vm.setProperty(vm.item, field.key, field.default instanceof Function ? field.default.apply(vm, [field]) : field.default)
+        }
+      })
+    },
     async setItem (item) {
       const vm = this
       vm.item = item
+      // 写入默认值
+      await vm.setDefaults()
       await vm.render()
       // 无论何种形式初始化（initData 或者 noInit + 外部 setItem）
       // 都从这里确认初始化成功，才触发渲染
@@ -366,9 +374,11 @@ export default {
   /deep/ .ivu-form-item-label {
     width: @label-width;
   }
+
   /deep/ .ivu-form-item-content {
     margin-left: @label-width;
   }
+
   .field-item {
     display: inline-block;
   }

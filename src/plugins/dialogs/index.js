@@ -199,14 +199,14 @@ export default {
                 el = h('embed-form', {
                   style: {marginTop: '16px'},
                   props: formOptions,
-                  noInit: !!item
+                  noInit: !!item,
+                  on: {
+                    init () {
+                      const $form = el.componentInstance
+                      $form.setItem(item)
+                    }
+                  }
                 })
-                if (item) {
-                  vm.$nextTick(function () {
-                    const $form = el.componentInstance
-                    $form.setItem(item)
-                  })
-                }
                 return el
               },
               async onOk () {
