@@ -117,7 +117,6 @@ export default {
               cancelText,
               loading: true,
               scrollable,
-              actions,
               render (h) {
                 el = h('edit-view-form', {
                   style: {marginTop: '16px'},
@@ -125,48 +124,25 @@ export default {
                 })
                 return el
               },
-              renderFooter (h) {
-                return h('div', [
-                  canDelete && editViewOptions.id ? h('i-button', {
-                    props: {
-                      type: 'error'
-                    },
-                    on: {
-                      click: async () => {
-                        await vm.$confirm('确定删除？', {width: 350})
-                        await el.componentInstance.deleteItem()
-                        resolve(null)
-                        dialog.close()
-                      }
-                    }
-                  }, deleteText) : '',
-                  h('i-button', {
-                    props: {
-                      type: 'text'
-                    },
-                    on: {
-                      click: async () => {
-                        reject()
-                        dialog.close()
-                      }
-                    }
-                  }, cancelText),
-                  h('i-button', {
-                    props: {
-                      type: 'primary'
-                    },
-                    on: {
-                      click: async () => {
-                        const $form = el.componentInstance
-                        await $form.validate()
-                        const item = await $form.save()
-                        resolve(item)
-                        dialog.close()
-                      }
-                    }
-                  }, okText)
-                ])
-              }
+              async onOk () {
+                const $form = el.componentInstance
+                await $form.validate()
+                const item = await $form.save()
+                resolve(item)
+                dialog.close()
+              },
+              actions: [...actions, {
+                label: deleteText,
+                buttonType: 'error',
+                position: 'start',
+                display: canDelete,
+                async action () {
+                  await vm.$confirm('确定删除？', {width: 350})
+                  await el.componentInstance.deleteItem()
+                  resolve(null)
+                  dialog.close()
+                }
+              }]
             })
           })
         },

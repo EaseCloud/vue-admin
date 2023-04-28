@@ -111,7 +111,7 @@ export default {
                   ids.splice(0, 0, ...await vm.field.actionAddItem.apply(vm))
                 } else {
                   const item = await vm.pickObject(
-                    vm.modalListViewOptions(), vm.field.modalOptions || {}
+                    vm.modalListViewOptions(await vm.finalize(vm.field.filterAddItem, vm.field)), vm.field.modalOptions || {}
                   ).catch(() => 0)
                   if (!item) return
                   ids.push(item[vm.field.listViewOptions.pk || 'id'])
@@ -125,7 +125,7 @@ export default {
         ...(vm.field.listViewOptions.options || {})
       }
     },
-    modalListViewOptions () {
+    modalListViewOptions (filters) {
       const vm = this
       const options = {
         ...vm.field.listViewOptions,
@@ -135,10 +135,14 @@ export default {
           can_delete: false
         },
       }
-      // 选的时候还要排除重复项
-      options.filters = options.filters || {}
-      options.filters['!pk__in'] = (vm.field.value || []).map(x => x.toString()).join(',')
-      options.actions = []
+      if (filters) {
+        options.filters = filters
+      } else {
+        // 选的时候还要排除重复项
+        options.filters = options.filters || {}
+        options.filters['!pk__in'] = (vm.field.value || []).map(x => x.toString()).join(',')
+        options.actions = []
+      }
       return options
     }
   }
