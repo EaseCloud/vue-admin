@@ -131,6 +131,7 @@ export default {
                 resolve(item)
                 dialog.close()
               },
+              onCancel: reject,
               actions: [...actions, {
                 label: deleteText,
                 buttonType: 'error',
