@@ -102,7 +102,6 @@ export default {
           okText = '确认',
           cancelText = '取消',
           deleteText = '删除',
-          method = 'confirm', // info/success/warning/error/confirm
           scrollable = true,
           canDelete = false,
           actions = []
@@ -131,7 +130,10 @@ export default {
                 resolve(item)
                 dialog.close()
               },
-              onCancel: reject,
+              async onCancel () {
+                dialog.close()
+                reject()
+              },
               actions: [...actions, {
                 label: deleteText,
                 buttonType: 'error',
