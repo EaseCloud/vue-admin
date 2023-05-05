@@ -177,8 +177,10 @@ export default {
               render (h) {
                 el = h('embed-form', {
                   style: {marginTop: '16px'},
-                  props: formOptions,
-                  noInit: !!item,
+                  props: {
+                    ...formOptions,
+                    noInit: !!item
+                  },
                   on: {
                     init () {
                       const $form = el.componentInstance
