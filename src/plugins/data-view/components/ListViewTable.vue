@@ -303,7 +303,10 @@
         } else if (type === 'link') {
           const text = field.text(value)
           const route = field.route(value)
-          return h('router-link', {props: {to: route}}, text)
+          if (typeof route === 'string') {
+            return h('a', {attrs: {href: route, target: field.target}}, text)
+          }
+          return h('router-link', {props: {to: route, target: field.target}}, text)
         } else if (type === 'image') {
           return h(tableComponents.TableFieldImage, {props: {value, field}})
           // } else if (type === 'image-text') {
