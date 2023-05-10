@@ -9,6 +9,7 @@
     name: 'TableFieldHtml',
     props: {
       value: {},
+      item: {},
       field: {
         type: Object
       }

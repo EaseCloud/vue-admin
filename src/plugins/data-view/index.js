@@ -129,7 +129,8 @@ export default {
           multiple = false,
           noSelect = false, // 隐藏选择按钮
           onSelect = null,
-          onOpen = null
+          onOpen = null,
+          actions = []
         } = {}) {
           const vm = this
           const loading = noSelect
@@ -165,6 +166,7 @@ export default {
               cancelText,
               scrollable,
               loading,
+              actions,
               render (h) {
                 el = h('list-view-table', {
                   style: {marginTop: '16px'},

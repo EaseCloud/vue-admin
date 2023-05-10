@@ -21,6 +21,7 @@ export default {
          * @param cancelText
          * @param scrollable
          * @param method
+         * @param actions
          * @param render
          * @returns {Promise<any>}
          */
@@ -31,6 +32,7 @@ export default {
           cancelText = '取消',
           scrollable = true,
           method = 'confirm', // info/success/warning/error/confirm
+          actions = [],
           render
         } = {}) {
           const vm = this
@@ -43,6 +45,7 @@ export default {
               cancelText,
               scrollable,
               supportEnter: true,
+              actions,
               render,
               onOk: resolve,
               onCancel: reject
@@ -57,7 +60,8 @@ export default {
           defaultValue = '',
           type = 'text',
           placeholder = '',
-          supportEnter = true
+          supportEnter = true,
+          actions = []
         } = {}) {
           const vm = this
           let value = defaultValue
@@ -69,6 +73,7 @@ export default {
               okText,
               cancelText,
               supportEnter,
+              actions,
               render (h) {
                 $input = h('i-input', {
                   props: {value, placeholder, type},
@@ -97,9 +102,9 @@ export default {
           okText = '确认',
           cancelText = '取消',
           deleteText = '删除',
-          method = 'confirm', // info/success/warning/error/confirm
           scrollable = true,
-          canDelete = false
+          canDelete = false,
+          actions = []
         } = {}) {
           const vm = this
           return new Promise((resolve, reject) => {
@@ -118,48 +123,29 @@ export default {
                 })
                 return el
               },
-              renderFooter (h) {
-                return h('div', [
-                  canDelete && editViewOptions.id ? h('i-button', {
-                    props: {
-                      type: 'error'
-                    },
-                    on: {
-                      click: async () => {
-                        await vm.$confirm('确定删除？', {width: 350})
-                        await el.componentInstance.deleteItem()
-                        resolve(null)
-                        dialog.close()
-                      }
-                    }
-                  }, deleteText) : '',
-                  h('i-button', {
-                    props: {
-                      type: 'text'
-                    },
-                    on: {
-                      click: async () => {
-                        reject()
-                        dialog.close()
-                      }
-                    }
-                  }, cancelText),
-                  h('i-button', {
-                    props: {
-                      type: 'primary'
-                    },
-                    on: {
-                      click: async () => {
-                        const $form = el.componentInstance
-                        await $form.validate()
-                        const item = await $form.save()
-                        resolve(item)
-                        dialog.close()
-                      }
-                    }
-                  }, okText)
-                ])
-              }
+              async onOk () {
+                const $form = el.componentInstance
+                await $form.validate()
+                const item = await $form.save()
+                resolve(item)
+                dialog.close()
+              },
+              async onCancel () {
+                dialog.close()
+                reject()
+              },
+              actions: [...actions, {
+                label: deleteText,
+                buttonType: 'error',
+                position: 'start',
+                display: canDelete,
+                async action () {
+                  await vm.$confirm('确定删除？', {width: 350})
+                  await el.componentInstance.deleteItem()
+                  resolve(null)
+                  dialog.close()
+                }
+              }]
             })
           })
         },
@@ -173,7 +159,8 @@ export default {
           scrollable = true,
           loading = false,
           item = null,
-          maskClosable = true
+          maskClosable = true,
+          actions = []
         } = {}) {
           const vm = this
           return new Promise((resolve, reject) => {
@@ -186,18 +173,19 @@ export default {
               scrollable,
               loading,
               maskClosable,
+              actions,
               render (h) {
                 el = h('embed-form', {
                   style: {marginTop: '16px'},
                   props: formOptions,
-                  noInit: !!item
+                  noInit: !!item,
+                  on: {
+                    init () {
+                      const $form = el.componentInstance
+                      $form.setItem(item)
+                    }
+                  }
                 })
-                if (item) {
-                  vm.$nextTick(function () {
-                    const $form = el.componentInstance
-                    $form.setItem(item)
-                  })
-                }
                 return el
               },
               async onOk () {
@@ -217,7 +205,7 @@ export default {
             })
           })
         },
-        async pickFile (multi = false, accept='*') {
+        async pickFile (multi = false, accept = '*') {
           return new Promise((resolve, reject) => {
             const elFile = document.getElementById('_vue_admin_file_picker')
               || document.createElement('input')
