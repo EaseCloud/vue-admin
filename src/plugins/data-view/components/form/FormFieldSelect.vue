@@ -7,6 +7,7 @@
               :placeholder="field.placeholder"
               :value="field.value"
               :default="field.final.default"
+              :disabled="field.final.disabled"
               :filterable="field.filterable"
               @input="$emit('input', $event===void 0 ? null : $event)">
       <template v-for="choice in choices">

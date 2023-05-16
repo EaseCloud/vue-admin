@@ -8,6 +8,7 @@
               :default="field.final.default||[]"
               :placeholder="field.placeholder"
               :value="field.value"
+              :disabled="field.final.disabled"
               :remote-method="field.asyncChoices?doQuery:void 0"
               :allow-create="field.allowCreate"
               @on-create="field.allowCreate?onCreate:void 0"
