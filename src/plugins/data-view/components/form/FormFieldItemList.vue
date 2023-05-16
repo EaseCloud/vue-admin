@@ -1,12 +1,10 @@
 <template>
   <div class="field-item field-item-item-list"
-       :style="{width: !!field.final.width && field.final.width}">
-    <div>
-    </div>
+       :style="{width: field.final.width ? field.final.width : '100%'}">
     <div class="ivu-table-wrapper ivu-table-wrapper-with-border">
       <div class="ivu-table ivu-table-small ivu-table-border">
         <div class="ivu-table-header">
-          <table cellspacing="0" cellpadding="0" border="0" style="width: 599px;">
+          <table cellspacing="0" cellpadding="0" border="0" style="width: 100%;">
             <thead>
             <tr>
               <th class="ivu-table-column-2Gkwny" v-if="!rawMode">
@@ -38,7 +36,7 @@
           </table>
         </div>
         <div class="ivu-table-body" v-show="!rawMode">
-          <table cellspacing="0" cellpadding="0" border="0" style="width: 599px;">
+          <table cellspacing="0" cellpadding="0" border="0" style="width: 100%;">
             <tbody class="ivu-table-tbody">
             <tr draggable="false" class="ivu-table-row" v-for="(item, index) in items">
               <td class="ivu-table-column-2Gkwny">
@@ -112,7 +110,12 @@
       },
       async addItem () {
         const vm = this
-        const item = await vm.modalForm({fields: vm.field.fields}, {title: '添加对象'})
+        const item = await vm.modalForm({
+          options: {},
+          fields: vm.field.fields
+        }, {
+          title: '添加对象'
+        })
         vm.items.push(item)
         vm.$emit('input', vm.items)
       },
