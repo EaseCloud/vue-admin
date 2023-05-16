@@ -104,9 +104,12 @@ export default {
           deleteText = '删除',
           scrollable = true,
           canDelete = false,
-          actions = []
+          actions = [],
+          dialogOptions = {}
         } = {}) {
           const vm = this
+          // 把 editViewOptions 转换成 Vue 的响应式对象，否则 Vue 不会检测到 options 的更新
+          Vue.observable(editViewOptions)
           return new Promise((resolve, reject) => {
             let el
             const dialog = vm.openDialog({
@@ -145,7 +148,8 @@ export default {
                   resolve(null)
                   dialog.close()
                 }
-              }]
+              }],
+              ...dialogOptions
             })
           })
         },
