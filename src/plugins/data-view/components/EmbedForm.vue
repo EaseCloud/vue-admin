@@ -255,7 +255,8 @@ export default {
       // 根据 mapper 过滤
       const mapper = await vm.finalize(field.mapper, vm)
       if (mapper) {
-        value = hasOwnProperty(mapper, value) ? mapper[value] : mapper.__default__
+        value = mapper.hasOwnProperty(value) ? mapper[value] :
+          mapper.hasOwnProperty('__default__') ? mapper.__default__ : value
       }
       // Update，会直接影响到内层 EmbedForm 的绑定值
       vm.$set(field, 'value', value)
