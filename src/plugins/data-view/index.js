@@ -130,7 +130,8 @@ export default {
           noSelect = false, // 隐藏选择按钮
           onSelect = null,
           onOpen = null,
-          actions = []
+          actions = [],
+          selectBtnText = '选择'
         } = {}) {
           const vm = this
           const loading = noSelect
@@ -147,7 +148,7 @@ export default {
                 ...(listViewOptions.options || {})
               },
               actions: [...(listViewOptions.actions || []), ...(noSelect ? [] : [{
-                label: '选择',
+                label: selectBtnText,
                 async action (item) {
                   if (onSelect) await onSelect(item, dialog)
                   dialog.close()
