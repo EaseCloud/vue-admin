@@ -1,6 +1,6 @@
 <template>
   <div class="field-item field-item-list-view"
-       :style="{width: field.final.width || 'auto'}">
+       :style="{width: field.final.width || '100%'}">
     <list-view-table v-if="initialized"
                      ref="view"
                      @input="$emit('input', $event)"
