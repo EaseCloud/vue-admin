@@ -1,6 +1,6 @@
 <template>
   <div class="field-item field-item-multi-object"
-       :style="{width: field.final.width || 'auto'}">
+       :style="{width: field.final.width || '100%'}">
     <list-view-table @input="$emit('input', $event)"
                      :model="field.listViewOptions.model"
                      :fields="field.listViewOptions.fields"
