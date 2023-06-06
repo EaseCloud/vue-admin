@@ -1,4 +1,6 @@
 import Dialog from './Dialog.vue'
+import store from '../../store'
+import router from '../../router'
 
 export default {
   install (Vue) {
@@ -9,7 +11,7 @@ export default {
           const el = document.createElement('div')
           document.body.appendChild(el)
           const ModalComponent = Vue.extend(Dialog)
-          return new ModalComponent({el, propsData: {options}})
+          return new ModalComponent({el, store, router, propsData: {options}})
         },
         /**
          * Promise 形式实现，类似于原生 confirm 方法
