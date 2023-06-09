@@ -656,12 +656,14 @@ export default {
         columns.unshift({
           key: '__selector__',
           width: vm.options.selector_column_width || 40,
+          align: 'center',
           renderHeader (h, {column, index}) {
             return h('checkbox', {
               props: {
                 value: vm.selectedIndices.length > 0 &&
                   vm.selectedIndices.length === vm.items.length
               },
+              style: {margin: 0},
               on: {
                 input (value) {
                   vm.selectedIndices = value ? vm._.range(vm.items.length) : []
@@ -675,6 +677,7 @@ export default {
               props: {
                 value: vm.selectedIndices.indexOf(index) > -1
               },
+              style: {margin: 0},
               on: {
                 input (value) {
                   vm.selectedIndices = (value

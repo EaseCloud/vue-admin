@@ -116,7 +116,7 @@ export default {
          * 在本页面弹窗创建
          * @returns {Promise<void>}
          */
-        async inlineCreate (options) {
+        async inlineCreate (options = {}) {
           const vm = this
           return vm.activeHooks.action_inline_create.apply(vm, [options])
         },
