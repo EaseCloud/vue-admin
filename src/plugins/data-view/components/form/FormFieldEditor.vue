@@ -4,6 +4,7 @@
     <quill-editor :value="field.value"
                   :style="field.style"
                   @change="change"
+                  :disabled="field.final.disabled"
                   ref="editor"
                   :options="field.editorOptions"
     ></quill-editor>
