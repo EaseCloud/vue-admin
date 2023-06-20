@@ -109,8 +109,8 @@ export default {
     return new Promise((resolve, reject) => {
       const check = () => {
         let value = item instanceof Function ? item.apply(vm, [key]) : vm.evaluate(item, key)
-        if (value) resolve(value)
-        if (Date.now() > deadline) reject(new Error('waitFor timed out'))
+        if (value) return resolve(value)
+        if (Date.now() > deadline) return reject(new Error('waitFor timed out'))
         setTimeout(check, interval)
       }
       check()
