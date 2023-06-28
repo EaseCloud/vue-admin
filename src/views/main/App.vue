@@ -10,15 +10,15 @@
         <div slot="top" class="logo-con">
           <template v-if="shrink">
             <img v-if="$root.config.logo_square"
-                 :src="$root.config.logo_square" />
+                 :src="$root.config.logo_square"/>
             <img v-else
-                 src="../../../assets/images/logo-min.jpg" key="min-logo" />
+                 src="../../../assets/images/logo-min.jpg" key="min-logo"/>
           </template>
           <template v-else>
             <img v-if="$root.config.logo_wide"
-                 :src="$root.config.logo_wide" />
+                 :src="$root.config.logo_wide"/>
             <img v-else
-                 src="../../../assets/images/logo.jpg" key="max-logo" />
+                 src="../../../assets/images/logo.jpg" key="max-logo"/>
           </template>
         </div>
       </shrinkable-menu>
@@ -32,9 +32,12 @@
                   @click="toggleClick"></x-icon>
         </div>
         <div class="header-middle-con">
-          <div class="main-breadcrumb">
+          <div class="main-breadcrumb" v-if="currentPath && currentPath.length">
             <breadcrumb-nav :currentPath="currentPath"></breadcrumb-nav>
           </div>
+          <!-- 支持通过钩子注入标题栏控件 -->
+          <render-component v-if="$root.config.hooks.render_main_header"
+                            :render="$root.config.hooks.render_main_header"/>
         </div>
         <div class="header-avatar-con">
           <!-- TODO: 升级 iView3.0 之后出现了很多不兼容问题，先隐藏 -->
@@ -42,7 +45,6 @@
           <!--<lock-screen></lock-screen>-->
           <!--<message-tip v-model="$store.state.app.messageCount"></message-tip>-->
           <!--<theme-switch></theme-switch>-->
-
           <div class="user-dropdown-menu-con">
             <dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
               <a href="javascript:void(0)">
@@ -54,7 +56,7 @@
                                :key="i"
                                v-if="finalizeSync(action.display)"
                                :name="'action_'+i">
-                  {{action.label}}
+                  {{ action.label }}
                 </dropdown-item>
                 <dropdown-item name="logout" :divided="$root.config.main_actions.length > 0">
                   退出登录
@@ -307,6 +309,7 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
+
   .unlock-con {
     width: 0;
     height: 0;
@@ -315,6 +318,7 @@ export default {
     top: 50%;
     z-index: 11000;
   }
+
   .sidebar-menu-con {
     height: 100%;
     position: fixed;
@@ -323,21 +327,26 @@ export default {
     z-index: 21;
     transition: width .3s;
     background: white;
+
     &.dark {
       background: #515A6E
     }
   }
+
   .layout-text {
     display: inline-block;
     white-space: nowrap;
     position: absolute;
   }
+
   .main-hide-text .layout-text {
     display: none;
   }
+
   &-content-container {
     position: relative;
   }
+
   &-header-con {
     box-sizing: border-box;
     position: fixed;
@@ -349,24 +358,30 @@ export default {
     box-shadow: 0 2px 1px 1px rgba(100, 100, 100, .1);
     transition: padding .3s;
   }
+
   &-breadcrumb {
     padding: 8px 15px 0;
+    float: left;
   }
+
   &-menu-left {
     background: #464c5b;
     height: 100%;
   }
+
   .tags-con {
     height: 40px;
     z-index: -1;
     overflow: hidden;
     background: #f0f0f0;
+
     .tags-outer-scroll-con {
       position: relative;
       box-sizing: border-box;
       padding-right: 120px;
       width: 100%;
       height: 100%;
+
       .tags-inner-scroll-body {
         position: absolute;
         padding: 2px 10px;
@@ -374,6 +389,7 @@ export default {
         white-space: nowrap;
         transition: left .3s ease;
       }
+
       .close-all-tag-con {
         position: absolute;
         right: 0;
@@ -389,58 +405,61 @@ export default {
       }
     }
   }
+
   &-header {
     height: 60px;
     background: #fff;
     box-shadow: 0 2px 1px 1px rgba(100, 100, 100, .1);
     position: relative;
     z-index: 11;
+    display: flex;
+
     .navicon-con {
       margin: 14px;
-      display: inline-block;
     }
+
     .header-middle-con {
-      position: absolute;
-      left: 60px;
-      top: 0;
-      right: 340px;
-      bottom: 0;
-      padding: 10px;
       overflow: hidden;
+      flex: 1;
     }
+
     .header-avatar-con {
-      position: absolute;
-      right: 0;
-      top: 0;
       height: 100%;
       width: auto;
+
       .switch-theme-con {
         display: inline-block;
         width: 40px;
         height: 100%;
       }
+
       .message-con {
         display: inline-block;
         width: 30px;
         padding: 18px 0;
         text-align: center;
         cursor: pointer;
+
         i {
           vertical-align: middle;
         }
       }
+
       .change-skin {
         font-size: 14px;
         font-weight: 500;
         padding-right: 5px;
       }
+
       .switch-theme {
         height: 100%;
       }
+
       .user-dropdown {
         &-menu-con {
           height: 32px;
           margin: 14px 10px;
+
           .main-user-name {
             display: inline-block;
             word-break: keep-all;
@@ -451,33 +470,39 @@ export default {
             text-align: right;
           }
         }
+
         &-innercon {
           height: 100%;
           padding-right: 14px;
         }
       }
+
       .full-screen-btn-con {
         display: inline-block;
         width: 30px;
         padding: 18px 0;
         text-align: center;
         cursor: pointer;
+
         i {
           vertical-align: middle;
         }
       }
+
       .lock-screen-btn-con {
         display: inline-block;
         width: 30px;
         padding: 18px 0;
         text-align: center;
         cursor: pointer;
+
         i {
           vertical-align: middle;
         }
       }
     }
   }
+
   .single-page-con {
     position: absolute;
     top: 100px;
@@ -487,10 +512,12 @@ export default {
     background-color: #F0F0F0;
     z-index: 1;
     transition: left .3s;
+
     .single-page {
       margin: 10px;
     }
   }
+
   &-copy {
     text-align: center;
     padding: 10px 0 20px;
@@ -507,6 +534,7 @@ export default {
   height: 44px;
   box-sizing: content-box;
   text-align: center;
+
   img {
     display: block;
     margin: auto;
